@@ -1,20 +1,47 @@
-(function() {
-  navigator.getUserMedia = (
-    navigator.getUserMedia        /*||
-    /*navigator.webkitGetUserMedia  ||
-    navigator.mozGetUserMedia     ||
-    navigator.msGetUserMedia*/
-  );
 
-  var video     = document.querySelector('video')
-    , width     = 640
-    , height    = 0
-    , streaming = false;
+    navigator.getUserMedia = (
+      navigator.getUserMedia        ||
+      navigator.webkitGetUserMedia  ||
+      navigator.mozGetUserMedia     ||
+      navigator.msGetUserMedia
+    );
+  
+    var video     = document.querySelector('video')
+      , width     = 640
+      , height    = 0
+      , streaming = false;
+  
+    /* Ancrage A */
 
-  /*----------------------------------------------------------------------------------------------------------- Ancrage A */
+    var texture   = new THREE.Texture( video )
+    //, material  = new THREE.MeshBasicMaterial( { map: texture, overdraw: true } );
+        material = getMaterial('PixelShader'); //bidouillage dans getmaterial rend le nom uselesse...
 
-  var texture   = new THREE.Texture( video )
-    , material  = new THREE.MeshBasicMaterial( { map: texture, overdraw: true } );
+
+        var materials = {
+            //shaderOff:  new THREE.MeshBasicMaterial({ map: texture, overdraw: true }),
+            PixelShader:  new THREE.ShaderMaterial(THREE.PixelShader),
+            
+            
+          };
+
+        function getMaterial(name) {
+            /*if (!materials[name]) {
+              name ='shaderOff';
+            }*/
+        
+            var m =  new THREE.ShaderMaterial(THREE.PixelShader); //CA NE MARCHE PAAAAAAAAS
+
+            if (m instanceof THREE.ShaderMaterial) {
+                m.uniforms.tDiffuse.value = texture;
+             // m.uniforms.tDiffuse.value = texture; //ICI UNDEFINED ALORS QUE DEFINI AU DESSUS
+            }
+        
+            m.needsUpdate = true;
+        
+            return m;
+          }
+
 
 video.style.display = 'none';
 
@@ -28,37 +55,11 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setClearColor(0x111111);
 document.body.appendChild(renderer.domElement);
 
-/*-------------------------------------------------------------------------------------------------------- Ancrage C */
+/* Ancrage C */
 
 var camera    = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 10000 )
-  , controls  = new THREE.OrbitControls(camera, renderer.domElement );
 
 camera.position.z = 1000;
-
-controls.enableDamping = true;
-controls.dampingFactor = 0.25;
-controls.enableZoom = true;
-
-
-var geometry = new THREE.BoxGeometry(width, height, height);
-var mesh = new THREE.Mesh(geometry, material);
-
-scene.add(mesh);
-
-requestAnimationFrame(render);
-
-
-function render() {
-  requestAnimationFrame(render);
-
-  if (streaming) {
-      texture.needsUpdate = true;
-  }
-
-  controls.update();
-  renderer.render(scene, camera);
-}
-
 
 window.addEventListener( 'resize', onWindowResize, false );
 
@@ -69,73 +70,66 @@ function onWindowResize() {
 }
 
 
+  
+    if (navigator.getUserMedia) {
+      navigator.getUserMedia(
+        {
+           video: true,
+           audio: false
+        },
+  
+        //
+        // Fonction appelée en cas de réussite
+        //
+        function(localMediaStream) {
+          video.setAttribute('autoplay', 'autoplay');
+          video.src = window.URL.createObjectURL(localMediaStream);
+  
+          video.addEventListener('canplay', function(ev) {
+            if (!streaming) {
+              height = video.videoHeight / (video.videoWidth / width);
+  
+              // Régle un bug sur Firefox (voir les sources)
+              if (isNaN(height)) {
+                height = width / (4/3);
+              }
+  
+              video.setAttribute('width',    width);
+              video.setAttribute('height',   height);
+  
+              streaming = true;
+  
+              /* Ancrage B */
 
+              var geometry = new THREE.BoxGeometry(width, height, height);
+              var mesh = new THREE.Mesh(geometry, material);
 
+              function render() {
+                requestAnimationFrame(render);
+              
+                if (streaming) {
+                    texture.needsUpdate = true;
+                }
+              
+                renderer.render(scene, camera);
+              }
 
+scene.add(mesh);
 
-
-
-
-
-  if (navigator.getUserMedia) {
-    navigator.getUserMedia(
-      {
-         video: true,
-         audio: false
-      },
-
-      //
-      // Fonction appelée en cas de réussite
-      //
-      function(localMediaStream) {
-        video.setAttribute('autoplay', 'autoplay');
-        video.src = window.URL.createObjectURL(localMediaStream);
-
-        video.addEventListener('canplay', function(ev) {
-          if (!streaming) {
-            height = video.videoHeight / (video.videoWidth / width);
-
-            // Régle un bug sur Firefox (voir les sources)
-            if (isNaN(height)) {
-              height = width / (4/3);
+requestAnimationFrame(render);
             }
-
-            video.setAttribute('width',    width);
-            video.setAttribute('height',   height);
-
-            streaming = true;
-
-            /* -----------------------------------------------------------------------------------------------Ancrage B */
-          }
-        }, false);
-      },
-
-      //
-      // Fonction appelée en cas d'échec
-      //
-      function(err) {
-         console.log("Une erreur est survenue: " + err);
-      }
-    );
-  }
-  else {
-    console.log('Ce navigateur ne supporte pas la méthode getUserMedia');
-  }
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+          }, false);
+        },
+  
+        //
+        // Fonction appelée en cas d'échec
+        //
+        function(err) {
+           console.log("Une erreur est survenue: " + err);
+        }
+      );
+    }
+    else {
+      console.log('Ce navigateur ne supporte pas la méthode getUserMedia');
+    }
+  ;
