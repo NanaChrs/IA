@@ -9,13 +9,13 @@
 			}
 
 			canvas {
-				position :absolute;
+				position :relative;
 				left : 0;
 				top :0;
 				z-index: 2;
 			}
 			video{
-				position: absolute;
+				position: relative;
 				left : 0;
 				top : 0;
 				z-index: 0;
@@ -25,14 +25,19 @@
 
 
 	<body>
-		<video id="video" width="640" height="480"
-			title="Advertisement"
-		    style="background-color: rgb(0, 0, 0); position: absolute; width: 640px; height: 480px;"
-		    autoplay="true"
-		    muted="muted">
-		</video>
-		<canvas id="canvas" width="640" height="480" style="display: none"></canvas>
-		<div id="filterbuttons"></div>
+		<div class="container" style="display: flex">
+				<video id="video" width="640" height="480"
+					title="Advertisement"
+				    style="background-color: rgb(0, 0, 0); position: absolute; width: 640px; height: 480px;"
+				    autoplay="true"
+				    muted="muted">
+				</video>
+				<canvas id="canvas" width="640" height="480" style="display: none"></canvas>
+			<div id="filterButtons" style="left: 660px; display: flex; flex-direction: column; position:relative;"></div>
+		</div>
+
+
+
 		<script
 		  src="https://code.jquery.com/jquery-3.1.1.min.js"
 		  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
@@ -45,7 +50,7 @@
 		<link rel="stylesheet" href="UI-Checkbox-master/checkbox.css"/>
 
 
-		<div id="filterButtons"></div>
+		
 		
 	</body>
 </html>

@@ -25,6 +25,10 @@
 		name:"Contraste",
 		filter:"contrast(500%)"
 	},{
+		name: "bjr"
+		
+
+	},{
 		name:"Reset",
 		filter:""
 	}];
@@ -74,4 +78,40 @@
     }
     start();
 
+    function addButtons(liste){
+    	var buttonsDiv = document.getElementById("filterButtons");    
+
+        liste.forEach(function(item){
+        	if (item.name=="Reset"){
+        		var div= document.createElement("button");
+        		div.className="ui button";
+        		var textLabel=document.createTextNode(item.name);
+        		div.appendChild(textLabel);
+        	}
+        	else{
+        		// Création de la div de la checkbox	
+				var div = document.createElement("div");
+				div.className="ui toggle checkbox";
+
+				//Création du label du bouton
+				var label= document.createElement("label");
+				var textLabel= document.createTextNode(item.name);
+				label.appendChild(textLabel);
+
+				//Création de l'input
+				var input=document.createElement("input");
+				input.type="checkbox";
+				input.id=item.name;
+				//Assemblage du tout
+				div.appendChild(input);
+				div.appendChild(label);
+        	}
+		console.log(div);
+		buttonsDiv.appendChild(div);
+		
+      });
+
+      
+    }
+    addButtons(filters);
 })();
