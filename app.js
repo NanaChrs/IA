@@ -6,7 +6,8 @@
       navigator.msGetUserMedia
     );
   
-    var video     = document.querySelector('video')
+    var video     = document.getElementById('test2')
+      , videoCanvas = document.getElementById('test')
       , width     = 640
       , height    = 0
       , streaming = false;
@@ -51,7 +52,7 @@ texture.magFilter = THREE.LinearFilter;
 var renderer  = new THREE.WebGLRenderer({ antialias: true })
   , scene     = new THREE.Scene()
 
-renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setSize(window.innerWidth/3, window.innerHeight/2); //la taille de la zone 3D
 renderer.setClearColor(0x111111);
 document.body.appendChild(renderer.domElement);
 
@@ -133,3 +134,28 @@ requestAnimationFrame(render);
       console.log('Ce navigateur ne supporte pas la méthode getUserMedia');
     }
   ;
+
+var canvas = document.querySelector('canvas');
+
+var stream = canvas.captureStream(30);
+
+videoCanvas.src =video.src;
+videoCanvas.setAttribute('autoplay', 'autoplay');
+videoCanvas.addEventListener('canplay', function(ev) {
+  if (!streaming) {
+    height = video.videoHeight / (video.videoWidth / width);
+
+    // Régle un bug sur Firefox (voir les sources)
+    if (isNaN(height)) {
+      height = width / (4/3);
+    }
+
+    video.setAttribute('width',    width);
+    video.setAttribute('height',   height);
+
+    streaming = true;
+  }
+}
+)
+
+
