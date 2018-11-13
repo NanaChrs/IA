@@ -1,6 +1,4 @@
-(function(){
-
-	var filters =[{
+var filters =[{
 		name: "Blur",
 		filter:"blur(3px)"
 	},{
@@ -25,18 +23,32 @@
 		name:"Contraste",
 		filter:"contrast(500%)"
 	},{
-		name: "bjr"
-		
-
-	},{
 		name:"Reset",
 		filter:""
 	}];
+/*
+function filterApply(){
+	var str="";
+	for (let item in filters){
+		console.log(filters);
+		if (item.name!="reset" && document.getElementById(item.name)!=null){
+			console.log(document.getElementById(item.name));
+			if (document.getElementById(item.name).checked){
+				str+=item.filter+"; ";
+			}
+		} 
+	}
+	if (str!=""){
+		document.getElementById("canvas").filter(str);
+	}
+}
+*/
+var video=document.getElementById("video");
+var canvas=document.getElementById("canvas");
+var canvasContext = canvas.getContext("2d");
+var str = "";
 
-	var video=document.getElementById("video");
-	var canvas=document.getElementById("canvas");
-	var canvasContext = canvas.getContext("2d");
-
+(function(){
 	//Permet d'utiliser le bon nom de fonction selon le navigateur utilisé
 	navigator.getUserMedia = (navigator.getUserMedia ||
       navigator.webkitGetUserMedia ||
@@ -76,10 +88,12 @@
 
 
     }
-    start();
+
+    
 
     function addButtons(liste){
-    	var buttonsDiv = document.getElementById("filterButtons");    
+    	var buttonsDiv = document.getElementById("filterButtons");
+    	var boutons;    
 
         liste.forEach(function(item){
         	if (item.name=="Reset"){
@@ -100,18 +114,50 @@
 
 				//Création de l'input
 				var input=document.createElement("input");
+				input.addEventListener('click', function(){
+					var stringette=item.filter+" ";
+					if (this.checked){
+						str+=stringette;
+					}
+					else{
+						str = str.replace(stringette, "");
+					}
+					//video.style.filter="contrast(500%)";
+					video.style.filter = str;
+					
+
+				});
+				//input.checked=false;
 				input.type="checkbox";
 				input.id=item.name;
+
 				//Assemblage du tout
 				div.appendChild(input);
 				div.appendChild(label);
+
         	}
-		console.log(div);
-		buttonsDiv.appendChild(div);
+        	console.log(document.getElementById('Contraste'));
+        	buttonsDiv.insertAdjacentElement("afterbegin", div); 
+
+
+  		
 		
       });
 
+        
+
       
     }
-    addButtons(filters);
+   	
+
+    document.body.onload=start();
+	document.body.onload=addButtons(filters);
+    
+    
 })();
+
+
+
+
+	
+

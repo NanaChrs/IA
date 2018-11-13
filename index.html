@@ -26,13 +26,14 @@
 
 	<body>
 		<div class="container" style="display: flex">
+			<canvas id="canvas" width="640" height="480" style="display: none"></canvas>
 				<video id="video" width="640" height="480"
 					title="Advertisement"
 				    style="background-color: rgb(0, 0, 0); position: absolute; width: 640px; height: 480px;"
 				    autoplay="true"
 				    muted="muted">
 				</video>
-				<canvas id="canvas" width="640" height="480" style="display: none"></canvas>
+				
 			<div id="filterButtons" style="left: 660px; display: flex; flex-direction: column; position:relative;"></div>
 		</div>
 
@@ -47,6 +48,7 @@
 		<script src="https://www.auduno.com/clmtrackr/examples/js/libs/utils.js"></script>
 		<script src="https://www.auduno.com/clmtrackr/build/clmtrackr.js"></script>
 		<script src="script.js"></script>
+		<!--<script src="filter.js"></script>-->
 		<link rel="stylesheet" href="UI-Checkbox-master/checkbox.css"/>
 
 
