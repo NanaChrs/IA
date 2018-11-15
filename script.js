@@ -144,6 +144,7 @@ function clearZone(x1,y1,x2,y2)
 			//input.checked=false;
 			input.type="checkbox";
 			input.id=item.name;
+			label.htmlFor = input.id;
 
 			//Assemblage du tout
 			div.appendChild(input);
@@ -166,22 +167,22 @@ function clearZone(x1,y1,x2,y2)
   	ctracker.start(video);
 
     function positionLoop() {
-		requestAnimFrame(positionLoop);
-		var positions = ctracker.getCurrentPosition();
-		// do something with the positions ...
-		// print the positions
-		var positionString = "";
-		//fillCircle(positions[27][0],positions[27][1]);
-		clearZone(0,0,2000,2000);
-		var taille=positions[27][1]-positions[24][1];
-		fillCircle(positions[27][0],positions[27][1],taille,'#FF0000');
-		var taille2=positions[32][1]-positions[29][1];
-		fillCircle(positions[32][0],positions[32][1],taille2,'#FF0000');
-		ctracker.draw(canvas);
+			requestAnimFrame(positionLoop);
+			var positions = ctracker.getCurrentPosition();
+			// do something with the positions ...
+			// print the positions
+			var positionString = "";
+			//fillCircle(positions[27][0],positions[27][1]);
+			clearZone(0,0,2000,2000);
+			var taille=positions[27][1]-positions[24][1];
+			fillCircle(positions[27][0],positions[27][1],taille,'#FF0000');
+			var taille2=positions[32][1]-positions[29][1];
+			fillCircle(positions[32][0],positions[32][1],taille2,'#FF0000');
+			ctracker.draw(canvas);
    	}
 
     document.body.onload=start();
-	document.body.onload=addButtons(filters);
+		document.body.onload=addButtons(filters);
 
 	
 	//var canvasInput = document.getElementById('drawCanvas');
