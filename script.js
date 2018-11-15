@@ -22,9 +22,6 @@ var filters =[{
 	},{
 		name:"Contraste",
 		filter:"contrast(500%)"
-	},{
-		name:"Reset",
-		filter:""
 	}];
 /*
 function filterApply(){
@@ -96,46 +93,38 @@ var str = "";
     	var boutons;    
 
         liste.forEach(function(item){
-        	if (item.name=="Reset"){
-        		var div= document.createElement("button");
-        		div.className="ui button";
-        		var textLabel=document.createTextNode(item.name);
-        		div.appendChild(textLabel);
-        	}
-        	else{
-        		// Création de la div de la checkbox	
-				var div = document.createElement("div");
-				div.className="ui toggle checkbox";
+    		// Création de la div de la checkbox	
+			var div = document.createElement("div");
+			div.className="ui toggle checkbox";
 
-				//Création du label du bouton
-				var label= document.createElement("label");
-				var textLabel= document.createTextNode(item.name);
-				label.appendChild(textLabel);
+			//Création du label du bouton
+			var label= document.createElement("label");
+			var textLabel= document.createTextNode(item.name);
+			label.appendChild(textLabel);
 
-				//Création de l'input
-				var input=document.createElement("input");
-				input.addEventListener('click', function(){
-					var stringette=item.filter+" ";
-					if (this.checked){
-						str+=stringette;
-					}
-					else{
-						str = str.replace(stringette, "");
-					}
-					//video.style.filter="contrast(500%)";
-					video.style.filter = str;
-					
+			//Création de l'input
+			var input=document.createElement("input");
+			input.addEventListener('click', function(){
+				var stringette=item.filter+" ";
+				if (this.checked){
+					str+=stringette;
+				}
+				else{
+					str = str.replace(stringette, "");
+				}
+				//video.style.filter="contrast(500%)";
+				video.style.filter = str;
+				
 
-				});
-				//input.checked=false;
-				input.type="checkbox";
-				input.id=item.name;
+			});
+			//input.checked=false;
+			input.type="checkbox";
+			input.id=item.name;
 
-				//Assemblage du tout
-				div.appendChild(input);
-				div.appendChild(label);
+			//Assemblage du tout
+			div.appendChild(input);
+			div.appendChild(label);
 
-        	}
         	console.log(document.getElementById('Contraste'));
         	buttonsDiv.insertAdjacentElement("afterbegin", div); 
 
@@ -152,6 +141,18 @@ var str = "";
 
     document.body.onload=start();
 	document.body.onload=addButtons(filters);
+
+	var ctracker = new clm.tracker();
+  	ctracker.init();
+  	ctracker.start(video);
+	//var canvasInput = document.getElementById('drawCanvas');
+  //var cc = canvasInput.getContext('2d');
+  function drawLoop() {
+    requestAnimationFrame(drawLoop);
+    canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+    ctracker.draw(canvas);
+  }
+  drawLoop();
     
     
 })();

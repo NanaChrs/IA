@@ -4,9 +4,6 @@
 		<meta charset=utf-8>
 		<title>My first three.js app</title>
 		<style>
-			#container {
-				position : absolute;
-			}
 
 			canvas {
 				position :relative;
@@ -26,7 +23,7 @@
 
 	<body>
 		<div class="container" style="display: flex">
-			<canvas id="canvas" width="640" height="480" style="display: none"></canvas>
+			<canvas id="canvas" width="640" height="480" ></canvas>
 				<video id="video" width="640" height="480"
 					title="Advertisement"
 				    style="background-color: rgb(0, 0, 0); position: absolute; width: 640px; height: 480px;"
@@ -34,11 +31,11 @@
 				    muted="muted">
 				</video>
 				
-			<div id="filterButtons" style="left: 660px; display: flex; flex-direction: column; position:relative;"></div>
+			<div id="filterButtons" style="left: 100px; display: flex; flex-direction: column; position:relative;"></div>
 		</div>
 
 
-
+		<script src="js/clmtrackr.js"></script>
 		<script
 		  src="https://code.jquery.com/jquery-3.1.1.min.js"
 		  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
