@@ -35,6 +35,8 @@
 
             if (m instanceof THREE.ShaderMaterial) {
                 m.uniforms.tDiffuse.value = texture;
+                tableauPixels = new THREE.Vector2(70,70); // le tableau de gros pixel par dessus l'image
+                m.uniforms.pixels.value= tableauPixels;
              // m.uniforms.tDiffuse.value = texture; //ICI UNDEFINED ALORS QUE DEFINI AU DESSUS
             }
         
@@ -44,7 +46,7 @@
           }
 
 
-video.style.display = 'none';
+//video.style.display = 'none';
 
 texture.minFilter = THREE.LinearFilter;
 texture.magFilter = THREE.LinearFilter;
@@ -84,12 +86,34 @@ function onWindowResize() {
         //
         function(localMediaStream) {
           video.setAttribute('autoplay', 'autoplay');
+          videoCanvas.setAttribute('autoplay','autoplay');
           video.src = window.URL.createObjectURL(localMediaStream);
+          //videoCanvas.src = video.src;
+
+          videoCanvas.addEventListener('canplay', function(ev) {
+            if (!streaming) {
+              height = video.videoHeight / (video.videoWidth / width);
+              
+              // Régle un bug sur Firefox (voir les sources)
+              if (isNaN(height)) {
+                height = width / (4/3);
+              }
+  
+              video.setAttribute('width',    width);
+              video.setAttribute('height',   height);
+  
+              streaming = true;
+            }
+          }, false);
+
+
+
+
   
           video.addEventListener('canplay', function(ev) {
             if (!streaming) {
               height = video.videoHeight / (video.videoWidth / width);
-  
+              
               // Régle un bug sur Firefox (voir les sources)
               if (isNaN(height)) {
                 height = width / (4/3);
@@ -109,24 +133,37 @@ function onWindowResize() {
                 requestAnimationFrame(render);
               
                 if (streaming) {
-                    texture.needsUpdate = true;
+                  texture.needsUpdate = true;
                 }
               
                 renderer.render(scene, camera);
               }
 
-scene.add(mesh);
+              scene.add(mesh);
 
-requestAnimationFrame(render);
+
+
+              requestAnimationFrame(render);
             }
           }, false);
+
+
+          var canvas = document.querySelector('canvas');
+
+          var stream = canvas.captureStream(25);
+
+          videoCanvas.src = stream;
+
+
+
+
         },
   
         //
         // Fonction appelée en cas d'échec
         //
         function(err) {
-           console.log("Une erreur est survenue: " + err);
+          console.log("Une erreur est survenue: " + err);
         }
       );
     }
@@ -135,13 +172,11 @@ requestAnimationFrame(render);
     }
   ;
 
-var canvas = document.querySelector('canvas');
 
-var stream = canvas.captureStream(30);
 
-videoCanvas.src =video.src;
-videoCanvas.setAttribute('autoplay', 'autoplay');
-videoCanvas.addEventListener('canplay', function(ev) {
+//videoCanvas.src =video.src;
+//videoCanvas.setAttribute('autoplay', 'autoplay');
+/*videoCanvas.addEventListener('canplay', function(ev) {
   if (!streaming) {
     height = video.videoHeight / (video.videoWidth / width);
 
@@ -157,5 +192,5 @@ videoCanvas.addEventListener('canplay', function(ev) {
   }
 }
 )
-
+*/
 

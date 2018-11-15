@@ -3,7 +3,7 @@ THREE.PixelShader = {
     uniforms: {
 
         "tDiffuse": { value: null }, //la texture
-        "pixels" : { value : new THREE.Vector2(64, 48) } //nombres de pixels sur l'image / resolution = 64/48
+        "pixels" : { value : new THREE.Vector2(1,1) } //nombres de pixels sur l'image / resolution = 64/48
 
     },
 
@@ -14,7 +14,7 @@ THREE.PixelShader = {
         "void main() {",
             "vUv = uv;",
             "gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);", //transformation standard pour calculer la position d'un sommet
-            //"vUv = vec2(1.0 - uv.x, uv.y);" //effet miroir pour la webcam (enlever pour d'autres usages...)
+            //"vUv = vec2(1.0 - uv.x, uv.y);", //effet miroir pour la webcam (enlever pour d'autres usages...)
             "}",
 
     ].join( "\n" ),
