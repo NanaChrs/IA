@@ -57,9 +57,9 @@ function circle(x,y,rayon)
 function fillCircle(x,y,rayon,couleur)
 {
 	canvasContext.beginPath();
-	context.fillStyle=couleur
-	context.arc(x, y, rayon, 0, 2 * Math.PI);
-	context.fill();
+	canvasContext.fillStyle=couleur
+	canvasContext.arc(x, y, rayon, 0, 2 * Math.PI);
+	canvasContext.fill();
 }
 function clearZone(x1,y1,x2,y2)
 {
@@ -161,22 +161,33 @@ function clearZone(x1,y1,x2,y2)
 
       
     }
-   	
+    var ctracker = new clm.tracker();
+  	ctracker.init();
+  	ctracker.start(video);
+
+    function positionLoop() {
+		requestAnimFrame(positionLoop);
+		var positions = ctracker.getCurrentPosition();
+		// do something with the positions ...
+		// print the positions
+		var positionString = "";
+		//fillCircle(positions[27][0],positions[27][1]);
+		clearZone(0,0,2000,2000);
+		var taille=positions[27][1]-positions[24][1];
+		fillCircle(positions[27][0],positions[27][1],taille,'#FF0000');
+		var taille2=positions[32][1]-positions[29][1];
+		fillCircle(positions[32][0],positions[32][1],taille2,'#FF0000');
+		ctracker.draw(canvas);
+   	}
 
     document.body.onload=start();
 	document.body.onload=addButtons(filters);
 
-	var ctracker = new clm.tracker();
-  	ctracker.init();
-  	ctracker.start(video);
+	
 	//var canvasInput = document.getElementById('drawCanvas');
   //var cc = canvasInput.getContext('2d');
-  function drawLoop() {
-    requestAnimationFrame(drawLoop);
-    canvasContext.clearRect(0, 0, canvas.width, canvas.height);
-    ctracker.draw(canvas);
-  }
-  drawLoop();
+  //drawLoop();
+  positionLoop();
     
     
 })();
