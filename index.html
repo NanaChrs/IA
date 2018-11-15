@@ -6,17 +6,23 @@
 		<style>
 
 			canvas {
-				position :relative;
+				position :absolute;
 				left : 0;
 				top :0;
 				z-index: 2;
 			}
 			video{
-				position: relative;
+				position: absolute;
 				left : 0;
 				top : 0;
 				z-index: 0;
-			}
+            }
+            #filterButtons{
+                display : flex;
+                flex-direction: column;
+                position : relative;
+                left : 640px;
+            }
 		</style>
 	</head>
 
@@ -31,7 +37,7 @@
 				    muted="muted">
 				</video>
 				
-			<div id="filterButtons" style="left: 100px; display: flex; flex-direction: column; position:relative;"></div>
+			<div id="filterButtons"></div>
 		</div>
 
 
