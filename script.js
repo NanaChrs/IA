@@ -1,3 +1,8 @@
+var video=document.getElementById("video");
+var canvas=document.getElementById("canvas");
+var canvasContext = canvas.getContext("2d");
+var str = "";
+
 var filters =[{
 		name: "Blur",
 		filter:"blur(3px)"
@@ -40,10 +45,29 @@ function filterApply(){
 	}
 }
 */
-var video=document.getElementById("video");
-var canvas=document.getElementById("canvas");
-var canvasContext = canvas.getContext("2d");
-var str = "";
+
+function circle(x,y,rayon)
+			{
+	canvasContext.beginPath();
+	context.lineWidth="2";
+	context.arc(x, y, rayon, 0, 2 * Math.PI);
+	context.stroke();
+}
+	
+function fillCircle(x,y,rayon,couleur)
+{
+	canvasContext.beginPath();
+	context.fillStyle=couleur
+	context.arc(x, y, rayon, 0, 2 * Math.PI);
+	context.fill();
+}
+function clearZone(x1,y1,x2,y2)
+{
+	canvasContext.clearRect(x1,y1,x2,y2);
+}
+
+
+
 
 (function(){
 	//Permet d'utiliser le bon nom de fonction selon le navigateur utilisé
