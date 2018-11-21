@@ -57,6 +57,10 @@
 				var context = canvas.getContext("2d");
 				context.clearRect(x1,y1,x2,y2);
 			}
+
+			function triangle(){
+
+			}
 	
 		</script>
 		<p>Printing coordinates of the first 10 points in facial features:</p>
@@ -95,6 +99,8 @@
 			}
 			
 			var rotationactuel = 0;
+			var translated = false;
+
 			function noreilleDeChat(){
 				var canvas = document.getElementById("canvas1");
 				var context = canvas.getContext("2d");
@@ -102,13 +108,20 @@
 				clearZone(0,0,2000,2000);
 				var positions = ctracker.getCurrentPosition();
 				var distance = 2 * (positions[19][1]-positions[1][1]);
-				var taille = (positions[14][0]-positions[0][0])*(1/3);
+				var taille = Math.sqrt((positions[14][0]-positions[0][0])**2+(positions[14][1]-positions[0][1])**2)*(1/3);
+
+				
+				/*if(!translated){
+					context.translate(positions[62][0],positions[62][1]);
+					translated = true;
+				}*/
 
 				//var rotation = (positions[1][1]-positions[13][1])*((positions[13][0]-positions[1][0])+90);
 				var rotation = Math.atan( (positions[23][1] - positions[28][1]) / (positions[23][0] - positions[28][0]) );
+				
+
 				// if(rotation != oldrotation){
-				// 	context.rotate(rotation * 2* Math.PI / 360 );
-				// 	context.translate(context.width * (rotation / 90),0)
+					 //context.rotate(rotation * 2* Math.PI / 360 );
 				// }
 				// while(rotation <= rotationactuel){
 				// 	context.rotate(rotation * 2* Math.PI / 360 );
@@ -124,15 +137,15 @@
 				//}
 				//context.rotate((rotation) * 2* Math.PI / 360 );
 
-				context.translate(positions[41][0],positions[41][1]);
+				//context.translate(positions[41][0],positions[41][1]);
 
-				fillCircle(positions[19][0]-positions[41][0],positions[19][1]+distance-positions[41][1],taille,'#000000');
-				fillCircle(positions[15][0]-positions[41][0],positions[15][1]+distance-positions[41][1],taille,'#000000');
+				fillCircle(positions[19][0],positions[19][1]+distance,taille,'#000000');
+				fillCircle(positions[15][0],positions[15][1]+distance,taille,'#000000');
 
 				
-				var oldrotation = rotation;
+				//var oldrotation = rotation;
 				
-				
+				//context.translate(-positions[62][0],-positions[62][1]);
 			}
 			
 			function points(){
@@ -159,9 +172,9 @@
 			}
 			//drawLoop();
 
-			points();
+			//points();
 			//yeuxRouge();
-			//noreilleDeChat();
+			noreilleDeChat();
 
 		</script>
 		
