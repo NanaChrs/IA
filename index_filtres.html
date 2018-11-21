@@ -58,7 +58,16 @@
 				context.clearRect(x1,y1,x2,y2);
 			}
 
-			function triangle(){
+			function triangle(point1,point2,point3){
+				var canvas = document.getElementById("canvas1"); 
+				var context = canvas.getContext("2d");
+				context.beginPath();
+				context.moveTo(point1[0],point1[1]);
+				context.lineTo(point2[0],point2[1]);
+				context.lineTo(point3[0],point3[1]);
+				context.closePath();
+				context.stroke();
+				context.fill();
 
 			}
 	
@@ -97,7 +106,8 @@
 				var taille2=positions[32][1]-positions[29][1];
 				fillCircle(positions[32][0],positions[32][1],taille2,'#FF0000');
 			}
-			
+
+
 			var rotationactuel = 0;
 			var translated = false;
 
@@ -139,9 +149,9 @@
 
 				//context.translate(positions[41][0],positions[41][1]);
 
-				fillCircle(positions[19][0],positions[19][1]+distance,taille,'#000000');
-				fillCircle(positions[15][0],positions[15][1]+distance,taille,'#000000');
-
+				//fillCircle(positions[19][0],positions[19][1]+distance,taille,'#000000');
+				//fillCircle(positions[15][0],positions[15][1]+distance,taille,'#000000');
+				triangle(positions[1],positions[20],positions[69],taille)
 				
 				//var oldrotation = rotation;
 				
@@ -162,6 +172,31 @@
 
 			}
 
+			
+
+						
+			function batman(){
+				var canvas = document.getElementById("canvas1");
+				var context = canvas.getContext("2d");
+				requestAnimationFrame(batman);
+				clearZone(0,0,2000,2000);
+				var positions = ctracker.getCurrentPosition();
+
+				triangle(positions[0],positions[1],positions[23]);
+				triangle(positions[0],positions[19],positions[23]);
+				triangle(positions[63],positions[19],positions[23]);
+				triangle(positions[63],positions[19],positions[20]);
+				triangle(positions[20],positions[19],positions[24]);
+				triangle(positions[63],positions[20],positions[24]);
+				triangle(positions[20],positions[24],positions[21]);
+				triangle(positions[24],positions[21],positions[64]);
+				triangle(positions[21],positions[22],positions[64]);
+				triangle(positions[22],positions[64],positions[25]);
+				triangle(positions[22],positions[25],positions[33]);
+				triangle(positions[25],positions[33],positions[41]);
+
+			}
+
 
 			var canvasInput = document.getElementById('canvas');
 			var cc = canvasInput.getContext('2d');
@@ -174,8 +209,8 @@
 
 			//points();
 			//yeuxRouge();
-			noreilleDeChat();
-
+			//noreilleDeChat();
+			batman();
 		</script>
 		
 	</body>
