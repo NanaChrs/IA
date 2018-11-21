@@ -3,32 +3,12 @@
 	<head>
 		<meta charset=utf-8>
 		<title>My first three.js app</title>
-		<style>
-
-			canvas {
-				position :absolute;
-				left : 0;
-				top :0;
-				z-index: 2;
-			}
-			video{
-				position: absolute;
-				left : 0;
-				top : 0;
-				z-index: 0;
-            }
-            #filterButtons{
-                display : flex;
-                flex-direction: column;
-                position : relative;
-                left : 640px;
-            }
-		</style>
 	</head>
 
 
 	<body>
 		<div class="container" style="display: flex">
+			<canvas id="drawCanvas" width="640" height="480"></canvas>
 			<canvas id="canvas" width="640" height="480" ></canvas>
 				<video id="video" width="640" height="480"
 					title="Advertisement"
@@ -53,6 +33,7 @@
 		<script src="script.js"></script>
 		<!--<script src="filter.js"></script>-->
 		<link rel="stylesheet" href="UI-Checkbox-master/checkbox.css"/>
+		<link rel="stylesheet" href="range.css"/>
 
 
 		

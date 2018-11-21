@@ -28,6 +28,13 @@ var filters =[{
 		name:"Contraste",
 		filter:"contrast(500%)"
 	}];
+
+
+/*var filters2d=[{
+	name: "Yeux rouges",
+	function: 
+}]*/
+	
 /*
 function filterApply(){
 	var str="";
@@ -46,12 +53,30 @@ function filterApply(){
 }
 */
 
+function getInputRangeByName(name){
+	result = null;
+	var jeSuisUnePetiteVariable=document.querySelectorAll("input.slider");
+	//console.log(jeSuisUnePetiteVariable);
+	jeSuisUnePetiteVariable.forEach(function(item){
+		//console.log(item);
+		if(item.name==name){
+			console.log("jsuisdedasn");
+			result = item;
+		}
+	});
+
+	return result;
+	
+}
+
+
+
 function circle(x,y,rayon)
 			{
 	canvasContext.beginPath();
-	context.lineWidth="2";
-	context.arc(x, y, rayon, 0, 2 * Math.PI);
-	context.stroke();
+	canvasContext.lineWidth="2";
+	canvasContext.arc(x, y, rayon, 0, 2 * Math.PI);
+	canvasContext.stroke();
 }
 	
 function fillCircle(x,y,rayon,couleur)
@@ -60,6 +85,7 @@ function fillCircle(x,y,rayon,couleur)
 	canvasContext.fillStyle=couleur
 	canvasContext.arc(x, y, rayon, 0, 2 * Math.PI);
 	canvasContext.fill();
+	//canvasContext.filter="blur(3px)"
 }
 function clearZone(x1,y1,x2,y2)
 {
@@ -112,32 +138,48 @@ function clearZone(x1,y1,x2,y2)
 
     
 
-    function addButtons(liste){
+	function addButtons(liste){
     	var buttonsDiv = document.getElementById("filterButtons");
-    	var boutons;    
+    	//var boutons;    
 
-        liste.forEach(function(item){
-    		// Création de la div de la checkbox	
-			var div = document.createElement("div");
-			div.className="ui toggle checkbox";
+      liste.forEach(function(item){
+				// Création de la div de la checkbox	
+				var div = document.createElement("div");
+				var bouton = document.createElement("div");
+				bouton.className="ui toggle checkbox";
 
-			//Création du label du bouton
-			var label= document.createElement("label");
-			var textLabel= document.createTextNode(item.name);
-			label.appendChild(textLabel);
+				//Création du label du bouton
+				var label= document.createElement("label");
+				var textLabel= document.createTextNode(item.name);
+				label.appendChild(textLabel);
 
-			//Création de l'input
-			var input=document.createElement("input");
-			input.addEventListener('click', function(){
-				var stringette=item.filter+" ";
-				if (this.checked){
-					str+=stringette;
-				}
-				else{
-					str = str.replace(stringette, "");
-				}
+				//Création de l'input
+				var input=document.createElement("input");
+				input.addEventListener('click', function(){
+					var stringette=item.filter+" ";
+					if (this.checked){
+						str+=stringette;
+						console.log(getInputRangeByName(item.name));
+						if (getInputRangeByName(item.name)==null){
+							var range=document.createElement("input");
+							range.className="slider";
+							range.name=item.name;
+							range.type="range";
+							div.appendChild(range);
+						}
+						else{
+							getInputRangeByName(item.name).style="";
+						}
+					}
+					else{
+						getInputRangeByName(item.name).style="display: none;";
+						str = str.replace(stringette, "");
+
+						console.log(document.querySelectorAll("input.slider"));
+						/*document.getElementsByName(item.name).style.display="none";*/
+					}
 				//video.style.filter="contrast(500%)";
-				video.style.filter = str;
+					video.style.filter = str;
 				
 
 			});
@@ -146,11 +188,13 @@ function clearZone(x1,y1,x2,y2)
 			input.id=item.name;
 
 			//Assemblage du tout
-			div.appendChild(input);
-			div.appendChild(label);
+			
+			bouton.appendChild(input);
+			bouton.appendChild(label);
+			div.appendChild(bouton);
 
-        	console.log(document.getElementById('Contraste'));
-        	buttonsDiv.insertAdjacentElement("afterbegin", div); 
+      console.log(document.getElementById('Contraste'));
+      buttonsDiv.insertAdjacentElement("afterbegin", div); 
 
 
   		
@@ -167,26 +211,33 @@ function clearZone(x1,y1,x2,y2)
 
     function positionLoop() {
 		requestAnimFrame(positionLoop);
-		var positions = ctracker.getCurrentPosition();
-		// do something with the positions ...
-		// print the positions
-		var positionString = "";
-		//fillCircle(positions[27][0],positions[27][1]);
-		clearZone(0,0,2000,2000);
-		var taille=positions[27][1]-positions[24][1];
-		fillCircle(positions[27][0],positions[27][1],taille,'#FF0000');
-		var taille2=positions[32][1]-positions[29][1];
-		fillCircle(positions[32][0],positions[32][1],taille2,'#FF0000');
-		ctracker.draw(canvas);
+			var positions = ctracker.getCurrentPosition();
+			// do something with the positions ...
+			// print the positions
+			var positionString = "";
+			//fillCircle(positions[27][0],positions[27][1]);
+			clearZone(0,0,2000,2000);
+			var taille=positions[27][1]-positions[24][1];
+			fillCircle(positions[27][0],positions[27][1],taille,'#FF0000');
+			var taille2=positions[32][1]-positions[29][1];
+			fillCircle(positions[32][0],positions[32][1],taille2,'#FF0000');
+		
    	}
 
     document.body.onload=start();
 	document.body.onload=addButtons(filters);
 
 	
-	//var canvasInput = document.getElementById('drawCanvas');
-  //var cc = canvasInput.getContext('2d');
-  //drawLoop();
+	var canvasInput = document.getElementById('drawCanvas');
+  	var cc = canvasInput.getContext('2d');
+
+  	function drawLoop(){
+  		requestAnimFrame(drawLoop);
+  		cc.clearRect(0, 0, canvasInput.width, canvasInput.height);
+  		ctracker.draw(canvasInput);
+  	}
+
+  drawLoop();
   positionLoop();
     
     
