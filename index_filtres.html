@@ -58,10 +58,12 @@
 				context.clearRect(x1,y1,x2,y2);
 			}
 
-			function triangle(point1,point2,point3){
+			function triangle(point1,point2,point3,color){
 				var canvas = document.getElementById("canvas1"); 
 				var context = canvas.getContext("2d");
 				context.beginPath();
+				context.fillStyle=color;
+				context.strokeStyle=color;
 				context.moveTo(point1[0],point1[1]);
 				context.lineTo(point2[0],point2[1]);
 				context.lineTo(point3[0],point3[1]);
@@ -175,25 +177,59 @@
 			
 
 						
-			function batman(){
+			function zorro(color){
 				var canvas = document.getElementById("canvas1");
 				var context = canvas.getContext("2d");
-				requestAnimationFrame(batman);
+				requestAnimationFrame(zorro);
 				clearZone(0,0,2000,2000);
 				var positions = ctracker.getCurrentPosition();
 
-				triangle(positions[0],positions[1],positions[23]);
-				triangle(positions[0],positions[19],positions[23]);
-				triangle(positions[63],positions[19],positions[23]);
-				triangle(positions[63],positions[19],positions[20]);
-				triangle(positions[20],positions[19],positions[24]);
-				triangle(positions[63],positions[20],positions[24]);
-				triangle(positions[20],positions[24],positions[21]);
-				triangle(positions[24],positions[21],positions[64]);
-				triangle(positions[21],positions[22],positions[64]);
-				triangle(positions[22],positions[64],positions[25]);
-				triangle(positions[22],positions[25],positions[33]);
-				triangle(positions[25],positions[33],positions[41]);
+				triangle(positions[0],positions[1],positions[23],color);
+				triangle(positions[0],positions[19],positions[23],color);
+				triangle(positions[63],positions[19],positions[23],color);
+				triangle(positions[63],positions[19],positions[20],color);
+				triangle(positions[20],positions[19],positions[24],color);
+				triangle(positions[63],positions[20],positions[24],color);
+				triangle(positions[20],positions[24],positions[21],color);
+				triangle(positions[24],positions[21],positions[64],color);
+				triangle(positions[21],positions[22],positions[64],color);
+				triangle(positions[22],positions[64],positions[25],color);
+				triangle(positions[22],positions[25],positions[33],color);
+				triangle(positions[25],positions[33],positions[41],color);
+				triangle(positions[30],positions[33],positions[41],color);
+				triangle(positions[30],positions[33],positions[18],color);
+				triangle(positions[30],positions[18],positions[68],color);
+				triangle(positions[17],positions[18],positions[68],color);
+				triangle(positions[29],positions[17],positions[68],color);
+				triangle(positions[17],positions[16],positions[29],color);
+				triangle(positions[29],positions[16],positions[67],color);
+				triangle(positions[16],positions[15],positions[67],color);
+				triangle(positions[15],positions[67],positions[28],color);
+				triangle(positions[15],positions[28],positions[14],color);
+
+				triangle(positions[13],positions[40],positions[31],color);
+
+				triangle(positions[28],positions[70],positions[13],color);
+				triangle(positions[31],positions[70],positions[13],color);
+				triangle(positions[69],positions[31],positions[40],color);
+				triangle(positions[69],positions[30],positions[40],color);
+				triangle(positions[40],positions[41],positions[30],color);
+				triangle(positions[14],positions[13],positions[28],color);
+
+				triangle(positions[40],positions[34],positions[25],color);
+
+				triangle(positions[26],positions[34],positions[1],color);
+				
+				triangle(positions[26],positions[65],positions[34],color);
+				triangle(positions[65],positions[25],positions[34],color);
+				triangle(positions[26],positions[66],positions[1],color);
+				triangle(positions[66],positions[23],positions[1],color);
+				triangle(positions[22],positions[18],positions[33],color);
+				triangle(positions[41],positions[33],positions[25],color);
+				triangle(positions[65],positions[25],positions[41],color);
+				triangle(positions[34],positions[41],positions[65],color);
+				triangle(positions[65],positions[26],positions[34],color);
+				
 
 			}
 
@@ -210,7 +246,7 @@
 			//points();
 			//yeuxRouge();
 			//noreilleDeChat();
-			batman();
+			zorro("#000000");
 		</script>
 		
 	</body>
