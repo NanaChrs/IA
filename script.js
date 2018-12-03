@@ -219,6 +219,7 @@ function clearZone(x1,y1,x2,y2)
 			//input.checked=false;
 			input.type="checkbox";
 			input.id=item.name;
+			label.htmlFor = input.id;
 
 			//Assemblage du tout
 			
@@ -254,7 +255,7 @@ function clearZone(x1,y1,x2,y2)
    	}
 
     document.body.onload=start();
-	document.body.onload=addButtons(filters);
+		document.body.onload=addButtons(filters);
 
 	
 
