@@ -190,10 +190,18 @@ function clearZone(x1,y1,x2,y2)
 							range.name=item.name;
 							range.type="range";
 							div.appendChild(range);
-							range.addEventListener('ValueChange', function(){
+							range.addEventListener('click', function(){
 								var value=getInputRangeByName(item.name).value;
-								str=str.replace(item.filter, item.range+value+item.dim);
-								item.filter = item.range+value+item.dim;
+								var stringette=item.range+value+item.dim;
+								if (item.name=="Saturé"){
+									var stringette=item.range+value*10+item.dim;
+								}
+								else if (item.name=="Flou"){
+									var stringette=item.range+value/5+item.dim;
+								}
+								
+								str=str.replace(item.filter, stringette);
+								item.filter = stringette;
 								console.log(str);
 								video.style.filter = str;
 							});
