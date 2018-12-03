@@ -104,3 +104,9 @@ video{
   position: relative;
   left:640px;
 }
+
+#buttons2D{
+  display:flex;
+  position: relative;
+  top:190px;
+}

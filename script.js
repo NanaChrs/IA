@@ -2,33 +2,57 @@ var video=document.getElementById("video");
 var canvas=document.getElementById("canvas");
 var canvasContext = canvas.getContext("2d");
 var str = "";
+//var canvasInput = document.getElementById('drawCanvas');
+//var cc = canvasInput.getContext('2d');
 
 var filters =[{
-		name: "Blur",
-		filter:"blur(3px)"
+		name: "Flou",
+		filter:"blur(4px)",
+		range:"blur(",
+		dim:"px) "
 	},{
-		name: "Noir&Blanc",
-		filter:"grayscale(100%)"
+		name: "Noir et Blanc",
+		filter:"grayscale(50%)",
+		range:"grayscale(",
+		dim:"%) "
 	},{
 		name:"Lumineux",
-		filter:"brightness(200%)"
+		filter:"brightness(50%)",
+		range:"brightness(",
+		dim:"%) "
 	},{
-		name:"Rotation",
-		filter:"hue-rotate(90deg)"
+		name:"Rotation de couleurs",
+		filter:"hue-rotate(45deg)",
+		range:"hue-rotate(",
+		dim:"deg) "
 	},{
 		name:"Inversion",
-		filter:"invert(100%)"
+		filter:"invert(50%)",
+		range:"invert(",
+		dim:"%) "
 	},{
 		name:"Saturé",
-		filter:"saturate(800%)"
+		filter:"saturate(50%)",
+		range: "saturate(",
+		dim:"%) "
 	},{
 		name:"Sepia",
-		filter:"sepia(400%)"
+		filter:"sepia(50%)",
+		range:"sepia(",
+		dim:"%) "
 	},{
 		name:"Contraste",
-		filter:"contrast(500%)"
+		filter:"contrast(50%)",
+		range:"contrast(",
+		dim:"%) "
 	}];
 
+
+var filters2D =[,{
+	name:"Zorro"
+},{
+	name:"Visage"
+}];
 
 /*var filters2d=[{
 	name: "Yeux rouges",
@@ -166,6 +190,14 @@ function clearZone(x1,y1,x2,y2)
 							range.name=item.name;
 							range.type="range";
 							div.appendChild(range);
+							range.addEventListener('ValueChange', function(){
+								var value=getInputRangeByName(item.name).value;
+								str=str.replace(item.filter, item.range+value+item.dim);
+								item.filter = item.range+value+item.dim;
+								console.log(str);
+								video.style.filter = str;
+							});
+							
 						}
 						else{
 							getInputRangeByName(item.name).style="";
@@ -175,11 +207,12 @@ function clearZone(x1,y1,x2,y2)
 						getInputRangeByName(item.name).style="display: none;";
 						str = str.replace(stringette, "");
 
-						console.log(document.querySelectorAll("input.slider"));
+						//console.log(document.querySelectorAll("input.slider"));
 						/*document.getElementsByName(item.name).style.display="none";*/
 					}
 				//video.style.filter="contrast(500%)";
-					video.style.filter = str;
+					
+					console.log(str);
 				
 
 			});
@@ -195,22 +228,18 @@ function clearZone(x1,y1,x2,y2)
 
       console.log(document.getElementById('Contraste'));
       buttonsDiv.insertAdjacentElement("afterbegin", div); 
-
-
-  		
 		
       });
-
-        
-
       
-    }
+	}
+	
+
     var ctracker = new clm.tracker();
   	ctracker.init();
   	ctracker.start(video);
 
-    function positionLoop() {
-		requestAnimFrame(positionLoop);
+    function yeuxRouges() {
+		requestAnimFrame(yeuxRouges);
 			var positions = ctracker.getCurrentPosition();
 			// do something with the positions ...
 			// print the positions
@@ -228,17 +257,15 @@ function clearZone(x1,y1,x2,y2)
 	document.body.onload=addButtons(filters);
 
 	
-	var canvasInput = document.getElementById('drawCanvas');
-  	var cc = canvasInput.getContext('2d');
 
-  	function drawLoop(){
-  		requestAnimFrame(drawLoop);
-  		cc.clearRect(0, 0, canvasInput.width, canvasInput.height);
+
+  	function visage(){
+  		requestAnimFrame(visage);
+  		canvasContext.clearRect(0, 0, canvasInput.width, canvasInput.height);
   		ctracker.draw(canvasInput);
   	}
 
-  drawLoop();
-  positionLoop();
+
     
     
 })();
