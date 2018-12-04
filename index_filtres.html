@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset=utf-8>
+		<title>My first three.js app</title>
+		<style>
+			#container {
+				position : relative;
+			}
+
+			#canvas ,#canvas1 {
+				position : absolute;
+				left : 0;
+				top : 0;
+			}
+
+		</style>
+	</head>
+
+
+	<body>
+		<script src="three.js"></script>
+		<!---<script src="script.js"></script>-->
+		<script src="utils.js"></script>
+		<script src="clmtrackr.js"></script>
+		<div id="container">
+				<video id="videoElement" width="368" height="288" autoplay loop playsinline>
+					
+				</video>
+				<canvas id="canvas" width="368" height="288"></canvas>
+				<canvas id="canvas1" width="368" height="288" style="border:1px solid #CCC;background: none"></canvas>
+		</div>
+			
+		<script>
+			function circle(x,y,rayon)
+			{
+				var canvas = document.getElementById("canvas1"); 
+				var context = canvas.getContext("2d");
+				context.beginPath();
+				context.lineWidth="2";
+				context.arc(x, y, rayon, 0, 2 * Math.PI);
+				context.stroke();
+			}
+				
+			function fillCircle(x,y,rayon,couleur)
+			{
+				var canvas = document.getElementById("canvas1");
+				var context = canvas.getContext("2d");
+				context.beginPath();
+				context.fillStyle=couleur
+				context.arc(x, y, rayon, 0, 2 * Math.PI);
+				context.fill();
+			}
+			function clearZone(x1,y1,x2,y2)
+			{
+				var canvas = document.getElementById("canvas1"); 
+				var context = canvas.getContext("2d");
+				context.clearRect(x1,y1,x2,y2);
+			}
+
+			function triangle(point1,point2,point3,color){
+				var canvas = document.getElementById("canvas1"); 
+				var context = canvas.getContext("2d");
+				context.beginPath();
+				context.fillStyle=color;
+				context.strokeStyle=color;
+				context.moveTo(point1[0],point1[1]);
+				context.lineTo(point2[0],point2[1]);
+				context.lineTo(point3[0],point3[1]);
+				context.closePath();
+				context.stroke();
+				context.fill();
+
+			}
+	
+		</script>
+		<p>Printing coordinates of the first 10 points in facial features:</p>
+		<p id="positions"></p>
+		<script>
+			var video=document.getElementById("videoElement");
+
+			if (navigator.mediaDevices.getUserMedia) {       
+			    navigator.mediaDevices.getUserMedia({video: true})
+			  .then(function(stream) {
+			    video.srcObject = stream;
+			  })
+			  .catch(function(err0r) {
+			    console.log("Something went wrong!");
+			  });
+			}
+
+			var videoInput = document.getElementById('videoElement');
+
+			var ctracker = new clm.tracker();
+			ctracker.init();
+			ctracker.start(videoInput);
+
+			function yeuxRouge() {
+				requestAnimFrame(yeuxRouge);
+				var positions = ctracker.getCurrentPosition();
+				// do something with the positions ...
+				// print the positions
+				var positionString = "";
+				//fillCircle(positions[27][0],positions[27][1]);
+				clearZone(0,0,2000,2000);
+				var taille=positions[27][1]-positions[24][1];
+				fillCircle(positions[27][0],positions[27][1],taille,'#FF0000');
+				var taille2=positions[32][1]-positions[29][1];
+				fillCircle(positions[32][0],positions[32][1],taille2,'#FF0000');
+			}
+
+
+			var rotationactuel = 0;
+			var translated = false;
+
+			function noreilleDeChat(){
+				var canvas = document.getElementById("canvas1");
+				var context = canvas.getContext("2d");
+				requestAnimationFrame(noreilleDeChat);
+				clearZone(0,0,2000,2000);
+				var positions = ctracker.getCurrentPosition();
+				var distance = 2 * (positions[19][1]-positions[1][1]);
+				var taille = Math.sqrt((positions[14][0]-positions[0][0])**2+(positions[14][1]-positions[0][1])**2)*(1/3);
+
+				
+				/*if(!translated){
+					context.translate(positions[62][0],positions[62][1]);
+					translated = true;
+				}*/
+
+				//var rotation = (positions[1][1]-positions[13][1])*((positions[13][0]-positions[1][0])+90);
+				var rotation = Math.atan( (positions[23][1] - positions[28][1]) / (positions[23][0] - positions[28][0]) );
+				
+
+				// if(rotation != oldrotation){
+					 //context.rotate(rotation * 2* Math.PI / 360 );
+				// }
+				// while(rotation <= rotationactuel){
+				// 	context.rotate(rotation * 2* Math.PI / 360 );
+				// 	rotationactuel -= rotation;
+				// }
+				// while(rotation >= rotationactuel){
+				// 	context.rotate(-rotation * 2* Math.PI / 360 );
+				// 	rotation += rotation;
+				// }
+				//if(rotation > oldrotation){
+				//	context.rotate(-rotation * 2* Math.PI / 360 );
+				//	context.translate(context.width * (rotation / 90),0)
+				//}
+				//context.rotate((rotation) * 2* Math.PI / 360 );
+
+				//context.translate(positions[41][0],positions[41][1]);
+
+				//fillCircle(positions[19][0],positions[19][1]+distance,taille,'#000000');
+				//fillCircle(positions[15][0],positions[15][1]+distance,taille,'#000000');
+				triangle(positions[1],positions[20],positions[69],taille)
+				
+				//var oldrotation = rotation;
+				
+				//context.translate(-positions[62][0],-positions[62][1]);
+			}
+			
+			function points(){
+				var i = 0;
+				requestAnimFrame(points);
+				var positions = ctracker.getCurrentPosition();
+				clearZone(0,0,2000,2000);
+
+				
+
+				for (i; i<=70;i++){
+					fillCircle(positions[i][0],positions[i][1],2,'#FF0000');
+				}
+
+			}
+
+			
+
+						
+			function zorro(color){
+				var canvas = document.getElementById("canvas1");
+				var context = canvas.getContext("2d");
+				requestAnimationFrame(zorro);
+				clearZone(0,0,2000,2000);
+				var positions = ctracker.getCurrentPosition();
+
+				triangle(positions[0],positions[1],positions[23],color);
+				triangle(positions[0],positions[19],positions[23],color);
+				triangle(positions[63],positions[19],positions[23],color);
+				triangle(positions[63],positions[19],positions[20],color);
+				triangle(positions[20],positions[19],positions[24],color);
+				triangle(positions[63],positions[20],positions[24],color);
+				triangle(positions[20],positions[24],positions[21],color);
+				triangle(positions[24],positions[21],positions[64],color);
+				triangle(positions[21],positions[22],positions[64],color);
+				triangle(positions[22],positions[64],positions[25],color);
+				triangle(positions[22],positions[25],positions[33],color);
+				triangle(positions[25],positions[33],positions[41],color);
+				triangle(positions[30],positions[33],positions[41],color);
+				triangle(positions[30],positions[33],positions[18],color);
+				triangle(positions[30],positions[18],positions[68],color);
+				triangle(positions[17],positions[18],positions[68],color);
+				triangle(positions[29],positions[17],positions[68],color);
+				triangle(positions[17],positions[16],positions[29],color);
+				triangle(positions[29],positions[16],positions[67],color);
+				triangle(positions[16],positions[15],positions[67],color);
+				triangle(positions[15],positions[67],positions[28],color);
+				triangle(positions[15],positions[28],positions[14],color);
+
+				triangle(positions[13],positions[40],positions[31],color);
+
+				triangle(positions[28],positions[70],positions[13],color);
+				triangle(positions[31],positions[70],positions[13],color);
+				triangle(positions[69],positions[31],positions[40],color);
+				triangle(positions[69],positions[30],positions[40],color);
+				triangle(positions[40],positions[41],positions[30],color);
+				triangle(positions[14],positions[13],positions[28],color);
+
+				triangle(positions[40],positions[34],positions[25],color);
+
+				triangle(positions[26],positions[34],positions[1],color);
+				
+				triangle(positions[26],positions[65],positions[34],color);
+				triangle(positions[65],positions[25],positions[34],color);
+				triangle(positions[26],positions[66],positions[1],color);
+				triangle(positions[66],positions[23],positions[1],color);
+				triangle(positions[22],positions[18],positions[33],color);
+				triangle(positions[41],positions[33],positions[25],color);
+				triangle(positions[65],positions[25],positions[41],color);
+				triangle(positions[34],positions[41],positions[65],color);
+				triangle(positions[65],positions[26],positions[34],color);
+				
+
+			}
+
+
+			var canvasInput = document.getElementById('canvas');
+			var cc = canvasInput.getContext('2d');
+			function drawLoop() {
+				requestAnimFrame(drawLoop);
+				cc.clearRect(0, 0, canvasInput.width, canvasInput.height);
+				ctracker.draw(canvasInput);
+			}
+			//drawLoop();
+
+			//points();
+			//yeuxRouge();
+			//noreilleDeChat();
+			zorro("#000000");
+		</script>
+		
+	</body>
+</html>
