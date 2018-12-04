@@ -236,12 +236,26 @@
 			function lunettes(){
 				var canvas = document.getElementById("canvas1");
 				var context = canvas.getContext("2d");
-				requestAnimationFrame(zorro);
+				requestAnimationFrame(lunettes);
 				clearZone(0,0,2000,2000);
 				var positions = ctracker.getCurrentPosition();
 				
+				
 
-
+				taille = positions[26][1] - positions[21][1];
+				var my_gradient=context.createLinearGradient(0,positions[27][1]-taille,0,positions[27][1]+taille);
+				my_gradient.addColorStop(0,"black");
+				my_gradient.addColorStop(0.8,"#00FF00");
+				my_gradient.addColorStop(1,"white");
+				
+				triangle(positions[27],positions[27], positions[32]);
+				triangle(positions[27],positions[27], positions[0]);
+				triangle(positions[32],positions[32], positions[14]);
+				fillCircle(positions[27][0],positions[27][1],taille,my_gradient);
+				fillCircle(positions[32][0],positions[32][1],taille,my_gradient);
+				circle(position[27][0],position[27][1],taille);
+				circle(position[32][0],position[32][1],taille);
+				
 
 			}
 
