@@ -183,6 +183,7 @@ function clearZone(x1,y1,x2,y2)
 					var stringette=item.filter+" ";
 					if (this.checked){
 						str+=stringette;
+						video.style.filter = str;
 						console.log(getInputRangeByName(item.name));
 						if (getInputRangeByName(item.name)==null){
 							var range=document.createElement("input");
@@ -193,11 +194,11 @@ function clearZone(x1,y1,x2,y2)
 							range.addEventListener('click', function(){
 								var value=getInputRangeByName(item.name).value;
 								var stringette=item.range+value+item.dim;
-								if (item.name=="Saturé"){
+								if (item.name=="Saturé" || item.name=="Contraste" || item.name=="Lumineux"){
 									var stringette=item.range+value*10+item.dim;
 								}
 								else if (item.name=="Flou"){
-									var stringette=item.range+value/5+item.dim;
+									var stringette=item.range+value/2+item.dim;
 								}
 								
 								str=str.replace(item.filter, stringette);
@@ -214,13 +215,15 @@ function clearZone(x1,y1,x2,y2)
 					else{
 						getInputRangeByName(item.name).style="display: none;";
 						str = str.replace(stringette, "");
-
+						console.log(stringette);
+						console.log(str);
+						video.style.filter = str;
 						//console.log(document.querySelectorAll("input.slider"));
 						/*document.getElementsByName(item.name).style.display="none";*/
 					}
 				//video.style.filter="contrast(500%)";
 					
-					console.log(str);
+					//console.log(str);
 				
 
 			});
@@ -235,8 +238,8 @@ function clearZone(x1,y1,x2,y2)
 			bouton.appendChild(label);
 			div.appendChild(bouton);
 
-      console.log(document.getElementById('Contraste'));
-      buttonsDiv.insertAdjacentElement("afterbegin", div); 
+      //console.log(document.getElementById('Contraste'));
+      buttonsDiv.insertAdjacentElement("beforeend", div); 
 		
       });
       
