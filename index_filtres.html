@@ -233,7 +233,7 @@
 
 			}
 
-			function lunettes(){
+			function lunettes(thecolor){
 				var canvas = document.getElementById("canvas1");
 				var context = canvas.getContext("2d");
 				requestAnimationFrame(lunettes);
@@ -263,9 +263,9 @@
 				triangle(positions[32],positions[32], positions[14]);
 				fillCircle(positions[27][0],positions[27][1],taille,my_gradient);
 				fillCircle(positions[32][0],positions[32][1],taille,my_gradient2);
-				circle(position[27][0],position[27][1],taille);
-				circle(position[32][0],position[32][1],taille);
-				
+				circle(positions[27][0],positions[27][1],taille);
+				circle(positions[32][0],positions[32][1],taille);
+				canvas.style.opacity = "0.5";
 
 			}
 
@@ -286,7 +286,7 @@
 			//noreilleDeChat();
 			//zorro("#000000");
 
-			lunettes();
+			lunettes("#00FF00");
 		</script>
 		
 	</body>
