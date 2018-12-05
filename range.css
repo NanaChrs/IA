@@ -109,4 +109,5 @@ video{
   display:flex;
   position: relative;
   top:190px;
+  flex-direction: column;
 }
