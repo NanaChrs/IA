@@ -10,8 +10,11 @@ var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAni
                             window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
 
 var cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
+
+var canvass=[];
 //var canvasInput = document.getElementById('drawCanvas');
 //var cc = canvasInput.getContext('2d');
+
 
 var filters =[{
 		name: "Flou",
@@ -129,75 +132,102 @@ function getInputRangeByName(name){
 	
 }
 
+function getCanvasByName(name){
+	result = null;
+	var jeSuisUnePetiteVariable=document.querySelectorAll("canvas");
+	//console.log(jeSuisUnePetiteVariable);
+	jeSuisUnePetiteVariable.forEach(function(item){
+		//console.log(item);
+		if(item.id==name){
+			//console.log("jsuisdedasn");
+			result = item;
+		}
+	});
+
+	return result;
+	
+}
 
 
-function circle(x,y,rayon)
-			{
-	canvasContext.beginPath();
-	canvasContext.lineWidth="2";
-	canvasContext.arc(x, y, rayon, 0, 2 * Math.PI);
-	canvasContext.stroke();
+
+function circle(x,y,rayon, context){
+	//var context=canvas.getContext("2d");
+	context.beginPath();
+	context.lineWidth="2";
+	context.arc(x, y, rayon, 0, 2 * Math.PI);
+	context.stroke();
 }
 	
-function fillCircle(x,y,rayon,couleur)
+function fillCircle(x,y,rayon,couleur, context)
 {
-	canvasContext.beginPath();
-	canvasContext.fillStyle=couleur
-	canvasContext.arc(x, y, rayon, 0, 2 * Math.PI);
-	canvasContext.fill();
+	//var context=canvas.getContext("2d");
+	context.beginPath();
+	context.fillStyle=couleur;
+	context.arc(x, y, rayon, 0, 2 * Math.PI);
+	context.fill();
 	//canvasContext.filter="blur(3px)"
 }
-function clearZone(x1,y1,x2,y2)
+function clearZone(x1,y1,x2,y2, context)
 {
-	canvasContext.clearRect(x1,y1,x2,y2);
+	//var context=canvas.getContext("2d");
+	context.clearRect(x1,y1,x2,y2);
 }
 
-function triangle(point1,point2,point3,color){
-	/*var canvas = document.getElementById("canvas1"); 
-	var context = canvas.getContext("2d");*/
-	canvasContext.beginPath();
-	canvasContext.fillStyle=color;
-	canvasContext.strokeStyle=color;
-	canvasContext.moveTo(point1[0],point1[1]);
-	canvasContext.lineTo(point2[0],point2[1]);
-	canvasContext.lineTo(point3[0],point3[1]);
-	canvasContext.closePath();
-	canvasContext.stroke();
-	canvasContext.fill();
+function triangle(point1,point2,point3,color, context){
+	//var canvasContext = document.getElementById("canvas1"); 
+	//console.log(context)
+	//var context = canvas.getContext("2d");	}
+	context.beginPath();
+	context.fillStyle=color;
+	context.strokeStyle=color;
+	context.moveTo(point1[0],point1[1]);
+	context.lineTo(point2[0],point2[1]);
+	context.lineTo(point3[0],point3[1]);
+	context.closePath();
+	context.stroke();
+	context.fill();
 
 }
 
 function mickey(color){
 	/*var canvas = document.getElementById("canvas1");
 	var context = canvas.getContext("2d");*/
+	
+	var context=getCanvasByName("mickey").getContext("2d");
+	context.clearRect(0,0,2000,2000);
 	requestAnimationFrame(mickey);
-	//clearZone(0,0,2000,2000);
+	//clearZone(0,0,2000,2000, context);
 	var positions = ctracker.getCurrentPosition();
 	var distance = 2 * (positions[19][1]-positions[1][1]);
 	var taille = Math.sqrt((positions[14][0]-positions[0][0])**2+(positions[14][1]-positions[0][1])**2)*(1/3);
-	fillCircle(positions[19][0],positions[19][1]+distance,taille,color);
-	fillCircle(positions[15][0],positions[15][1]+distance,taille,color);
+	fillCircle(positions[19][0],positions[19][1]+distance,taille,color,context);
+	fillCircle(positions[15][0],positions[15][1]+distance,taille,color,context);
 }
 
 function visage(color){
 	requestAnimFrame(visage);
 	//clearZone(0,0,2000,2000);
 	//canvasContext.clearRect(0, 0, canvas.width, canvas.height);
-	ctracker.draw(canvas);
+	//ctracker.draw(canvas);
 }
 
 function points(color){
 	var i = 0;
+	var context=getCanvasByName("points").getContext("2d");
+	context.clearRect(0,0,2000,2000);
 	requestAnimFrame(points);
 	var positions = ctracker.getCurrentPosition();
 	//clearZone(0,0,2000,2000);
 	for (i; i<=70;i++){
-		fillCircle(positions[i][0],positions[i][1],2,color);
+		fillCircle(positions[i][0],positions[i][1],2,color,context);
 	}
 
 }
 
 function yeuxRouges(color) {
+	
+	var context=getCanvasByName("yeuxRouges").getContext("2d");
+	context.clearRect(0,0,2000,2000);
 	requestAnimFrame(yeuxRouges);
 	var positions = ctracker.getCurrentPosition();
 	// do something with the positions ...
@@ -206,65 +236,67 @@ function yeuxRouges(color) {
 	//fillCircle(positions[27][0],positions[27][1]);
 	//clearZone(0,0,2000,2000);
 	var taille=positions[27][1]-positions[24][1];
-	fillCircle(positions[27][0],positions[27][1],taille,color);
+	fillCircle(positions[27][0],positions[27][1],taille,color,context);
 	var taille2=positions[32][1]-positions[29][1];
-	fillCircle(positions[32][0],positions[32][1],taille2,color);
+	fillCircle(positions[32][0],positions[32][1],taille2,color,context);
 	
    }
 
 function zorro(color){
 	/*var canvas = document.getElementById("canvas1");
 	var context = canvas.getContext("2d");*/
-
+	var context=getCanvasByName("zorro").getContext("2d");
+	context.clearRect(0,0,2000,2000);
 	requestAnimationFrame(zorro);
-	clearZone(0,0,2000,2000);
+	console.log(context)
+	//clearZone(0,0,2000,2000);
 	var positions = ctracker.getCurrentPosition();
 
-	triangle(positions[0],positions[1],positions[23],color);
-	triangle(positions[0],positions[19],positions[23],color);
-	triangle(positions[63],positions[19],positions[23],color);
-	triangle(positions[63],positions[19],positions[20],color);
-	triangle(positions[20],positions[19],positions[24],color);
-	triangle(positions[63],positions[20],positions[24],color);
-	triangle(positions[20],positions[24],positions[21],color);
-	triangle(positions[24],positions[21],positions[64],color);
-	triangle(positions[21],positions[22],positions[64],color);
-	triangle(positions[22],positions[64],positions[25],color);
-	triangle(positions[22],positions[25],positions[33],color);
-	triangle(positions[25],positions[33],positions[41],color);
-	triangle(positions[30],positions[33],positions[41],color);
-	triangle(positions[30],positions[33],positions[18],color);
-	triangle(positions[30],positions[18],positions[68],color);
-	triangle(positions[17],positions[18],positions[68],color);
-	triangle(positions[29],positions[17],positions[68],color);
-	triangle(positions[17],positions[16],positions[29],color);
-	triangle(positions[29],positions[16],positions[67],color);
-	triangle(positions[16],positions[15],positions[67],color);
-	triangle(positions[15],positions[67],positions[28],color);
-	triangle(positions[15],positions[28],positions[14],color);
+	triangle(positions[0],positions[1],positions[23],color,context);
+	triangle(positions[0],positions[19],positions[23],color,context);
+	triangle(positions[63],positions[19],positions[23],color,context);
+	triangle(positions[63],positions[19],positions[20],color,context);
+	triangle(positions[20],positions[19],positions[24],color,context);
+	triangle(positions[63],positions[20],positions[24],color,context);
+	triangle(positions[20],positions[24],positions[21],color,context);
+	triangle(positions[24],positions[21],positions[64],color,context);
+	triangle(positions[21],positions[22],positions[64],color,context);
+	triangle(positions[22],positions[64],positions[25],color,context);
+	triangle(positions[22],positions[25],positions[33],color,context);
+	triangle(positions[25],positions[33],positions[41],color,context);
+	triangle(positions[30],positions[33],positions[41],color,context);
+	triangle(positions[30],positions[33],positions[18],color,context);
+	triangle(positions[30],positions[18],positions[68],color,context);
+	triangle(positions[17],positions[18],positions[68],color,context);
+	triangle(positions[29],positions[17],positions[68],color,context);
+	triangle(positions[17],positions[16],positions[29],color,context);
+	triangle(positions[29],positions[16],positions[67],color,context);
+	triangle(positions[16],positions[15],positions[67],color,context);
+	triangle(positions[15],positions[67],positions[28],color,context);
+	triangle(positions[15],positions[28],positions[14],color,context);
 
-	triangle(positions[13],positions[40],positions[31],color);
+	triangle(positions[13],positions[40],positions[31],color,context);
 
-	triangle(positions[28],positions[70],positions[13],color);
-	triangle(positions[31],positions[70],positions[13],color);
-	triangle(positions[69],positions[31],positions[40],color);
-	triangle(positions[69],positions[30],positions[40],color);
-	triangle(positions[40],positions[41],positions[30],color);
-	triangle(positions[14],positions[13],positions[28],color);
+	triangle(positions[28],positions[70],positions[13],color,context);
+	triangle(positions[31],positions[70],positions[13],color,context);
+	triangle(positions[69],positions[31],positions[40],color,context);
+	triangle(positions[69],positions[30],positions[40],color,context);
+	triangle(positions[40],positions[41],positions[30],color,context);
+	triangle(positions[14],positions[13],positions[28],color,context);
 
-	triangle(positions[40],positions[34],positions[25],color);
+	triangle(positions[40],positions[34],positions[25],color,context);
 
-	triangle(positions[26],positions[34],positions[1],color);
+	triangle(positions[26],positions[34],positions[1],color,context);
 	
-	triangle(positions[26],positions[65],positions[34],color);
-	triangle(positions[65],positions[25],positions[34],color);
-	triangle(positions[26],positions[66],positions[1],color);
-	triangle(positions[66],positions[23],positions[1],color);
-	triangle(positions[22],positions[18],positions[33],color);
-	triangle(positions[41],positions[33],positions[25],color);
-	triangle(positions[65],positions[25],positions[41],color);
-	triangle(positions[34],positions[41],positions[65],color);
-	triangle(positions[65],positions[26],positions[34],color);
+	triangle(positions[26],positions[65],positions[34],color,context);
+	triangle(positions[65],positions[25],positions[34],color,context);
+	triangle(positions[26],positions[66],positions[1],color,context);
+	triangle(positions[66],positions[23],positions[1],color,context);
+	triangle(positions[22],positions[18],positions[33],color,context);
+	triangle(positions[41],positions[33],positions[25],color,context);
+	triangle(positions[65],positions[25],positions[41],color,context);
+	triangle(positions[34],positions[41],positions[65],color,context);
+	triangle(positions[65],positions[26],positions[34],color,context);
 	
 
 }
@@ -272,9 +304,15 @@ function zorro(color){
 function addButtons2D(liste){
 	var buttonsDiv = document.getElementById("buttons2D");
 	//var boutons;    
+	var container=document.getElementById("container");
+	var test=canvass;
 
   	liste.forEach(function(item){
-			// Création de la div de la checkbox	
+			// Création de la div de la checkbox
+				
+		
+		//test[item.start]=can.getContext("2d");
+		
 		var div = document.createElement("div");
 		var bouton = document.createElement("div");
 		bouton.className="ui toggle checkbox";
@@ -289,18 +327,32 @@ function addButtons2D(liste){
 		input.addEventListener('click', function(){
 
 			if (this.checked){
+				var can = document.createElement("canvas");
+				can.id = item.start;
+				can.width="640";
+				can.height="480";
+				container.insertAdjacentElement("afterbegin", can);
+				//console.log(test);
+				//console.log(item.start);
 				
 				window[item.start]("#ffffff");
+				//requestAnimationFrame(item.cancel);
+				//console.log(requestAnimationFrame(item.cancel))
+				//var color = document.
 			}
 			else{
 				cancelAnimationFrame(requestAnimationFrame(item.cancel));
 				console.log("je cancel ");
-				clearZone(0,0,2000,2000);
+				//console.log("cnvas#"+item.start);
+				container.removeChild(getCanvasByName(item.start));
+				//delete getCanvasByName("zorro");
+				//clearZone(0,0,2000,2000,getCanvasByName(item.start));
 				
 				
 			}
-			console.log(item.start);
+			//console.log(item.start);
 	});
+		canvas=test;
 		
 		input.type="checkbox";
 		input.id=item.name;
@@ -459,7 +511,7 @@ function addButtons2D(liste){
 
     document.body.onload=start();
 	document.body.onload=addButtons(filters);
-	document.body=addButtons2D(filters2D);
+	document.body.onload=addButtons2D(filters2D);
 	//filter2D(filter2D);
 	clearZone(0,0,2000,2000);
 
