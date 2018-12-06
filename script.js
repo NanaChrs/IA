@@ -82,7 +82,7 @@ var filters2D =[,{
 },{
 	name:"Lunettes",
 	start:"lunettes",
-	end:""
+	cancel:lunettes
 }];
 
 /*var filters2d=[{
@@ -239,6 +239,43 @@ function points(color){
 
 }
 
+function lunettes(thecolor){
+	//console.log(typeof thecolor); la coueluer ne fonctionne pas avec la fonction addcolorstop, on a un changement de type intempestif ainsi que une incrementation infini de la variable
+	var canvas=getCanvasByName("lunettes");
+	var context = canvas.getContext("2d");
+	requestAnimationFrame(lunettes);
+	context.clearRect(0,0,2000,2000);
+	var positions = ctracker.getCurrentPosition();
+	
+	
+
+	taille = Math.sqrt((positions[14][0] - positions[0][0])*(positions[14][0] - positions[0][0])+(positions[14][1] - positions[0][1])*(positions[14][1] - positions[0][1]));
+	taille = taille / 5;
+	//var my_gradient=context.createLinearGradient(0,positions[27][1]-taille,0,positions[27][1]+taille);
+	//var my_gradient=context.createLinearGradient(0,positions[21][1],0,positions[41][1]); //gradient mouvant chelou
+	
+	var my_gradient=context.createLinearGradient(0,positions[27][1]-taille,0,positions[27][1]+taille);
+	var my_gradient2=context.createLinearGradient(0,positions[32][1]-taille,0,positions[32][1]+taille);
+	
+	my_gradient.addColorStop(0,"black");
+	my_gradient.addColorStop(0.8,"#ff5397");
+	my_gradient.addColorStop(1,"white");
+
+	my_gradient2.addColorStop(0,"black");
+	my_gradient2.addColorStop(0.8,"#ff5397");
+	my_gradient2.addColorStop(1,"white");
+	
+	triangle(positions[27],positions[27], positions[32],"black",context);
+	triangle(positions[27],positions[27], positions[0],"black",context);
+	triangle(positions[32],positions[32], positions[14],"black",context);
+	fillCircle(positions[27][0],positions[27][1],taille,my_gradient,context);
+	fillCircle(positions[32][0],positions[32][1],taille,my_gradient2,context);
+	circle(positions[27][0],positions[27][1],taille,context);
+	circle(positions[32][0],positions[32][1],taille,context);
+	canvas.style.opacity = "0.5";
+
+}
+
 function yeux(color) {
 	
 	var context=getCanvasByName("yeux").getContext("2d");
@@ -351,15 +388,23 @@ function addButtons2D(liste){
 				//console.log(test);
 				//console.log(item.start);
 				if (getInputById(item.start+"color")==null){
-					var color=document.createElement("input");
-					new jscolor(color);
-					color.id=item.start+"color";
-					color.addEventListener('change',function(){
-						window[item.start]("#"+color.value);
-					});
-					color.style="margin-left:2%;";
-					//window[item.start](color.value);
-					div.append(color);
+					
+					if (item.start!="lunettes"){
+						var color=document.createElement("input");
+						new jscolor(color);
+						color.id=item.start+"color";
+						color.addEventListener('change',function(){
+							window[item.start]("#"+color.value);
+						});
+						color.style="margin-left:2%;";
+						//window[item.start](color.value);
+						div.append(color);
+					}
+					
+					window[item.start]("#FFFFFF");
+
+
+					
 				}
 				else{
 					getInputById(item.start+"color").style="margin-left:2%";
@@ -372,7 +417,13 @@ function addButtons2D(liste){
 			else{
 				
 				//console.log("je cancel ");
-				getInputById(item.start+"color").style="display: none";
+				try{
+					getInputById(item.start+"color").style="display: none";
+				}
+				catch(err){
+
+				}
+				
 				cancelAnimationFrame(requestAnimationFrame(item.cancel));
 				//console.log("cnvas#"+item.start);
 				container.removeChild(getCanvasByName(item.start));
