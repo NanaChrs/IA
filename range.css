@@ -111,3 +111,8 @@ video{
   top:190px;
   flex-direction: column;
 }
+
+.jscolor{
+  display:flex;
+  margin-left: 5%;
+}

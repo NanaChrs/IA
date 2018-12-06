@@ -68,9 +68,9 @@ var filters2D =[,{
 	start:"visage",
 	cancel:visage
 },{
-	name:"Yeux rouges",
-	start:"yeuxRouges",
-	cancel:yeuxRouges
+	name:"Yeux",
+	start:"yeux",
+	cancel:yeux
 },{
 	name:"Points",
 	start:"points",
@@ -81,7 +81,7 @@ var filters2D =[,{
 	cancel:mickey
 },{
 	name:"Lunettes",
-	start:"",
+	start:"lunettes",
 	end:""
 }];
 
@@ -146,6 +146,21 @@ function getCanvasByName(name){
 
 	return result;
 	
+}
+
+function getInputById(id){
+	result = null;
+	var jeSuisUnePetiteVariable=document.querySelectorAll("input");
+	//console.log(jeSuisUnePetiteVariable);
+	jeSuisUnePetiteVariable.forEach(function(item){
+		//console.log(item);
+		if(item.id==id){
+			//console.log("jsuisdedasn");
+			result = item;
+		}
+	});
+
+	return result;
 }
 
 
@@ -224,11 +239,11 @@ function points(color){
 
 }
 
-function yeuxRouges(color) {
+function yeux(color) {
 	
-	var context=getCanvasByName("yeuxRouges").getContext("2d");
+	var context=getCanvasByName("yeux").getContext("2d");
 	context.clearRect(0,0,2000,2000);
-	requestAnimFrame(yeuxRouges);
+	requestAnimFrame(yeux);
 	var positions = ctracker.getCurrentPosition();
 	// do something with the positions ...
 	// print the positions
@@ -248,7 +263,7 @@ function zorro(color){
 	var context=getCanvasByName("zorro").getContext("2d");
 	context.clearRect(0,0,2000,2000);
 	requestAnimationFrame(zorro);
-	console.log(context)
+	//console.log(context)
 	//clearZone(0,0,2000,2000);
 	var positions = ctracker.getCurrentPosition();
 
@@ -316,6 +331,7 @@ function addButtons2D(liste){
 		var div = document.createElement("div");
 		var bouton = document.createElement("div");
 		bouton.className="ui toggle checkbox";
+		//div.style="display: flex; flex-direction: row; align-content: space-around;"
 
 		//Création du label du bouton
 		var label= document.createElement("label");
@@ -334,15 +350,30 @@ function addButtons2D(liste){
 				container.insertAdjacentElement("afterbegin", can);
 				//console.log(test);
 				//console.log(item.start);
+				if (getInputById(item.start+"color")==null){
+					var color=document.createElement("input");
+					new jscolor(color);
+					color.id=item.start+"color";
+					color.addEventListener('change',function(){
+						window[item.start]("#"+color.value);
+					});
+					color.style="margin-left:2%;";
+					//window[item.start](color.value);
+					div.append(color);
+				}
+				else{
+					getInputById(item.start+"color").style="margin-left:2%";
+				}
 				
-				window[item.start]("#ffffff");
 				//requestAnimationFrame(item.cancel);
 				//console.log(requestAnimationFrame(item.cancel))
 				//var color = document.
 			}
 			else{
+				
+				//console.log("je cancel ");
+				getInputById(item.start+"color").style="display: none";
 				cancelAnimationFrame(requestAnimationFrame(item.cancel));
-				console.log("je cancel ");
 				//console.log("cnvas#"+item.start);
 				container.removeChild(getCanvasByName(item.start));
 				//delete getCanvasByName("zorro");
@@ -352,7 +383,7 @@ function addButtons2D(liste){
 			}
 			//console.log(item.start);
 	});
-		canvas=test;
+		//canvas=test;
 		
 		input.type="checkbox";
 		input.id=item.name;
@@ -459,7 +490,7 @@ function addButtons2D(liste){
 								
 								str=str.replace(item.filter, stringette);
 								item.filter = stringette;
-								console.log(str);
+								//console.log(str);
 								video.style.filter = str;
 							});
 							
@@ -472,8 +503,8 @@ function addButtons2D(liste){
 					else{
 						getInputRangeByName(item.name).style="display: none;";
 						str = str.replace(stringette, "");
-						console.log(stringette);
-						console.log(str);
+						/*console.log(stringette);
+						console.log(str);*/
 						video.style.filter = str;
 						//console.log(document.querySelectorAll("input.slider"));
 						/*document.getElementsByName(item.name).style.display="none";*/
