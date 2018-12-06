@@ -82,7 +82,7 @@ var filters2D =[,{
 },{
 	name:"Lunettes",
 	start:"lunettes",
-	end:""
+	cancel:lunettes
 }];
 
 /*var filters2d=[{
@@ -204,6 +204,17 @@ function triangle(point1,point2,point3,color, context){
 
 }
 
+function nofilltriangle(point1,point2,point3,color,context){
+	context.beginPath();
+	context.strokeStyle=color;
+	context.lineWidth="0.7";
+	context.moveTo(point1[0],point1[1]);
+	context.lineTo(point2[0],point2[1]);
+	context.lineTo(point3[0],point3[1]);
+	context.closePath();
+	context.stroke();
+}
+
 function mickey(color){
 	/*var canvas = document.getElementById("canvas1");
 	var context = canvas.getContext("2d");*/
@@ -220,10 +231,67 @@ function mickey(color){
 }
 
 function visage(color){
-	requestAnimFrame(visage);
-	//clearZone(0,0,2000,2000);
-	//canvasContext.clearRect(0, 0, canvas.width, canvas.height);
-	//ctracker.draw(canvas);
+	//requestAnimFrame(visage);
+	var canvas = getCanvasByName("visage");
+	var context = canvas.getContext("2d");
+	requestAnimationFrame(visage);
+	context.clearRect(0,0,2000,2000);
+	var positions = ctracker.getCurrentPosition();
+
+	for (let index = 0; index < 14; index++) { //bas visage
+		nofilltriangle(positions[index],positions[index+1],positions[index+1],color,context);
+	}
+	for (let index = 15; index < 18; index++) {//sourcil droit
+		nofilltriangle(positions[index],positions[index+1],positions[index+1],color,context);
+	}
+	for (let index = 19; index < 22; index++) {//sourcil gauche
+		nofilltriangle(positions[index],positions[index+1],positions[index+1],color,context);
+	}
+	for (let index = 44; index < 55; index++) {//contour bouche
+		nofilltriangle(positions[index],positions[index+1],positions[index+1],color,context);
+	}
+	for (let index = 56; index < 58; index++) {//bas levres
+		nofilltriangle(positions[index],positions[index+1],positions[index+1],color,context);
+	}
+	for (let index = 59; index < 61; index++) {//haut levres
+		nofilltriangle(positions[index],positions[index+1],positions[index+1],color,context);
+	}
+	nofilltriangle(positions[44],positions[44],positions[55],color,context);//jointures
+	nofilltriangle(positions[44],positions[44],positions[56],color,context);
+	nofilltriangle(positions[44],positions[44],positions[61],color,context);
+	nofilltriangle(positions[50],positions[50],positions[58],color,context);
+	nofilltriangle(positions[50],positions[50],positions[59],color,context);
+	for (let index = 34; index < 36; index++) {//droite nez
+		nofilltriangle(positions[index],positions[index+1],positions[index+1],color,context);
+	}
+	for (let index = 38; index < 40; index++) {//gauche nez
+		nofilltriangle(positions[index],positions[index+1],positions[index+1],color,context);
+	}
+	nofilltriangle(positions[36],positions[36],positions[42],color,context);//details nez
+	nofilltriangle(positions[42],positions[42],positions[37],color,context);
+	nofilltriangle(positions[37],positions[37],positions[43],color,context);
+	nofilltriangle(positions[43],positions[43],positions[38],color,context);
+
+	nofilltriangle(positions[41],positions[41],positions[33],color,context);//haut nez
+	nofilltriangle(positions[41],positions[41],positions[62],color,context);
+
+	nofilltriangle(positions[23],positions[23],positions[66],color,context);//oeil gauche
+	nofilltriangle(positions[23],positions[23],positions[63],color,context);
+	nofilltriangle(positions[63],positions[63],positions[24],color,context);
+	nofilltriangle(positions[24],positions[24],positions[64],color,context);
+	nofilltriangle(positions[64],positions[64],positions[25],color,context);
+	nofilltriangle(positions[65],positions[25],positions[25],color,context);
+	nofilltriangle(positions[65],positions[65],positions[26],color,context);
+	nofilltriangle(positions[26],positions[26],positions[66],color,context);
+
+	nofilltriangle(positions[30],positions[30],positions[68],color,context);//oeil droit
+	nofilltriangle(positions[29],positions[68],positions[68],color,context);
+	nofilltriangle(positions[29],positions[29],positions[67],color,context);
+	nofilltriangle(positions[28],positions[67],positions[67],color,context);
+	nofilltriangle(positions[28],positions[28],positions[70],color,context);
+	nofilltriangle(positions[31],positions[70],positions[70],color,context);
+	nofilltriangle(positions[31],positions[31],positions[69],color,context);
+	nofilltriangle(positions[30],positions[69],positions[69],color,context);
 }
 
 function points(color){
@@ -236,6 +304,43 @@ function points(color){
 	for (i; i<=70;i++){
 		fillCircle(positions[i][0],positions[i][1],2,color,context);
 	}
+
+}
+
+function lunettes(thecolor){
+	//console.log(typeof thecolor); la coueluer ne fonctionne pas avec la fonction addcolorstop, on a un changement de type intempestif ainsi que une incrementation infini de la variable
+	var canvas=getCanvasByName("lunettes");
+	var context = canvas.getContext("2d");
+	requestAnimationFrame(lunettes);
+	context.clearRect(0,0,2000,2000);
+	var positions = ctracker.getCurrentPosition();
+	
+	
+
+	taille = Math.sqrt((positions[14][0] - positions[0][0])*(positions[14][0] - positions[0][0])+(positions[14][1] - positions[0][1])*(positions[14][1] - positions[0][1]));
+	taille = taille / 5;
+	//var my_gradient=context.createLinearGradient(0,positions[27][1]-taille,0,positions[27][1]+taille);
+	//var my_gradient=context.createLinearGradient(0,positions[21][1],0,positions[41][1]); //gradient mouvant chelou
+	
+	var my_gradient=context.createLinearGradient(0,positions[27][1]-taille,0,positions[27][1]+taille);
+	var my_gradient2=context.createLinearGradient(0,positions[32][1]-taille,0,positions[32][1]+taille);
+	
+	my_gradient.addColorStop(0,"black");
+	my_gradient.addColorStop(0.8,"#ff5397");
+	my_gradient.addColorStop(1,"white");
+
+	my_gradient2.addColorStop(0,"black");
+	my_gradient2.addColorStop(0.8,"#ff5397");
+	my_gradient2.addColorStop(1,"white");
+	
+	triangle(positions[27],positions[27], positions[32],"black",context);
+	triangle(positions[27],positions[27], positions[0],"black",context);
+	triangle(positions[32],positions[32], positions[14],"black",context);
+	fillCircle(positions[27][0],positions[27][1],taille,my_gradient,context);
+	fillCircle(positions[32][0],positions[32][1],taille,my_gradient2,context);
+	circle(positions[27][0],positions[27][1],taille,context);
+	circle(positions[32][0],positions[32][1],taille,context);
+	canvas.style.opacity = "0.5";
 
 }
 
@@ -351,15 +456,23 @@ function addButtons2D(liste){
 				//console.log(test);
 				//console.log(item.start);
 				if (getInputById(item.start+"color")==null){
-					var color=document.createElement("input");
-					new jscolor(color);
-					color.id=item.start+"color";
-					color.addEventListener('change',function(){
-						window[item.start]("#"+color.value);
-					});
-					color.style="margin-left:2%;";
-					//window[item.start](color.value);
-					div.append(color);
+					
+					if (item.start!="lunettes"){
+						var color=document.createElement("input");
+						new jscolor(color);
+						color.id=item.start+"color";
+						color.addEventListener('change',function(){
+							window[item.start]("#"+color.value);
+						});
+						color.style="margin-left:2%;";
+						//window[item.start](color.value);
+						div.append(color);
+					}
+					
+					window[item.start]("#FFFFFF");
+
+
+					
 				}
 				else{
 					getInputById(item.start+"color").style="margin-left:2%";
@@ -372,7 +485,13 @@ function addButtons2D(liste){
 			else{
 				
 				//console.log("je cancel ");
-				getInputById(item.start+"color").style="display: none";
+				try{
+					getInputById(item.start+"color").style="display: none";
+				}
+				catch(err){
+
+				}
+				
 				cancelAnimationFrame(requestAnimationFrame(item.cancel));
 				//console.log("cnvas#"+item.start);
 				container.removeChild(getCanvasByName(item.start));
