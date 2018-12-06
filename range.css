@@ -109,4 +109,10 @@ video{
   display:flex;
   position: relative;
   top:190px;
+  flex-direction: column;
+}
+
+.jscolor{
+  display:flex;
+  margin-left: 5%;
 }
