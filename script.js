@@ -221,9 +221,66 @@ function mickey(color){
 
 function visage(color){
 	requestAnimFrame(visage);
-	//clearZone(0,0,2000,2000);
-	//canvasContext.clearRect(0, 0, canvas.width, canvas.height);
-	//ctracker.draw(canvas);
+	var canvas = getCanvasByName("visage");
+	var context = canvas.getContext("2d");
+	requestAnimationFrame(visage);
+	context.clearRect(0,0,2000,2000);
+	var positions = ctracker.getCurrentPosition();
+
+	for (let index = 0; index < 14; index++) { //bas visage
+		nofilltriangle(positions[index],positions[index+1],positions[index+1],color);
+	}
+	for (let index = 15; index < 18; index++) {//sourcil droit
+		nofilltriangle(positions[index],positions[index+1],positions[index+1],color);
+	}
+	for (let index = 19; index < 22; index++) {//sourcil gauche
+		nofilltriangle(positions[index],positions[index+1],positions[index+1],color);
+	}
+	for (let index = 44; index < 55; index++) {//contour bouche
+		nofilltriangle(positions[index],positions[index+1],positions[index+1],color);
+	}
+	for (let index = 56; index < 58; index++) {//bas levres
+		nofilltriangle(positions[index],positions[index+1],positions[index+1],color);
+	}
+	for (let index = 59; index < 61; index++) {//haut levres
+		nofilltriangle(positions[index],positions[index+1],positions[index+1],color);
+	}
+	nofilltriangle(positions[44],positions[44],positions[55],color);//jointures
+	nofilltriangle(positions[44],positions[44],positions[56],color);
+	nofilltriangle(positions[44],positions[44],positions[61],color);
+	nofilltriangle(positions[50],positions[50],positions[58],color);
+	nofilltriangle(positions[50],positions[50],positions[59],color);
+	for (let index = 34; index < 36; index++) {//droite nez
+		nofilltriangle(positions[index],positions[index+1],positions[index+1],color);
+	}
+	for (let index = 38; index < 40; index++) {//gauche nez
+		nofilltriangle(positions[index],positions[index+1],positions[index+1],color);
+	}
+	nofilltriangle(positions[36],positions[36],positions[42],color);//details nez
+	nofilltriangle(positions[42],positions[42],positions[37],color);
+	nofilltriangle(positions[37],positions[37],positions[43],color);
+	nofilltriangle(positions[43],positions[43],positions[38],color);
+
+	nofilltriangle(positions[41],positions[41],positions[33],color);//haut nez
+	nofilltriangle(positions[41],positions[41],positions[62],color);
+
+	nofilltriangle(positions[23],positions[23],positions[66],color);//oeuil gauche
+	nofilltriangle(positions[23],positions[23],positions[63],color);
+	nofilltriangle(positions[63],positions[63],positions[24],color);
+	nofilltriangle(positions[24],positions[24],positions[64],color);
+	nofilltriangle(positions[64],positions[64],positions[25],color);
+	nofilltriangle(positions[65],positions[25],positions[25],color);
+	nofilltriangle(positions[65],positions[65],positions[26],color);
+	nofilltriangle(positions[26],positions[26],positions[66],color);
+
+	nofilltriangle(positions[30],positions[30],positions[68],color);//oeuil droit
+	nofilltriangle(positions[29],positions[68],positions[68],color);
+	nofilltriangle(positions[29],positions[29],positions[67],color);
+	nofilltriangle(positions[28],positions[67],positions[67],color);
+	nofilltriangle(positions[28],positions[28],positions[70],color);
+	nofilltriangle(positions[31],positions[70],positions[70],color);
+	nofilltriangle(positions[31],positions[31],positions[69],color);
+	nofilltriangle(positions[30],positions[69],positions[69],color);
 }
 
 function points(color){
