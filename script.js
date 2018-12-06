@@ -132,6 +132,22 @@ function getInputRangeByName(name){
 	
 }
 
+function getOptionByValue(name){
+	result = null;
+	var jeSuisUnePetiteVariable=document.querySelectorAll("option");
+	//console.log(jeSuisUnePetiteVariable);
+	jeSuisUnePetiteVariable.forEach(function(item){
+		//console.log(item);
+		if(item.value==name){
+			//console.log("jsuisdedasn");
+			result = item;
+		}
+	});
+
+	return result;
+	
+}
+
 function getCanvasByName(name){
 	result = null;
 	var jeSuisUnePetiteVariable=document.querySelectorAll("canvas");
@@ -486,7 +502,7 @@ function addButtons2D(liste){
 		else{
 			canvass.splice(canvass.indexOf(item.name),1);
 			document.querySelectorAll("select").forEach(function(element){
-				
+				element.removeChild(getOptionByValue(item.name));
 			});
 			//console.log(canvass);
 			//console.log("je cancel ");
