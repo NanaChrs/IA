@@ -3,13 +3,33 @@
 	<head>
 		<meta charset=utf-8>
 		<title>My first three.js app</title>
+		<style>
+			canvas {
+				position :absolute;
+				left : 0;
+				top :0;
+				z-index: 2;
+			}
+			video{
+				position: absolute;
+				left : 0;
+				top : 0;
+				z-index: 0;
+            }
+            #filterButtons{
+                display : flex;
+                flex-direction: column;
+                position : relative;
+                left : 640px;
+            }
+		</style>
 	</head>
 
 
 	<body>
 		<div class="container" style="display: flex">
-			<!--<canvas id="drawCanvas" width="640" height="480"></canvas>-->
-			<canvas id="canvas" width="640" height="480" ></canvas>
+			<canvas id="webgl" width="640" height="480" ></canvas>
+			<canvas id="overlay" width="640" height="480"></canvas>
 				<video id="video" width="640" height="480"
 					title="Advertisement"
 				    style="background-color: rgb(0, 0, 0); position: absolute; width: 640px; height: 480px;"
@@ -17,13 +37,11 @@
 				    muted="muted">
 				</video>
 				
-			<div id="filterButtons"><h2>Filtres appliqués à la vidéo:</h2></div>
-			
+			<div id="filterButtons"></div>
 		</div>
-		<div id="buttons2D"><h2>Filtres 2D:</h2></div>
 
 
-		<script src="js/clmtrackr.js"></script>
+		<script src="clmtrackr.js"></script>
 		<script
 		  src="https://code.jquery.com/jquery-3.1.1.min.js"
 		  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
@@ -32,10 +50,11 @@
 		<script src="three.js"></script>
 		<script src="https://www.auduno.com/clmtrackr/examples/js/libs/utils.js"></script>
 		<script src="https://www.auduno.com/clmtrackr/build/clmtrackr.js"></script>
+		<script src="vertices.js"></script>
+		<script src="deformation.js"></script>
 		<script src="script.js"></script>
 		<!--<script src="filter.js"></script>-->
 		<link rel="stylesheet" href="UI-Checkbox-master/checkbox.css"/>
-		<link rel="stylesheet" href="range.css"/>
 
 
 		

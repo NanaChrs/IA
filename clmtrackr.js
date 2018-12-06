@@ -14803,7 +14803,7 @@ var clm = {
 				}
 				var paramUpdateLeft = numeric1_2_6.add(prior, jtj);
 				var paramUpdateRight = numeric1_2_6.sub(priorP, jtv);
-
+                console.log(numeric1_2_6);
 				var paramUpdate = numeric1_2_6.dot(numeric1_2_6.inv(paramUpdateLeft), paramUpdateRight);
 				//var paramUpdate = numeric.solve(paramUpdateLeft, paramUpdateRight, true);
 

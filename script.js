@@ -1,64 +1,37 @@
 var video=document.getElementById("video");
-var canvas=document.getElementById("canvas");
-var canvasContext = canvas.getContext("2d");
+var video_width = video.width;
+var video_height = video.height;
+var overlay = document.getElementById('overlay');
+var overlayCC = overlay.getContext('2d');
+var webgl_overlay = document.getElementById('webgl');
 var str = "";
-//var canvasInput = document.getElementById('drawCanvas');
-//var cc = canvasInput.getContext('2d');
+
 
 var filters =[{
-		name: "Flou",
-		filter:"blur(4px)",
-		range:"blur(",
-		dim:"px) "
+		name: "Blur",
+		filter:"blur(3px)"
 	},{
-		name: "Noir et Blanc",
-		filter:"grayscale(50%)",
-		range:"grayscale(",
-		dim:"%) "
+		name: "Noir&Blanc",
+		filter:"grayscale(100%)"
 	},{
 		name:"Lumineux",
-		filter:"brightness(50%)",
-		range:"brightness(",
-		dim:"%) "
+		filter:"brightness(200%)"
 	},{
-		name:"Rotation de couleurs",
-		filter:"hue-rotate(45deg)",
-		range:"hue-rotate(",
-		dim:"deg) "
+		name:"Rotation",
+		filter:"hue-rotate(90deg)"
 	},{
 		name:"Inversion",
-		filter:"invert(50%)",
-		range:"invert(",
-		dim:"%) "
+		filter:"invert(100%)"
 	},{
 		name:"Saturé",
-		filter:"saturate(50%)",
-		range: "saturate(",
-		dim:"%) "
+		filter:"saturate(800%)"
 	},{
 		name:"Sepia",
-		filter:"sepia(50%)",
-		range:"sepia(",
-		dim:"%) "
+		filter:"sepia(400%)"
 	},{
 		name:"Contraste",
-		filter:"contrast(50%)",
-		range:"contrast(",
-		dim:"%) "
+		filter:"contrast(500%)"
 	}];
-
-
-var filters2D =[,{
-	name:"Zorro"
-},{
-	name:"Visage"
-}];
-
-/*var filters2d=[{
-	name: "Yeux rouges",
-	function: 
-}]*/
-	
 /*
 function filterApply(){
 	var str="";
@@ -77,43 +50,24 @@ function filterApply(){
 }
 */
 
-function getInputRangeByName(name){
-	result = null;
-	var jeSuisUnePetiteVariable=document.querySelectorAll("input.slider");
-	//console.log(jeSuisUnePetiteVariable);
-	jeSuisUnePetiteVariable.forEach(function(item){
-		//console.log(item);
-		if(item.name==name){
-			console.log("jsuisdedasn");
-			result = item;
-		}
-	});
-
-	return result;
-	
-}
-
-
-
 function circle(x,y,rayon)
 			{
-	canvasContext.beginPath();
-	canvasContext.lineWidth="2";
-	canvasContext.arc(x, y, rayon, 0, 2 * Math.PI);
-	canvasContext.stroke();
+	overlayCC.beginPath();
+	context.lineWidth="2";
+	context.arc(x, y, rayon, 0, 2 * Math.PI);
+	context.stroke();
 }
 	
 function fillCircle(x,y,rayon,couleur)
 {
-	canvasContext.beginPath();
-	canvasContext.fillStyle=couleur
-	canvasContext.arc(x, y, rayon, 0, 2 * Math.PI);
-	canvasContext.fill();
-	//canvasContext.filter="blur(3px)"
+	overlayCC.beginPath();
+	overlayCC.fillStyle=couleur
+	overlayCC.arc(x, y, rayon, 0, 2 * Math.PI);
+	overlayCC.fill();
 }
 function clearZone(x1,y1,x2,y2)
 {
-	canvasContext.clearRect(x1,y1,x2,y2);
+	overlayCC.clearRect(x1,y1,x2,y2);
 }
 
 
@@ -132,7 +86,8 @@ function clearZone(x1,y1,x2,y2)
           video.mozSrcObject = stream;
         } else {
           var vendorURL = window.URL || window.webkitURL;
-          video.src = vendorURL.createObjectURL(stream); 
+		  video.src = vendorURL.createObjectURL(stream); 
+		  //video.src = vendorHTMLMediaElement.srcObject (stream);à inverser un jour peut etre
         }
 
         video.play();
@@ -162,68 +117,32 @@ function clearZone(x1,y1,x2,y2)
 
     
 
-	function addButtons(liste){
+    function addButtons(liste){
     	var buttonsDiv = document.getElementById("filterButtons");
-    	//var boutons;    
+    	var boutons;    
 
-      liste.forEach(function(item){
-				// Création de la div de la checkbox	
-				var div = document.createElement("div");
-				var bouton = document.createElement("div");
-				bouton.className="ui toggle checkbox";
+        liste.forEach(function(item){
+    		// Création de la div de la checkbox	
+			var div = document.createElement("div");
+			div.className="ui toggle checkbox";
 
-				//Création du label du bouton
-				var label= document.createElement("label");
-				var textLabel= document.createTextNode(item.name);
-				label.appendChild(textLabel);
+			//Création du label du bouton
+			var label= document.createElement("label");
+			var textLabel= document.createTextNode(item.name);
+			label.appendChild(textLabel);
 
-				//Création de l'input
-				var input=document.createElement("input");
-				input.addEventListener('click', function(){
-					var stringette=item.filter+" ";
-					if (this.checked){
-						str+=stringette;
-						video.style.filter = str;
-						console.log(getInputRangeByName(item.name));
-						if (getInputRangeByName(item.name)==null){
-							var range=document.createElement("input");
-							range.className="slider";
-							range.name=item.name;
-							range.type="range";
-							div.appendChild(range);
-							range.addEventListener('click', function(){
-								var value=getInputRangeByName(item.name).value;
-								var stringette=item.range+value+item.dim;
-								if (item.name=="Saturé" || item.name=="Contraste" || item.name=="Lumineux"){
-									var stringette=item.range+value*10+item.dim;
-								}
-								else if (item.name=="Flou"){
-									var stringette=item.range+value/2+item.dim;
-								}
-								
-								str=str.replace(item.filter, stringette);
-								item.filter = stringette;
-								console.log(str);
-								video.style.filter = str;
-							});
-							
-						}
-						else{
-							getInputRangeByName(item.name).style="";
-						}
-					}
-					else{
-						getInputRangeByName(item.name).style="display: none;";
-						str = str.replace(stringette, "");
-						console.log(stringette);
-						console.log(str);
-						video.style.filter = str;
-						//console.log(document.querySelectorAll("input.slider"));
-						/*document.getElementsByName(item.name).style.display="none";*/
-					}
+			//Création de l'input
+			var input=document.createElement("input");
+			input.addEventListener('click', function(){
+				var stringette=item.filter+" ";
+				if (this.checked){
+					str+=stringette;
+				}
+				else{
+					str = str.replace(stringette, "");
+				}
 				//video.style.filter="contrast(500%)";
-					
-					//console.log(str);
+				video.style.filter = str;
 				
 
 			});
@@ -233,51 +152,158 @@ function clearZone(x1,y1,x2,y2)
 			label.htmlFor = input.id;
 
 			//Assemblage du tout
-			
-			bouton.appendChild(input);
-			bouton.appendChild(label);
-			div.appendChild(bouton);
+			div.appendChild(input);
+			div.appendChild(label);
 
-      //console.log(document.getElementById('Contraste'));
-      buttonsDiv.insertAdjacentElement("beforeend", div); 
+        	console.log(document.getElementById('Contraste'));
+        	buttonsDiv.insertAdjacentElement("afterbegin", div); 
+
+
+  		
 		
       });
-      
-	}
-	
 
+        
+
+      
+    }
     var ctracker = new clm.tracker();
   	ctracker.init();
-  	ctracker.start(video);
+		ctracker.start(video);
 
-    function yeuxRouges() {
-		requestAnimFrame(yeuxRouges);
+		var deform = new deformation();
+		deform.init(webgl_overlay);
+		
+		// Triangles composant la bouche
+		var mouth_vertices = [
+			[44,45,61,44],
+			[45,46,61,45],
+			[46,60,61,46],
+			[46,47,60,46],
+			[47,48,60,47],
+			[48,59,60,48],
+			[48,49,59,48],
+			[49,50,59,49],
+			[50,51,58,50],
+			[51,52,58,51],
+			[52,57,58,52],
+			[52,53,57,52],
+			[53,54,57,53],
+			[54,56,57,54],
+			[54,55,56,54],
+			[55,44,56,55],
+			[44,61,56,44],
+			[61,60,56,61],
+			[56,57,60,56],
+			[57,59,60,57],
+			[57,58,59,57],
+			[50,58,59,50],
+		];
+		
+
+		var extendVertices = [
+			[0,71,72,0],
+			[0,72,1,0],
+			[1,72,73,1],
+			[1,73,2,1],
+			[2,73,74,2],
+			[2,74,3,2],
+			[3,74,75,3],
+			[3,75,4,3],
+			[4,75,76,4],
+			[4,76,5,4],
+			[5,76,77,5],
+			[5,77,6,5],
+			[6,77,78,6],
+			[6,78,7,6],
+			[7,78,79,7],
+			[7,79,8,7],
+			[8,79,80,8],
+			[8,80,9,8],
+			[9,80,81,9],
+			[9,81,10,9],
+			[10,81,82,10],
+			[10,82,11,10],
+			[11,82,83,11],
+			[11,83,12,11],
+			[12,83,84,12],
+			[12,84,13,12],
+			[13,84,85,13],
+			[13,85,14,13],
+			[14,85,86,14],
+			[14,86,15,14],
+			[15,86,87,15],
+			[15,87,16,15],
+			[16,87,88,16],
+			[16,88,17,16],
+			[17,88,89,17],
+			[17,89,18,17],
+			[18,89,93,18],
+			[18,93,22,18],
+			[22,93,21,22],
+			[93,92,21,93],
+			[21,92,20,21],
+			[92,91,20,92],
+			[20,91,19,20],
+			[91,90,19,91],
+			[19,90,71,19],
+			[19,71,0,19]
+		]
+
+    function positionLoop() {
+			requestAnimationFrame(positionLoop);
 			var positions = ctracker.getCurrentPosition();
 			// do something with the positions ...
 			// print the positions
 			var positionString = "";
 			//fillCircle(positions[27][0],positions[27][1]);
-			clearZone(0,0,2000,2000);
-			var taille=positions[27][1]-positions[24][1];
-			fillCircle(positions[27][0],positions[27][1],taille,'#FF0000');
-			var taille2=positions[32][1]-positions[29][1];
-			fillCircle(positions[32][0],positions[32][1],taille2,'#FF0000');
-		
-   	}
+			clearZone(0,0,video_width,video_height);
+			//var taille=positions[27][1]-positions[24][1];
+			//fillCircle(positions[27][0],positions[27][1],taille,'#FF0000');
+			//var taille2=positions[32][1]-positions[29][1];
+			//fillCircle(positions[32][0],positions[32][1],taille2,'#FF0000');
+			if(positions){
+				ctracker.draw(overlay);
+				drawMaskLoop();
+			}
+		}
+		 
+		function drawMaskLoop() {
+			//var pos = [];
+			var pos = ctracker.getCurrentPosition();
+			if (pos !== undefined) {
+				// create additional points around face
+				var tempPos;
+				var addPos = [];
+				for (var i = 0;i < 23;i++) {
+					tempPos = [];
+					tempPos[0] = (pos[i][0] - pos[62][0])*1.3 + pos[62][0];
+					tempPos[1] = (pos[i][1] - pos[62][1])*1.3 + pos[62][1];
+					addPos.push(tempPos);
+				}
+			}
+			
+			// merge with pos
+			var newPos = pos.concat(addPos);
+
+			var newVertices = vertices.concat(mouth_vertices);
+			// merge with newVertices
+			newVertices = newVertices.concat(extendVertices);
+			deform.load(video, newPos, newVertices);
+			deform.draw(newPos);
+
+			//var ph=[0, 0, 0, 0, 0, 0, 22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+		}
 
     document.body.onload=start();
-		document.body.onload=addButtons(filters);
+	document.body.onload=addButtons(filters);
 
 	
-
-
-  	function visage(){
-  		requestAnimFrame(visage);
-  		canvasContext.clearRect(0, 0, canvasInput.width, canvasInput.height);
-  		ctracker.draw(canvasInput);
-  	}
-
-
+	//var canvasInput = document.getElementById('drawCanvas');
+  	//var cc = canvasInput.getContext('2d');
+  	//drawLoop();
+  	positionLoop();
     
     
 })();
