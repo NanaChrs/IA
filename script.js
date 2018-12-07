@@ -450,17 +450,21 @@ function addButtons2D(liste){
 			if (this.checked){
 				var can = document.createElement("canvas");
 				can.id = item.start;
-				can.width="640";
-				can.height="480";
+				can.setAttribute("class","canvas");
+				can.width="1080";
+				can.height="607";
 				container.insertAdjacentElement("afterbegin", can);
+				window[item.start]("#FFFFFF");
 				//console.log(test);
 				//console.log(item.start);
 				if (getInputById(item.start+"color")==null){
 					
 					if (item.start!="lunettes"){
 						var color=document.createElement("input");
-						new jscolor(color);
+						var picker = new jscolor(color);
 						color.id=item.start+"color";
+						color.className='jscolor';
+						
 						color.addEventListener('change',function(){
 							window[item.start]("#"+color.value);
 						});
@@ -469,7 +473,7 @@ function addButtons2D(liste){
 						div.append(color);
 					}
 					
-					window[item.start]("#FFFFFF");
+					
 
 
 					
@@ -531,13 +535,13 @@ function addButtons2D(liste){
       navigator.mozGetUserMedia ||
       navigator.msGetUserMedia);
 
-	if (navigator.getUserMedia) {
+	if (navigator.mediaDevices.getUserMedia) {
       function gotStream(stream) {
         if (navigator.mozGetUserMedia) {
           video.mozSrcObject = stream;
         } else {
-          var vendorURL = window.URL || window.webkitURL;
-          video.src = vendorURL.createObjectURL(stream); 
+          //var vendorURL = window.URL || window.webkitURL;
+          video.srcObject = stream; 
         }
 
         video.play();
@@ -552,19 +556,35 @@ function addButtons2D(liste){
         navigator.getUserMedia( { 
           audio: false,  
           video: {
-            mandatory: {
-              maxWidth: 320,
-              maxHeight: 240
-            }
+              width: 1080,
+              height: 607
           }
         }, 
         gotStream, 
         error);
-      }
+      }}
 
 
-    }
-
+	// }
+	// var constraints = { audio: false, video: { framerate:120, width: 1080, height: 607 } };
+	// var video = document.querySelector('video');
+	// navigator.mediaDevices.getUserMedia(constraints).then(function(mediaStream) {
+	// video.srcObject = mediaStream;
+	// })
+	// .catch(function(err) { console.log(err.name + ": " + err.message); });*/
+	
+	// var video = document.querySelector("video");
+ 
+	// if (navigator.mediaDevices.getUserMedia) {       
+	// 	navigator.mediaDevices.getUserMedia({video: {width:1080, height:607}})
+	// .then(function(stream) {
+	// 	video.srcObject = stream;
+	// })
+	// .catch(function(err0r) {
+	// 	console.log("Something went wrong!");
+	// });
+	// }
+	
     
 
 	function addButtons(liste){
@@ -656,12 +676,12 @@ function addButtons2D(liste){
     var ctracker = new clm.tracker();
   	ctracker.init();
   	ctracker.start(video);
+	start();
 
 
-
-    document.body.onload=start();
 	document.body.onload=addButtons(filters);
 	document.body.onload=addButtons2D(filters2D);
+	video.play();
 	//filter2D(filter2D);
 	clearZone(0,0,2000,2000);
 

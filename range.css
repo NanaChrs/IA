@@ -84,7 +84,7 @@ input[type=range].slider:focus::-ms-fill-upper {
   background: rgba(255, 255, 255, 0.37);
 }
 
-canvas{
+.canvas{
   position: absolute;
   left:0;
   top:0;
@@ -102,13 +102,13 @@ video{
   display: flex;
   flex-direction: column;
   position: relative;
-  left:640px;
+  left:1080px;
 }
 
 #buttons2D{
   display:flex;
   position: relative;
-  top:190px;
+  top:607px;
   flex-direction: column;
 }
 
