@@ -463,34 +463,21 @@ function addButtons2D(liste){
 	var input=document.createElement("input");
 	input.addEventListener('click', function(){
 
-			if (this.checked){
-				var can = document.createElement("canvas");
-				can.id = item.start;
-				can.setAttribute("class","canvas");
-				can.width="1080";
-				can.height="607";
-				container.insertAdjacentElement("afterbegin", can);
-				window[item.start]("#FFFFFF");
-				//console.log(test);
-				//console.log(item.start);
-				if (getInputById(item.start+"color")==null){
-					
-					if (item.start!="lunettes"){
-						var color=document.createElement("input");
-						var picker = new jscolor(color);
-						color.id=item.start+"color";
-						color.className='jscolor';
-						
-						color.addEventListener('change',function(){
-							window[item.start]("#"+color.value);
-						});
-						color.style="margin-left:2%;";
-						//window[item.start](color.value);
-						div.append(color);
-					}
-					
-					
+		if (this.checked){
+			var can = document.createElement("canvas");
+			can.id = item.start;
+			can.height="480";
+			can.width="640";
+			container.insertAdjacentElement("afterbegin", can);
+			document.querySelectorAll("select").forEach(function(element){
 
+				var li=document.createElement("option");
+				li.className=item.name;
+				element.insertAdjacentElement("beforeend",li);
+				li.textContent=item.name;
+			});
+			//console.log(item.start);
+			//console.log(test);
 			canvass.push(item.name);
 			if(document.querySelectorAll("option#option"+item.start)==null){
 				document.querySelectorAll("select").forEach(function(element){
@@ -521,7 +508,7 @@ function addButtons2D(liste){
 				
 			}
 			else{
-				getCreatedElementById(item.start+"color").style="margin-left:2%";
+				getCreatedElementById(item.start+"color","input").style="margin-left:2%";
 			}
 			
 			//requestAnimationFrame(item.cancel);
@@ -530,16 +517,19 @@ function addButtons2D(liste){
 		}
 		else{
 			canvass.splice(canvass.indexOf(item.name),1);
-			document.querySelectorAll("select").forEach(function(element){
-				element.removeChild(getOptionByValue(item.name));
+			document.querySelectorAll("select").forEach(function(elem){
+				document.querySelectorAll("option."+item.name).forEach(function(element){
+					elem.removeChild(element);
+				});
 			});
+			
 			//console.log(canvass);
 			//console.log("je cancel ");
 			try{
-				getCreatedElementById(item.start+"color").style="display: none";
+				getCreatedElementById(item.start+"color","input").style="display: none";
 			}
 			catch(err){
-
+				console.log(err);
 			}
 			
 			cancelAnimationFrame(requestAnimationFrame(item.cancel));
@@ -596,11 +586,10 @@ function addButtons(liste){
 			
 
 			var ul=document.createElement("select");
-			ul.id="select"+item.name;
+			ul.className="select"+item.name;
 			canvass.forEach(function(item){
 				var li=document.createElement("option");
-				li.value=li.textContent=item;
-				li.id="option"+item;
+				li.className=li.textContent=item;
 				ul.appendChild(li);
 			})
 			bouton.insertAdjacentElement("afterend",ul);
