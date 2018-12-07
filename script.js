@@ -5,13 +5,13 @@ var str = "";
 var ctracker = new clm.tracker();
 ctracker.init();
 ctracker.start(video);
-var filter2D=[];
+//var filter2D=[];
 var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
                             window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
 
 var cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
 
-var canvass=[];
+var canvass=["All", "Video"];
 //var canvasInput = document.getElementById('drawCanvas');
 //var cc = canvasInput.getContext('2d');
 
@@ -132,6 +132,22 @@ function getInputRangeByName(name){
 	
 }
 
+function getOptionByValue(name){
+	result = null;
+	var jeSuisUnePetiteVariable=document.querySelectorAll("option");
+	//console.log(jeSuisUnePetiteVariable);
+	jeSuisUnePetiteVariable.forEach(function(item){
+		//console.log(item);
+		if(item.value==name){
+			//console.log("jsuisdedasn");
+			result = item;
+		}
+	});
+
+	return result;
+	
+}
+
 function getCanvasByName(name){
 	result = null;
 	var jeSuisUnePetiteVariable=document.querySelectorAll("canvas");
@@ -148,9 +164,9 @@ function getCanvasByName(name){
 	
 }
 
-function getInputById(id){
+function getCreatedElementById(id,element){
 	result = null;
-	var jeSuisUnePetiteVariable=document.querySelectorAll("input");
+	var jeSuisUnePetiteVariable=document.querySelectorAll(element);
 	//console.log(jeSuisUnePetiteVariable);
 	jeSuisUnePetiteVariable.forEach(function(item){
 		//console.log(item);
@@ -182,11 +198,12 @@ function fillCircle(x,y,rayon,couleur, context)
 	context.fill();
 	//canvasContext.filter="blur(3px)"
 }
+/*
 function clearZone(x1,y1,x2,y2, context)
 {
 	//var context=canvas.getContext("2d");
 	context.clearRect(x1,y1,x2,y2);
-}
+}*/
 
 function triangle(point1,point2,point3,color, context){
 	//var canvasContext = document.getElementById("canvas1"); 
@@ -425,7 +442,6 @@ function addButtons2D(liste){
 	var buttonsDiv = document.getElementById("buttons2D");
 	//var boutons;    
 	var container=document.getElementById("container");
-	var test=canvass;
 
   	liste.forEach(function(item){
 			// Création de la div de la checkbox
@@ -433,19 +449,19 @@ function addButtons2D(liste){
 		
 		//test[item.start]=can.getContext("2d");
 		
-		var div = document.createElement("div");
-		var bouton = document.createElement("div");
-		bouton.className="ui toggle checkbox";
-		//div.style="display: flex; flex-direction: row; align-content: space-around;"
+	var div = document.createElement("div");
+	var bouton = document.createElement("div");
+	bouton.className="ui toggle checkbox";
+	//div.style="display: flex; flex-direction: row; align-content: space-around;"
 
-		//Création du label du bouton
-		var label= document.createElement("label");
-		var textLabel= document.createTextNode(item.name);
-		label.appendChild(textLabel);
+	//Création du label du bouton
+	var label= document.createElement("label");
+	var textLabel= document.createTextNode(item.name);
+	label.appendChild(textLabel);
 
-		//Création de l'input
-		var input=document.createElement("input");
-		input.addEventListener('click', function(){
+	//Création de l'input
+	var input=document.createElement("input");
+	input.addEventListener('click', function(){
 
 			if (this.checked){
 				var can = document.createElement("canvas");
@@ -475,48 +491,182 @@ function addButtons2D(liste){
 					
 					
 
-
-					
-				}
-				else{
-					getInputById(item.start+"color").style="margin-left:2%";
+			canvass.push(item.name);
+			if(document.querySelectorAll("option#option"+item.start)==null){
+				document.querySelectorAll("select").forEach(function(element){
+					var li=document.createElement("option");
+					li.textContent=li.value=item.name;
+					li.id="option"+item.start;
+					element.insertAdjacentElement("beforeend",li);
+				});
+			}
+			//console.log(canvass);
+			if (getCreatedElementById(item.start+"color","input")==null){
+				
+				if (item.start!="lunettes"){
+					var color=document.createElement("input");
+					new jscolor(color);
+					color.id=item.start+"color";
+					color.addEventListener('change',function(){
+						window[item.start]("#"+color.value);
+					});
+					color.style="margin-left:2%;";
+					//window[item.start](color.value);
+					div.append(color);
 				}
 				
-				//requestAnimationFrame(item.cancel);
-				//console.log(requestAnimationFrame(item.cancel))
-				//var color = document.
+				window[item.start]("#FFFFFF");
+
+			
+				
 			}
 			else{
-				
-				//console.log("je cancel ");
-				try{
-					getInputById(item.start+"color").style="display: none";
-				}
-				catch(err){
-
-				}
-				
-				cancelAnimationFrame(requestAnimationFrame(item.cancel));
-				//console.log("cnvas#"+item.start);
-				container.removeChild(getCanvasByName(item.start));
-				//delete getCanvasByName("zorro");
-				//clearZone(0,0,2000,2000,getCanvasByName(item.start));
-				
-				
+				getCreatedElementById(item.start+"color").style="margin-left:2%";
 			}
-			//console.log(item.start);
+			
+			//requestAnimationFrame(item.cancel);
+			//console.log(requestAnimationFrame(item.cancel))
+			//var color = document.
+		}
+		else{
+			canvass.splice(canvass.indexOf(item.name),1);
+			document.querySelectorAll("select").forEach(function(element){
+				element.removeChild(getOptionByValue(item.name));
+			});
+			//console.log(canvass);
+			//console.log("je cancel ");
+			try{
+				getCreatedElementById(item.start+"color").style="display: none";
+			}
+			catch(err){
+
+			}
+			
+			cancelAnimationFrame(requestAnimationFrame(item.cancel));
+			//console.log("cnvas#"+item.start);
+			container.removeChild(getCanvasByName(item.start));
+			//delete getCanvasByName("zorro");
+			//clearZone(0,0,2000,2000,getCanvasByName(item.start));
+			
+			
+		}
+		//console.log(item.start);
 	});
 		//canvas=test;
 		
-		input.type="checkbox";
-		input.id=item.name;
-		label.htmlFor = input.id;
+	input.type="checkbox";
+	input.id=item.name;
+	label.htmlFor = input.id;
 
-		//Assemblage du tout
+	//Assemblage du tout
+	
+	bouton.appendChild(input);
+	bouton.appendChild(label);
+	div.appendChild(bouton);
+
+  //console.log(document.getElementById('Contraste'));
+  	buttonsDiv.insertAdjacentElement("beforeend", div); 
+	
+  });
+  
+}
+
+function addButtons(liste){
+	var buttonsDiv = document.getElementById("filterButtons");
+	//var boutons;    
+
+  liste.forEach(function(item){
+			// Création de la div de la checkbox	
+	var div = document.createElement("div");
+	var bouton = document.createElement("div");
+	bouton.className="ui toggle checkbox";
+
+	//Création du label du bouton
+	var label= document.createElement("label");
+	var textLabel= document.createTextNode(item.name);
+	label.appendChild(textLabel);
+
+	//Création de l'input
+	var input=document.createElement("input");
+	input.addEventListener('click', function(){
+		var stringette=item.filter+" ";
+		if (this.checked){
+			str+=stringette;
+			video.style.filter = str;
+			
+
+			var ul=document.createElement("select");
+			ul.id="select"+item.name;
+			canvass.forEach(function(item){
+				var li=document.createElement("option");
+				li.value=li.textContent=item;
+				li.id="option"+item;
+				ul.appendChild(li);
+			})
+			bouton.insertAdjacentElement("afterend",ul);
+			
+			//console.log(getInputRangeByName(item.name));
+			if (getInputRangeByName(item.name)==null){
+				var range=document.createElement("input");
+				range.className="slider";
+				range.name=item.name;
+				range.type="range";
+				div.appendChild(range);
+				
+
+				range.addEventListener('click', function(){
+					var value=getInputRangeByName(item.name).value;
+					var stringette=item.range+value+item.dim;
+					if (item.name=="Saturé" || item.name=="Contraste" || item.name=="Lumineux"){
+						var stringette=item.range+value*10+item.dim;
+					}
+					else if (item.name=="Flou"){
+						var stringette=item.range+value/2+item.dim;
+					}
+					
+					str=str.replace(item.filter, stringette);
+					item.filter = stringette;
+					//console.log(str);
+					video.style.filter = str;
+				});
+				
+			}
+
+
+			else{
+				
+				
+				getInputRangeByName(item.name).value=50;
+				getInputRangeByName(item.name).style="";
+			}
+		}
+		else{
+			//console.log(getCreatedElementById("select"+item.name,"select"));
+			div.removeChild(getCreatedElementById("select"+item.name,"select"));
+			getInputRangeByName(item.name).style="display: none;";
+			str = str.replace(stringette, "");
+			/*console.log(stringette);
+			console.log(str);*/
+			video.style.filter = str;
+			//console.log(document.querySelectorAll("input.slider"));
+			/*document.getElementsByName(item.name).style.display="none";*/
+		}
+	//video.style.filter="contrast(500%)";
 		
-		bouton.appendChild(input);
-		bouton.appendChild(label);
-		div.appendChild(bouton);
+		//console.log(str);
+	
+
+	});
+	//input.checked=false;
+	input.type="checkbox";
+	input.id=item.name;
+	label.htmlFor = input.id;
+
+	//Assemblage du tout
+	
+	bouton.appendChild(input);
+	bouton.appendChild(label);
+	div.appendChild(bouton);
 
   //console.log(document.getElementById('Contraste'));
   buttonsDiv.insertAdjacentElement("beforeend", div); 
@@ -587,90 +737,7 @@ function addButtons2D(liste){
 	
     
 
-	function addButtons(liste){
-    	var buttonsDiv = document.getElementById("filterButtons");
-    	//var boutons;    
-
-      liste.forEach(function(item){
-				// Création de la div de la checkbox	
-				var div = document.createElement("div");
-				var bouton = document.createElement("div");
-				bouton.className="ui toggle checkbox";
-
-				//Création du label du bouton
-				var label= document.createElement("label");
-				var textLabel= document.createTextNode(item.name);
-				label.appendChild(textLabel);
-
-				//Création de l'input
-				var input=document.createElement("input");
-				input.addEventListener('click', function(){
-					var stringette=item.filter+" ";
-					if (this.checked){
-						str+=stringette;
-						video.style.filter = str;
-						
-						//console.log(getInputRangeByName(item.name));
-						if (getInputRangeByName(item.name)==null){
-							var range=document.createElement("input");
-							range.className="slider";
-							range.name=item.name;
-							range.type="range";
-							div.appendChild(range);
-							range.addEventListener('click', function(){
-								var value=getInputRangeByName(item.name).value;
-								var stringette=item.range+value+item.dim;
-								if (item.name=="Saturé" || item.name=="Contraste" || item.name=="Lumineux"){
-									var stringette=item.range+value*10+item.dim;
-								}
-								else if (item.name=="Flou"){
-									var stringette=item.range+value/2+item.dim;
-								}
-								
-								str=str.replace(item.filter, stringette);
-								item.filter = stringette;
-								//console.log(str);
-								video.style.filter = str;
-							});
-							
-						}
-						else{
-							getInputRangeByName(item.name).value=50;
-							getInputRangeByName(item.name).style="";
-						}
-					}
-					else{
-						getInputRangeByName(item.name).style="display: none;";
-						str = str.replace(stringette, "");
-						/*console.log(stringette);
-						console.log(str);*/
-						video.style.filter = str;
-						//console.log(document.querySelectorAll("input.slider"));
-						/*document.getElementsByName(item.name).style.display="none";*/
-					}
-				//video.style.filter="contrast(500%)";
-					
-					//console.log(str);
-				
-
-			});
-			//input.checked=false;
-			input.type="checkbox";
-			input.id=item.name;
-			label.htmlFor = input.id;
-
-			//Assemblage du tout
-			
-			bouton.appendChild(input);
-			bouton.appendChild(label);
-			div.appendChild(bouton);
-
-      //console.log(document.getElementById('Contraste'));
-      buttonsDiv.insertAdjacentElement("beforeend", div); 
-		
-      });
-      
-	}
+	
 	
 
     var ctracker = new clm.tracker();
