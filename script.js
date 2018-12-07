@@ -752,7 +752,7 @@ function addButtons(liste){
 	document.body.onload=addButtons2D(filters2D);
 	video.play();
 	//filter2D(filter2D);
-	clearZone(0,0,2000,2000);
+	//clearZone(0,0,2000,2000);
 
 	
 
