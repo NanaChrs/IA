@@ -20,42 +20,50 @@ var filters =[{
 		name: "Flou",
 		filter:"blur(4px)",
 		range:"blur(",
-		dim:"px) "
+		dim:"px) ",
+		start:"blur"
 	},{
 		name: "Noir et Blanc",
 		filter:"grayscale(50%)",
 		range:"grayscale(",
-		dim:"%) "
+		dim:"%) ",
+		start:"grayscale"
 	},{
 		name:"Lumineux",
 		filter:"brightness(50%)",
 		range:"brightness(",
-		dim:"%) "
+		dim:"%) ",
+		start:"brightness"
 	},{
 		name:"Rotation de couleurs",
 		filter:"hue-rotate(45deg)",
 		range:"hue-rotate(",
-		dim:"deg) "
+		dim:"deg) ",
+		start:"hue-rotate"
 	},{
 		name:"Inversion",
 		filter:"invert(50%)",
 		range:"invert(",
-		dim:"%) "
+		dim:"%) ",
+		start:"invert"
 	},{
 		name:"Saturé",
 		filter:"saturate(50%)",
 		range: "saturate(",
-		dim:"%) "
+		dim:"%) ",
+		start:"saturate"
 	},{
 		name:"Sepia",
 		filter:"sepia(50%)",
 		range:"sepia(",
-		dim:"%) "
+		dim:"%) ",
+		start:"sepia"
 	},{
 		name:"Contraste",
 		filter:"contrast(50%)",
 		range:"contrast(",
-		dim:"%) "
+		dim:"%) ",
+		start:"contrast"
 	}];
 
 
@@ -466,8 +474,9 @@ function addButtons2D(liste){
 		if (this.checked){
 			var can = document.createElement("canvas");
 			can.id = item.start;
-			can.height="480";
-			can.width="640";
+			can.width="1080";
+			can.height="607";
+			can.className="canvas";
 			container.insertAdjacentElement("afterbegin", can);
 			document.querySelectorAll("select").forEach(function(element){
 
@@ -488,6 +497,7 @@ function addButtons2D(liste){
 				});
 			}
 			//console.log(canvass);
+			window[item.start]("#FFFFFF");
 			if (getCreatedElementById(item.start+"color","input")==null){
 				
 				if (item.start!="lunettes"){
@@ -502,7 +512,7 @@ function addButtons2D(liste){
 					div.append(color);
 				}
 				
-				window[item.start]("#FFFFFF");
+				
 
 			
 				
@@ -586,7 +596,7 @@ function addButtons(liste){
 			
 
 			var ul=document.createElement("select");
-			ul.className="select"+item.name;
+			ul.className="select"+item.start;
 			canvass.forEach(function(item){
 				var li=document.createElement("option");
 				li.className=li.textContent=item;
@@ -631,7 +641,10 @@ function addButtons(liste){
 		}
 		else{
 			//console.log(getCreatedElementById("select"+item.name,"select"));
-			div.removeChild(getCreatedElementById("select"+item.name,"select"));
+			document.querySelectorAll("select.select"+item.start).forEach(function(elem){
+				div.removeChild(elem);
+			});
+			
 			getInputRangeByName(item.name).style="display: none;";
 			str = str.replace(stringette, "");
 			/*console.log(stringette);
