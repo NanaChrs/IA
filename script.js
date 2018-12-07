@@ -592,7 +592,7 @@ function addButtons(liste){
 		var stringette=item.filter+" ";
 		if (this.checked){
 			str+=stringette;
-			video.style.filter = str;
+			
 			
 
 			var ul=document.createElement("select");
@@ -603,6 +603,34 @@ function addButtons(liste){
 				ul.appendChild(li);
 			})
 			bouton.insertAdjacentElement("afterend",ul);
+			ul.addEventListener('click',function(){
+				document.querySelectorAll("canvas.canvas").forEach(function(elem){
+					elem.style.filter=str.replace(stringette,"");
+				});
+				video.style.filter = str;
+				if (this.value=="All"){
+					document.querySelectorAll("canvas.canvas").forEach(function(elem){
+						elem.style.filter=str;
+					});
+					video.style.filter = str;
+				}
+				else if (this.value=="Video"){
+					video.style.filter=str;
+				}
+				else{
+					var value=this.value;
+					console.log(value);
+					document.querySelectorAll("canvas.canvas").forEach(function(elem){
+						console.log(elem.id);
+						if (elem.id==value){
+							elem.style.filter=str.replace(stringette,"");
+						}
+						
+					});
+				}
+				
+
+			})
 			
 			//console.log(getInputRangeByName(item.name));
 			if (getInputRangeByName(item.name)==null){
@@ -649,6 +677,7 @@ function addButtons(liste){
 			str = str.replace(stringette, "");
 			/*console.log(stringette);
 			console.log(str);*/
+			document.querySelectorAll("canvas.canvas").forEach
 			video.style.filter = str;
 			//console.log(document.querySelectorAll("input.slider"));
 			/*document.getElementsByName(item.name).style.display="none";*/
