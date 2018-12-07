@@ -468,6 +468,13 @@ function addButtons2D(liste){
 			can.width="640";
 			can.height="480";
 			container.insertAdjacentElement("afterbegin", can);
+
+			document.querySelectorAll("select").forEach(function(element){
+				var li=document.createElement("option");
+				li.className=item.name;
+				li.textContent=item.name;
+				element.insertAdjacentElement("beforeend",li);
+			});
 			//console.log(test);
 			//console.log(item.start);
 			canvass.push(item.name);
@@ -492,7 +499,7 @@ function addButtons2D(liste){
 				
 			}
 			else{
-				getCreatedElementById(item.start+"color").style="margin-left:2%";
+				getCreatedElementById(item.start+"color","input").style="margin-left:2%";
 			}
 			
 			//requestAnimationFrame(item.cancel);
@@ -501,16 +508,19 @@ function addButtons2D(liste){
 		}
 		else{
 			canvass.splice(canvass.indexOf(item.name),1);
-			document.querySelectorAll("select").forEach(function(element){
-				element.removeChild(getOptionByValue(item.name));
+			document.querySelectorAll("select").forEach(function(elem){
+				document.querySelectorAll("option."+item.name).forEach(function(element){
+					elem.removeChild(element);
+				});
 			});
+			
 			//console.log(canvass);
 			//console.log("je cancel ");
 			try{
-				getCreatedElementById(item.start+"color").style="display: none";
+				getCreatedElementById(item.start+"color","input").style="display: none";
 			}
 			catch(err){
-
+				console.log(err);
 			}
 			
 			cancelAnimationFrame(requestAnimationFrame(item.cancel));
@@ -567,10 +577,10 @@ function addButtons(liste){
 			
 
 			var ul=document.createElement("select");
-			ul.id="select"+item.name;
+			ul.className="select"+item.name;
 			canvass.forEach(function(item){
 				var li=document.createElement("option");
-				li.value=li.textContent=item;
+				li.className=li.textContent=item;
 				ul.appendChild(li);
 			})
 			bouton.insertAdjacentElement("afterend",ul);
@@ -660,8 +670,8 @@ function addButtons(liste){
         if (navigator.mozGetUserMedia) {
           video.mozSrcObject = stream;
         } else {
-          var vendorURL = window.URL || window.webkitURL;
-          video.src = vendorURL.createObjectURL(stream); 
+          //var vendorURL = window.URL || window.webkitURL;
+          video.srcObject = stream; 
         }
 
         video.play();
