@@ -198,11 +198,12 @@ function fillCircle(x,y,rayon,couleur, context)
 	context.fill();
 	//canvasContext.filter="blur(3px)"
 }
+/*
 function clearZone(x1,y1,x2,y2, context)
 {
 	//var context=canvas.getContext("2d");
 	context.clearRect(x1,y1,x2,y2);
-}
+}*/
 
 function triangle(point1,point2,point3,color, context){
 	//var canvasContext = document.getElementById("canvas1"); 
@@ -470,9 +471,18 @@ function addButtons2D(liste){
 			container.insertAdjacentElement("afterbegin", can);
 			//console.log(test);
 			//console.log(item.start);
+
 			canvass.push(item.name);
+			if(document.querySelectorAll("option#option"+item.start)==null){
+				document.querySelectorAll("select").forEach(function(element){
+					var li=document.createElement("option");
+					li.textContent=li.value=item.name;
+					li.id="option"+item.start;
+					element.insertAdjacentElement("beforeend",li);
+				});
+			}
 			//console.log(canvass);
-			if (getCreatedElementById(item.start+"color")==null){
+			if (getCreatedElementById(item.start+"color","input")==null){
 				
 				if (item.start!="lunettes"){
 					var color=document.createElement("input");
@@ -571,6 +581,7 @@ function addButtons(liste){
 			canvass.forEach(function(item){
 				var li=document.createElement("option");
 				li.value=li.textContent=item;
+				li.id="option"+item;
 				ul.appendChild(li);
 			})
 			bouton.insertAdjacentElement("afterend",ul);
