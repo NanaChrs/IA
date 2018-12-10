@@ -592,7 +592,7 @@ function addButtons(liste){
 		var stringette=item.filter+" ";
 		if (this.checked){
 			str+=stringette;
-			video.style.filter = str;
+			
 			
 
 			var ul=document.createElement("select");
@@ -603,6 +603,15 @@ function addButtons(liste){
 				ul.appendChild(li);
 			})
 			bouton.insertAdjacentElement("afterend",ul);
+			ul.addEventListener('click',function(){
+				/*document.querySelectorAll("canvas.canvas").forEach(function(elem){
+					elem.style.filter=str.replace(stringette,"");
+				});*/
+				//video.style.filter = str;
+				
+				
+
+			})
 			
 			//console.log(getInputRangeByName(item.name));
 			if (getInputRangeByName(item.name)==null){
@@ -613,20 +622,43 @@ function addButtons(liste){
 				div.appendChild(range);
 				
 
-				range.addEventListener('click', function(){
+				range.addEventListener('change', function(){
 					var value=getInputRangeByName(item.name).value;
 					var stringette=item.range+value+item.dim;
 					if (item.name=="Saturé" || item.name=="Contraste" || item.name=="Lumineux"){
-						var stringette=item.range+value*10+item.dim;
+						stringette=item.range+value*10+item.dim;
 					}
 					else if (item.name=="Flou"){
-						var stringette=item.range+value/2+item.dim;
+						stringette=item.range+value/2+item.dim;
 					}
 					
 					str=str.replace(item.filter, stringette);
 					item.filter = stringette;
-					//console.log(str);
-					video.style.filter = str;
+
+					var value=document.querySelector("select.select"+item.start).value;
+					//console.log(document.querySelector("select.select"+item.start));
+
+					if (value=="All"){
+						document.querySelectorAll("canvas.canvas").forEach(function(elem){
+							elem.style.filter=str;
+						});
+						video.style.filter = str;
+					}
+					else if (value=="Video"){
+						video.style.filter=str;
+					}
+					else{
+						var value=value.toLowerCase();
+						console.log(value);
+						document.querySelectorAll("canvas.canvas").forEach(function(elem){
+							//console.log(elem.id);
+							if (elem.id==value){
+								console.log(elem)
+								elem.style.filter=str;
+							}
+							
+						});
+					}
 				});
 				
 			}
@@ -649,6 +681,10 @@ function addButtons(liste){
 			str = str.replace(stringette, "");
 			/*console.log(stringette);
 			console.log(str);*/
+			
+			document.querySelectorAll("canvas.canvas").forEach(function(elem){
+				elem.style.filter=str;
+			});
 			video.style.filter = str;
 			//console.log(document.querySelectorAll("input.slider"));
 			/*document.getElementsByName(item.name).style.display="none";*/
