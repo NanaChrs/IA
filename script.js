@@ -241,12 +241,13 @@ function nofilltriangle(point1,point2,point3,color,context){
 }
 
 function mickey(color){
+	requestAnimationFrame(mickey);
 	/*var canvas = document.getElementById("canvas1");
 	var context = canvas.getContext("2d");*/
 	
 	var context=getCanvasByName("mickey").getContext("2d");
 	context.clearRect(0,0,2000,2000);
-	requestAnimationFrame(mickey);
+	
 	//clearZone(0,0,2000,2000, context);
 	var positions = ctracker.getCurrentPosition();
 	var distance = 2 * (positions[19][1]-positions[1][1]);
@@ -256,10 +257,11 @@ function mickey(color){
 }
 
 function visage(color){
+	requestAnimationFrame(visage);
 	//requestAnimFrame(visage);
 	var canvas = getCanvasByName("visage");
 	var context = canvas.getContext("2d");
-	requestAnimationFrame(visage);
+	
 	context.clearRect(0,0,2000,2000);
 	var positions = ctracker.getCurrentPosition();
 
@@ -320,10 +322,10 @@ function visage(color){
 }
 
 function points(color){
+	requestAnimFrame(points);
 	var i = 0;
 	var context=getCanvasByName("points").getContext("2d");
 	context.clearRect(0,0,2000,2000);
-	requestAnimFrame(points);
 	var positions = ctracker.getCurrentPosition();
 	//clearZone(0,0,2000,2000);
 	for (i; i<=70;i++){
@@ -333,10 +335,11 @@ function points(color){
 }
 
 function lunettes(thecolor){
+	requestAnimationFrame(lunettes);
 	//console.log(typeof thecolor); la coueluer ne fonctionne pas avec la fonction addcolorstop, on a un changement de type intempestif ainsi que une incrementation infini de la variable
 	var canvas=getCanvasByName("lunettes");
 	var context = canvas.getContext("2d");
-	requestAnimationFrame(lunettes);
+	
 	context.clearRect(0,0,2000,2000);
 	var positions = ctracker.getCurrentPosition();
 	
@@ -369,11 +372,11 @@ function lunettes(thecolor){
 
 }
 
-function yeux(color) {
-	
+function yeux(color) {	
+	requestAnimFrame(yeux);
+
 	var context=getCanvasByName("yeux").getContext("2d");
 	context.clearRect(0,0,2000,2000);
-	requestAnimFrame(yeux);
 	var positions = ctracker.getCurrentPosition();
 	// do something with the positions ...
 	// print the positions
@@ -390,9 +393,9 @@ function yeux(color) {
 function zorro(color){
 	/*var canvas = document.getElementById("canvas1");
 	var context = canvas.getContext("2d");*/
+	requestAnimationFrame(zorro);
 	var context=getCanvasByName("zorro").getContext("2d");
 	context.clearRect(0,0,2000,2000);
-	requestAnimationFrame(zorro);
 	//console.log(context)
 	//clearZone(0,0,2000,2000);
 	var positions = ctracker.getCurrentPosition();
@@ -542,7 +545,7 @@ function addButtons2D(liste){
 				console.log(err);
 			}
 			
-			cancelAnimationFrame(requestAnimationFrame(item.cancel));
+			window.cancelAnimationFrame(item.cancel);
 			//console.log("cnvas#"+item.start);
 			container.removeChild(getCanvasByName(item.start));
 			//delete getCanvasByName("zorro");
