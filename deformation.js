@@ -19,7 +19,7 @@ var deformation = function() {
 		gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
 	}
 
-    this.load = function(element, points, vertices) {
+    this.load = function(element, points, vertices, changements) {
         if (vertices) {
 			verticeMap = vertices;
 		} else {
@@ -78,9 +78,13 @@ var deformation = function() {
 		}
 		
 		//deformation
-		if (modif){
-			bouche(deformPoints,2);
-		}	
+		yeux(deformPoints,changements[0].value);
+		visage(deformPoints,changements[1].value);
+		bouche(deformPoints,changements[2].value);
+		nez(deformPoints,changements[3].value);
+		sourcils(deformPoints,changements[4].value);
+		yeuxor(deformPoints,changements[5].value);
+		
 
         // create vertices based on points
 		var textureVertices = [];

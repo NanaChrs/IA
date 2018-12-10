@@ -6,7 +6,6 @@ var overlayCC = overlay.getContext('2d');
 var webgl_overlay = document.getElementById('webgl');
 var str = "";
 
-
 var filters =[{
 		name: "Blur",
 		filter:"blur(3px)"
@@ -32,6 +31,43 @@ var filters =[{
 		name:"Contraste",
 		filter:"contrast(500%)"
 	}];
+
+
+var changements=[{
+	name:"Taille des yeux",
+	value:0
+},{
+	name:"Taille du visage",
+	value:0
+},{
+	name:"Taille de la bouche",
+	value:0
+},{
+	name:"Taille du nez",
+	value:0
+},{
+	name:"Taille des sourcils",
+	value:0
+},{
+	name:"Orientation des yeux",
+	value:0
+},{
+	name:"Allongement des yeux",
+	value:0
+},{
+	name:"Triste",
+	value:0
+},{
+	name:"Colère",
+	value:0
+},{
+	name:"Heureux",
+	value:0
+},{
+	name:"Surprise",
+	value:0
+}]
+
 /*
 function filterApply(){
 	var str="";
@@ -86,7 +122,7 @@ function clearZone(x1,y1,x2,y2)
           video.mozSrcObject = stream;
         } else {
           var vendorURL = window.URL || window.webkitURL;
-		  video.src = vendorURL.createObjectURL(stream); 
+		  video.srcObject = stream; 
 		  //video.src = vendorHTMLMediaElement.srcObject (stream);à inverser un jour peut etre
         }
 
@@ -290,7 +326,7 @@ function clearZone(x1,y1,x2,y2)
 			var newVertices = vertices.concat(mouth_vertices);
 			// merge with newVertices
 			newVertices = newVertices.concat(extendVertices);
-			deform.load(video, newPos, newVertices);
+			deform.load(video, newPos, newVertices, changements);
 			deform.draw(newPos);
 
 			//var ph=[0, 0, 0, 0, 0, 0, 22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -304,7 +340,8 @@ function clearZone(x1,y1,x2,y2)
 	//var canvasInput = document.getElementById('drawCanvas');
   	//var cc = canvasInput.getContext('2d');
   	//drawLoop();
-  	positionLoop();
+	  //positionLoop();
+	  //bouche(deformPoints,50);
     
     
 })();
