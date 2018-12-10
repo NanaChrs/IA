@@ -8,8 +8,10 @@ var deformation = function() {
 	var first = true;
 	var texCoordBuffer, gridCoordbuffer;
     var texCoordLocation;
-    var usegrid = false;
-    var drawProgram, gridProgram;
+	var usegrid = false;
+	var modif = true;
+	var drawProgram, gridProgram;
+	var nupoints, deformPoints;
     
     this.init = function(canvas) {
 		// ready a webgl element
@@ -50,6 +52,7 @@ var deformation = function() {
 
         if (element.tagName == 'VIDEO' || element.tagName == 'IMG') {
 			var ca = document.createElement('canvas');
+			ca.id="shader";
 			ca.width = element.width;
 			ca.height = element.height;
 			var cc = ca.getContext('2d');
@@ -60,24 +63,34 @@ var deformation = function() {
 		var image = cc.getImageData(minx, miny, width, height);
 
 		// correct points
-		var nupoints = [];
+		nupoints = [];
 		for (var i = 0;i < points.length;i++) {
 			nupoints[i] = [];
 			nupoints[i][0] = points[i][0] - minx;
 			nupoints[i][1] = points[i][1] - miny;
-        }
-        
+		}
+		
+		deformPoints=[];
+		for (var i = 0;i < points.length;i++) {
+			deformPoints[i] = [];
+			deformPoints[i][0] = nupoints[i][0];
+			deformPoints[i][1] = nupoints[i][1];
+		}
+		
+		//deformation
+		if (modif){
+			bouche(deformPoints,2);
+		}	
+
         // create vertices based on points
 		var textureVertices = [];
 		for (var i = 0;i < verticeMap.length;i++) {
-			//if((typeof nupoints[verticeMap[i][0]][0]!= 'undefined')&&(typeof nupoints[verticeMap[i][0]][1]!= 'undefined')&&(typeof nupoints[verticeMap[i][1]][0]!= 'undefined')&&(typeof nupoints[verticeMap[i][1]][1]!= 'undefined')&&(typeof nupoints[verticeMap[i][2]][0]!= 'undefined')&&(typeof nupoints[verticeMap[i][2]][1]!= 'undefined')){
-				textureVertices.push(nupoints[verticeMap[i][0]][0]/width);
-				textureVertices.push(nupoints[verticeMap[i][0]][1]/height);
-				textureVertices.push(nupoints[verticeMap[i][1]][0]/width);
-				textureVertices.push(nupoints[verticeMap[i][1]][1]/height);
-				textureVertices.push(nupoints[verticeMap[i][2]][0]/width);
-				textureVertices.push(nupoints[verticeMap[i][2]][1]/height);
-			//}
+			textureVertices.push(deformPoints[verticeMap[i][0]][0]/width);
+			textureVertices.push(deformPoints[verticeMap[i][0]][1]/height);
+			textureVertices.push(deformPoints[verticeMap[i][1]][0]/width);
+			textureVertices.push(deformPoints[verticeMap[i][1]][1]/height);
+			textureVertices.push(deformPoints[verticeMap[i][2]][0]/width);
+			textureVertices.push(deformPoints[verticeMap[i][2]][1]/height);
 		}
 
 		if (first) {
@@ -160,6 +173,7 @@ var deformation = function() {
 
 			first = false;
 		}
+		
         // load program for drawing grid
 		gl.useProgram(gridProgram);
 

@@ -155,7 +155,6 @@ function clearZone(x1,y1,x2,y2)
 			div.appendChild(input);
 			div.appendChild(label);
 
-        	console.log(document.getElementById('Contraste'));
         	buttonsDiv.insertAdjacentElement("afterbegin", div); 
 
 
@@ -271,6 +270,8 @@ function clearZone(x1,y1,x2,y2)
 		function drawMaskLoop() {
 			//var pos = [];
 			var pos = ctracker.getCurrentPosition();
+			// supprimer le masque
+			clearZone(0,0,video_width,video_height);
 			if (pos !== undefined) {
 				// create additional points around face
 				var tempPos;
