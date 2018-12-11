@@ -55,6 +55,7 @@ var deformation = function() {
 			ca.id="shader";
 			ca.width = element.width;
 			ca.height = element.height;
+			ca.class="canvas";
 			var cc = ca.getContext('2d');
 			cc.drawImage(element, 0, 0, element.width, element.height);
 		} else if (element.tagName == 'CANVAS') {
@@ -84,7 +85,12 @@ var deformation = function() {
 		nez(deformPoints,changements[3].value);
 		sourcils(deformPoints,changements[4].value);
 		yeuxor(deformPoints,changements[5].value);
-		
+		yeuxbrides(deformPoints,changements[6].value);
+		triste(deformPoints,changements[7].value);
+		colere(deformPoints,changements[8].value);
+		joie(deformPoints,changements[9].value);
+		surprise(deformPoints,changements[10].value);
+
 
         // create vertices based on points
 		var textureVertices = [];

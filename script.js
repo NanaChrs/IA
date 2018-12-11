@@ -15,9 +15,6 @@ var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAni
 var cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
 
 var canvass=["All", "Video"];
-//var canvasInput = document.getElementById('drawCanvas');
-//var cc = canvasInput.getContext('2d');
-
 
 var filters =[{
 		name: "Flou",
@@ -70,21 +67,18 @@ var filters =[{
 	}];
 
 
-var filters2D =[,{
+var filters2D =[{
 	name:"Zorro",
 	start:"zorro",
 	cancel:zorro
 	},{
 	name:"Visage",
 	start:"visage",
-	cancel:visage
-var changements=[{
-	name:"Taille des yeux",
-	value:0
+	cancel:visage2D
 },{
 	name:"Yeux",
-	start:"yeux",
-	cancel:yeux
+	start:"yeux2D",
+	cancel:yeux2D
 },{
 	name:"Points",
 	start:"points",
@@ -98,6 +92,11 @@ var changements=[{
 	start:"lunettes",
 	cancel:lunettes
 }];
+
+var changements=[{
+	name:"Taille des yeux",
+	value:0},
+	{
 	name:"Taille du visage",
 	value:0
 },{
@@ -127,7 +126,98 @@ var changements=[{
 },{
 	name:"Surprise",
 	value:0
-}]
+}];
+
+var mouth_vertices = [
+	[44,45,61,44],
+	[45,46,61,45],
+	[46,60,61,46],
+	[46,47,60,46],
+	[47,48,60,47],
+	[48,59,60,48],
+	[48,49,59,48],
+	[49,50,59,49],
+	[50,51,58,50],
+	[51,52,58,51],
+	[52,57,58,52],
+	[52,53,57,52],
+	[53,54,57,53],
+	[54,56,57,54],
+	[54,55,56,54],
+	[55,44,56,55],
+	[44,61,56,44],
+	[61,60,56,61],
+	[56,57,60,56],
+	[57,59,60,57],
+	[57,58,59,57],
+	[50,58,59,50],
+];
+
+var deform = new deformation();
+deform.init(webgl_overlay);
+
+
+var extendVertices = [
+	[0,71,72,0],
+	[0,72,1,0],
+	[1,72,73,1],
+	[1,73,2,1],
+	[2,73,74,2],
+	[2,74,3,2],
+	[3,74,75,3],
+	[3,75,4,3],
+	[4,75,76,4],
+	[4,76,5,4],
+	[5,76,77,5],
+	[5,77,6,5],
+	[6,77,78,6],
+	[6,78,7,6],
+	[7,78,79,7],
+	[7,79,8,7],
+	[8,79,80,8],
+	[8,80,9,8],
+	[9,80,81,9],
+	[9,81,10,9],
+	[10,81,82,10],
+	[10,82,11,10],
+	[11,82,83,11],
+	[11,83,12,11],
+	[12,83,84,12],
+	[12,84,13,12],
+	[13,84,85,13],
+	[13,85,14,13],
+	[14,85,86,14],
+	[14,86,15,14],
+	[15,86,87,15],
+	[15,87,16,15],
+	[16,87,88,16],
+	[16,88,17,16],
+	[17,88,89,17],
+	[17,89,18,17],
+	[18,89,93,18],
+	[18,93,22,18],
+	[22,93,21,22],
+	[93,92,21,93],
+	[21,92,20,21],
+	[92,91,20,92],
+	[20,91,19,20],
+	[91,90,19,91],
+	[19,90,71,19],
+	[19,71,0,19]
+];
+
+function getElementOfList(liste, name){
+	var result = null;
+	liste.forEach(function(e){
+		console.log(e.name);
+		console.log(name);
+		if (e.name==name){
+			result=e;
+		}
+		
+	});
+	return result;
+}
 
 /*
 function filterApply(){
@@ -147,13 +237,6 @@ function filterApply(){
 }
 */
 
-function filter2D(liste){
-	requestAnimationFrame(filter2D);
-	clearZone(0,0,2000,2000);
-	liste.forEach(function(item){
-		item;
-	})
-}
 
 function getInputRangeByName(name){
 	result = null;
@@ -272,11 +355,12 @@ function nofilltriangle(point1,point2,point3,color,context){
 }
 
 function mickey(color){
+	var context=getCanvasByName("mickey").getContext("2d");
 	requestAnimationFrame(mickey);
 	/*var canvas = document.getElementById("canvas1");
 	var context = canvas.getContext("2d");*/
 	
-	var context=getCanvasByName("mickey").getContext("2d");
+	
 	context.clearRect(0,0,2000,2000);
 	
 	//clearZone(0,0,2000,2000, context);
@@ -287,10 +371,11 @@ function mickey(color){
 	fillCircle(positions[15][0],positions[15][1]+distance,taille,color,context);
 }
 
-function visage(color){
-	requestAnimationFrame(visage);
-	//requestAnimFrame(visage);
+function visage2D(color){
 	var canvas = getCanvasByName("visage");
+	requestAnimationFrame(visage2D);
+	//requestAnimFrame(visage);
+	
 	var context = canvas.getContext("2d");
 	
 	context.clearRect(0,0,2000,2000);
@@ -353,9 +438,10 @@ function visage(color){
 }
 
 function points(color){
+	var context=getCanvasByName("points").getContext("2d");
 	requestAnimFrame(points);
 	var i = 0;
-	var context=getCanvasByName("points").getContext("2d");
+	
 	context.clearRect(0,0,2000,2000);
 	var positions = ctracker.getCurrentPosition();
 	//clearZone(0,0,2000,2000);
@@ -365,10 +451,54 @@ function points(color){
 
 }
 
+function positionLoop() {
+	requestAnimationFrame(positionLoop);
+	var positions = ctracker.getCurrentPosition();
+	// do something with the positions ...
+	// print the positions
+	var positionString = "";
+	//fillCircle(positions[27][0],positions[27][1]);
+	(0,0,video_width,video_height)
+	//var taille=positions[27][1]-positions[24][1];
+	//fillCircle(positions[27][0],positions[27][1],taille,'#FF0000');
+	//var taille2=positions[32][1]-positions[29][1];
+	//fillCircle(positions[32][0],positions[32][1],taille2,'#FF0000');
+	if(positions){
+		ctracker.draw(overlay);
+		drawMaskLoop();
+	}
+}
+ 
+function drawMaskLoop() {
+	//var pos = [];
+	var pos = ctracker.getCurrentPosition();
+	// supprimer le masque
+	overlayCC.clearRect(0,0,video_width,video_height);
+	if (pos !== undefined) {
+		// create additional points around face
+		var tempPos;
+		var addPos = [];
+		for (var i = 0;i < 23;i++) {
+			tempPos = [];
+			tempPos[0] = (pos[i][0] - pos[62][0])*1.3 + pos[62][0];
+			tempPos[1] = (pos[i][1] - pos[62][1])*1.3 + pos[62][1];
+			addPos.push(tempPos);
+		}
+	}
+	var newPos = pos.concat(addPos);
+	var newVertices = vertices.concat(mouth_vertices);
+			// merge with newVertices
+			newVertices = newVertices.concat(extendVertices);
+			deform.load(video, newPos, newVertices, changements);
+			deform.draw(newPos);
+}
+
+
 function lunettes(thecolor){
+	var canvas=getCanvasByName("lunettes");
 	requestAnimationFrame(lunettes);
 	//console.log(typeof thecolor); la coueluer ne fonctionne pas avec la fonction addcolorstop, on a un changement de type intempestif ainsi que une incrementation infini de la variable
-	var canvas=getCanvasByName("lunettes");
+	
 	var context = canvas.getContext("2d");
 	
 	context.clearRect(0,0,2000,2000);
@@ -403,10 +533,11 @@ function lunettes(thecolor){
 
 }
 
-function yeux(color) {	
-	requestAnimFrame(yeux);
+function yeux2D(color) {	
+	var context=getCanvasByName("yeux2D").getContext("2d");
+	requestAnimFrame(yeux2D);
 
-	var context=getCanvasByName("yeux").getContext("2d");
+	
 	context.clearRect(0,0,2000,2000);
 	var positions = ctracker.getCurrentPosition();
 	// do something with the positions ...
@@ -422,10 +553,11 @@ function yeux(color) {
    }
 
 function zorro(color){
+	var context=getCanvasByName("zorro").getContext("2d");
 	/*var canvas = document.getElementById("canvas1");
 	var context = canvas.getContext("2d");*/
 	requestAnimationFrame(zorro);
-	var context=getCanvasByName("zorro").getContext("2d");
+	
 	context.clearRect(0,0,2000,2000);
 	//console.log(context)
 	//clearZone(0,0,2000,2000);
@@ -747,7 +879,86 @@ function addButtons(liste){
   
 }
 
+function addButtonsDeform(liste){
+	var buttonsDiv = document.getElementById("deformation");
+	//var boutons;    
 
+  liste.forEach(function(item){
+			// Création de la div de la checkbox	
+	var div = document.createElement("div");
+	var bouton = document.createElement("div");
+	bouton.className="ui toggle checkbox";
+
+	//Création du label du bouton
+	var label= document.createElement("label");
+	var textLabel= document.createTextNode(item.name);
+	label.appendChild(textLabel);
+
+	//Création de l'input
+	var input=document.createElement("input");
+	input.addEventListener('change', function(){
+		if (this.checked){
+			//console.log(getInputRangeByName(item.name));
+			if (getInputRangeByName(item.name)==null){
+				var range=document.createElement("input");
+				range.className="slider";
+				range.name=item.name;
+				range.type="range";
+				div.appendChild(range);
+				
+				range.addEventListener('change', function(){
+					getElementOfList(changements, item.name).value=this.value;
+					positionLoop();
+				});
+			}
+
+
+			else{
+				getInputRangeByName(item.name).value=50;
+				getInputRangeByName(item.name).style="";
+			}
+		}
+		else{
+			//console.log(getCreatedElementById("select"+item.name,"select"));
+			document.querySelectorAll("select.select"+item.start).forEach(function(elem){
+				div.removeChild(elem);
+			});
+			
+			getInputRangeByName(item.name).style="display: none;";
+			str = str.replace(stringette, "");
+			/*console.log(stringette);
+			console.log(str);*/
+			
+			document.querySelectorAll("canvas.canvas").forEach(function(elem){
+				elem.style.filter=str;
+			});
+			video.style.filter = str;
+			//console.log(document.querySelectorAll("input.slider"));
+			/*document.getElementsByName(item.name).style.display="none";*/
+		}
+	//video.style.filter="contrast(500%)";
+		
+		//console.log(str);
+	
+
+	});
+	//input.checked=false;
+	input.type="checkbox";
+	input.id=item.name;
+	label.htmlFor = input.id;
+
+	//Assemblage du tout
+	
+	bouton.appendChild(input);
+	bouton.appendChild(label);
+	div.appendChild(bouton);
+
+  //console.log(document.getElementById('Contraste'));
+  buttonsDiv.insertAdjacentElement("beforeend", div); 
+	
+  });
+  
+}
 
 
 (function(){
@@ -807,57 +1018,6 @@ function addButtons(liste){
 	// });
 	// }
 	
-    
-
-    function addButtons(liste){
-    	var buttonsDiv = document.getElementById("filterButtons");
-    	var boutons;    
-
-        liste.forEach(function(item){
-    		// Création de la div de la checkbox	
-			var div = document.createElement("div");
-			div.className="ui toggle checkbox";
-
-			//Création du label du bouton
-			var label= document.createElement("label");
-			var textLabel= document.createTextNode(item.name);
-			label.appendChild(textLabel);
-
-			//Création de l'input
-			var input=document.createElement("input");
-			input.addEventListener('click', function(){
-				var stringette=item.filter+" ";
-				if (this.checked){
-					str+=stringette;
-				}
-				else{
-					str = str.replace(stringette, "");
-				}
-				//video.style.filter="contrast(500%)";
-				video.style.filter = str;
-				
-
-			});
-			//input.checked=false;
-			input.type="checkbox";
-			input.id=item.name;
-			label.htmlFor = input.id;
-
-			//Assemblage du tout
-			div.appendChild(input);
-			div.appendChild(label);
-
-        	buttonsDiv.insertAdjacentElement("afterbegin", div); 
-
-
-  		
-		
-      });
-
-        
-
-      
-    }
     var ctracker = new clm.tracker();
   	ctracker.init();
 		ctracker.start(video);
@@ -866,131 +1026,14 @@ function addButtons(liste){
 		deform.init(webgl_overlay);
 		
 		// Triangles composant la bouche
-		var mouth_vertices = [
-			[44,45,61,44],
-			[45,46,61,45],
-			[46,60,61,46],
-			[46,47,60,46],
-			[47,48,60,47],
-			[48,59,60,48],
-			[48,49,59,48],
-			[49,50,59,49],
-			[50,51,58,50],
-			[51,52,58,51],
-			[52,57,58,52],
-			[52,53,57,52],
-			[53,54,57,53],
-			[54,56,57,54],
-			[54,55,56,54],
-			[55,44,56,55],
-			[44,61,56,44],
-			[61,60,56,61],
-			[56,57,60,56],
-			[57,59,60,57],
-			[57,58,59,57],
-			[50,58,59,50],
-		];
-		
 
-		var extendVertices = [
-			[0,71,72,0],
-			[0,72,1,0],
-			[1,72,73,1],
-			[1,73,2,1],
-			[2,73,74,2],
-			[2,74,3,2],
-			[3,74,75,3],
-			[3,75,4,3],
-			[4,75,76,4],
-			[4,76,5,4],
-			[5,76,77,5],
-			[5,77,6,5],
-			[6,77,78,6],
-			[6,78,7,6],
-			[7,78,79,7],
-			[7,79,8,7],
-			[8,79,80,8],
-			[8,80,9,8],
-			[9,80,81,9],
-			[9,81,10,9],
-			[10,81,82,10],
-			[10,82,11,10],
-			[11,82,83,11],
-			[11,83,12,11],
-			[12,83,84,12],
-			[12,84,13,12],
-			[13,84,85,13],
-			[13,85,14,13],
-			[14,85,86,14],
-			[14,86,15,14],
-			[15,86,87,15],
-			[15,87,16,15],
-			[16,87,88,16],
-			[16,88,17,16],
-			[17,88,89,17],
-			[17,89,18,17],
-			[18,89,93,18],
-			[18,93,22,18],
-			[22,93,21,22],
-			[93,92,21,93],
-			[21,92,20,21],
-			[92,91,20,92],
-			[20,91,19,20],
-			[91,90,19,91],
-			[19,90,71,19],
-			[19,71,0,19]
-		]
 
-    function positionLoop() {
-			requestAnimationFrame(positionLoop);
-			var positions = ctracker.getCurrentPosition();
-			// do something with the positions ...
-			// print the positions
-			var positionString = "";
-			//fillCircle(positions[27][0],positions[27][1]);
-			clearZone(0,0,video_width,video_height);
-			//var taille=positions[27][1]-positions[24][1];
-			//fillCircle(positions[27][0],positions[27][1],taille,'#FF0000');
-			//var taille2=positions[32][1]-positions[29][1];
-			//fillCircle(positions[32][0],positions[32][1],taille2,'#FF0000');
-			if(positions){
-				ctracker.draw(overlay);
-				drawMaskLoop();
-			}
-		}
-		 
-		function drawMaskLoop() {
-			//var pos = [];
-			var pos = ctracker.getCurrentPosition();
-			// supprimer le masque
-			clearZone(0,0,video_width,video_height);
-			if (pos !== undefined) {
-				// create additional points around face
-				var tempPos;
-				var addPos = [];
-				for (var i = 0;i < 23;i++) {
-					tempPos = [];
-					tempPos[0] = (pos[i][0] - pos[62][0])*1.3 + pos[62][0];
-					tempPos[1] = (pos[i][1] - pos[62][1])*1.3 + pos[62][1];
-					addPos.push(tempPos);
-				}
-			}
-			
-			// merge with pos
-			var newPos = pos.concat(addPos);
-
+    
+    document.body.onload=start();
 	document.body.onload=addButtons(filters);
 	document.body.onload=addButtons2D(filters2D);
+	document.body.onload=addButtonsDeform(changements);
 	video.play();
-	//filter2D(filter2D);
-	//clearZone(0,0,2000,2000);
-
-			//var ph=[0, 0, 0, 0, 0, 0, 22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-
-		}
-
-    document.body.onload=start();
-
 	
 	//var canvasInput = document.getElementById('drawCanvas');
   	//var cc = canvasInput.getContext('2d');
