@@ -91,6 +91,11 @@ input[type=range].slider:focus::-ms-fill-upper {
   z-index: 2;
 }
 
+#overlay, #webgl{
+  z-index:1;
+}
+
+
 video{
   position: absolute;
   left:0;

@@ -73,7 +73,7 @@ var filters2D =[{
 	cancel:zorro
 	},{
 	name:"Visage",
-	start:"visage",
+	start:"visage2D",
 	cancel:visage2D
 },{
 	name:"Yeux",
@@ -217,6 +217,15 @@ function getElementOfList(liste, name){
 		
 	});
 	return result;
+}
+
+function checktrue(liste){
+	liste.forEach(function(e){
+		if (e.value!=0){
+			return true;
+		}
+	});
+	return false;
 }
 
 /*
@@ -372,7 +381,7 @@ function mickey(color){
 }
 
 function visage2D(color){
-	var canvas = getCanvasByName("visage");
+	var canvas = getCanvasByName("visage2D");
 	requestAnimationFrame(visage2D);
 	//requestAnimFrame(visage);
 	
@@ -904,11 +913,16 @@ function addButtonsDeform(liste){
 				range.className="slider";
 				range.name=item.name;
 				range.type="range";
+				range.max=50;
+				range.min=-50;
+				range.value=0;
+
 				div.appendChild(range);
-				
+
 				range.addEventListener('change', function(){
 					getElementOfList(changements, item.name).value=this.value;
 					positionLoop();
+					document.querySelector("canvas#shader").style="z-index=1";
 				});
 			}
 
@@ -924,15 +938,24 @@ function addButtonsDeform(liste){
 				div.removeChild(elem);
 			});
 			
+			getElementOfList(changements, item.name).value=0;
+			getInputRangeByName(item.name).value=0;
+			if (checktrue(changements)){
+				document.querySelector("canvas#shader").style="z-index=-3";
+				return;
+			}
+			positionLoop();
 			getInputRangeByName(item.name).style="display: none;";
-			str = str.replace(stringette, "");
+			//str = str.replace(stringette, "");
 			/*console.log(stringette);
 			console.log(str);*/
+			
+			
 			
 			document.querySelectorAll("canvas.canvas").forEach(function(elem){
 				elem.style.filter=str;
 			});
-			video.style.filter = str;
+			//video.style.filter = str;
 			//console.log(document.querySelectorAll("input.slider"));
 			/*document.getElementsByName(item.name).style.display="none";*/
 		}
