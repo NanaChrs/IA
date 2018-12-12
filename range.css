@@ -113,7 +113,6 @@ video{
 #buttons2D{
   display:flex;
   position: relative;
-  top:307px;
   flex-direction: column;
   
 }

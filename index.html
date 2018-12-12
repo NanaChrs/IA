@@ -20,10 +20,19 @@
 				    muted="muted">
 				</video>
 				
-			<div id="filterButtons"><h2>Filtres CSS:</h2></div>
+			<div id="filterButtons"><h2>Filtres CSS:</h2></div></div>
 		</div>
-		<div id="buttons2D"><h2>Filtres 2D:</h2></divs>
-		<div id="deformation"><h2>Filtres de déformation:</h2></div>
+		<div style="display:flex; justify-content: space-between; top:307px; position:relative;">
+			<div id="buttons2D"><h2>Filtres 2D:</h2></div>
+			<div id="deformation" style="top:307px"><h2>Filtres de déformation:</h2></div>
+
+			<div style="display: flex">
+				<button id="save">Sauvegarder</button>
+				<select id="filtres"></select>
+				<button id="load">load</button>
+			</div>
+			
+		</div>
 
 
 		<script src="clmtrackr.js"></script>
