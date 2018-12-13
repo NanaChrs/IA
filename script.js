@@ -639,6 +639,7 @@ function addButtons2D(liste){
 
 	//Création du label du bouton
 	var label= document.createElement("label");
+	label.setAttribute("style","color:#992222");
 	var textLabel= document.createTextNode(item.name);
 	label.appendChild(textLabel);
 
@@ -649,8 +650,8 @@ function addButtons2D(liste){
 		if (this.checked){
 			var can = document.createElement("canvas");
 			can.id = item.start;
-			can.width="1080";
-			can.height="607";
+			can.width="800";
+			can.height="550";
 			can.className="canvas";
 			container.insertAdjacentElement("afterbegin", can);
 			document.querySelectorAll("select").forEach(function(element){
@@ -758,6 +759,7 @@ function addButtons(liste){
 
 	//Création du label du bouton
 	var label= document.createElement("label");
+	label.setAttribute("style","color:#992222");
 	var textLabel= document.createTextNode(item.name);
 	label.appendChild(textLabel);
 
@@ -900,6 +902,7 @@ function addButtonsDeform(liste){
 
 	//Création du label du bouton
 	var label= document.createElement("label");
+	label.setAttribute("style","color:#992222");
 	var textLabel= document.createTextNode(item.name);
 	label.appendChild(textLabel);
 
@@ -1012,8 +1015,8 @@ function addButtonsDeform(liste){
         navigator.getUserMedia( { 
           audio: false,  
           video: {
-              width: 1080,
-              height: 607
+              width: 800,
+              height: 550
           }
         }, 
         gotStream, 
