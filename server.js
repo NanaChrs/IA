@@ -1,20 +1,156 @@
-var express=require('express');
-var http=require('http');
-var fs=require('fs');
-var jscolor=require('./jscolor');
-var clm=require('./clmtrackr');
-var deformation=require('./deformation');
-var filtresdeform=require('./filresdeform');
-var script=require('./script');
-var utils=require('./utils');
-var vertices=require('./vertices');
+var app=require('express')(),
+    server=require('http').createServer(app),
+    io=require('socket.io').listen(server),
+    fs=require('fs'),
+    ent=require('ent');
 
-http.createServer(function (req, res) {
-    fs.readFile('index.html', function(err, data) {
-        res.writeHead(200, {'Content-Type': 'text/html'});
-        res.write(data);
+
+app.get('/', function (req, res) {
+    fs.readFile("index.html", function (error, pgResp) {
+        if (error) {
+            res.writeHead(404);
+            res.write('Contents you are looking are not found');
+        } else {
+            res.writeHead(200, { 'Content-Type': 'text/html' });
+            res.write(pgResp);   
+        }    
         res.end();
-      });
+    });
+});
 
-    script.start();
-}).listen(8080);
+app.get('/clmtrackr.js', function (req, res) {
+    fs.readFile("./clmtrackr.js", function (error, pgResp) {
+        if (error) {
+            res.writeHead(404);
+            res.write('Contents you are looking are Not Found');
+        } else {
+            res.writeHead(200, { 'Content-Type': 'text/js' });
+            res.write(pgResp);   
+        }    
+        res.end();
+    });
+});
+
+app.get('/UI-Checkbox-master/checkbox.js', function (req, res) {
+    fs.readFile("./UI-Checkbox-master/checkbox.js", function (error, pgResp) {
+        if (error) {
+            res.writeHead(404);
+            res.write('Contents you are looking are Not Found');
+        } else {
+            res.writeHead(200, { 'Content-Type': 'text/js' });
+            res.write(pgResp);   
+        }    
+        res.end();
+    });
+});
+
+
+app.get('/three.js', function (req, res) {
+    fs.readFile("./three.js", function (error, pgResp) {
+        if (error) {
+            res.writeHead(404);
+            res.write('Contents you are looking are Not Found');
+        } else {
+            res.writeHead(200, { 'Content-Type': 'text/js' });
+            res.write(pgResp);   
+        }    
+        res.end();
+    });
+});
+
+
+app.get('/vertices.js', function (req, res) {
+    fs.readFile("./vertices.js", function (error, pgResp) {
+        if (error) {
+            res.writeHead(404);
+            res.write('Contents you are looking are Not Found');
+        } else {
+            res.writeHead(200, { 'Content-Type': 'text/js' });
+            res.write(pgResp);   
+        }    
+        res.end();
+    });
+});
+
+
+app.get('/filresdeform.js', function (req, res) {
+    fs.readFile("./filresdeform.js", function (error, pgResp) {
+        if (error) {
+            res.writeHead(404);
+            res.write('Contents you are looking are Not Found');
+        } else {
+            res.writeHead(200, { 'Content-Type': 'text/js' });
+            res.write(pgResp);   
+        }    
+        res.end();
+    });
+});
+
+app.get('/jscolor.js', function (req, res) {
+    fs.readFile("./jscolor.js", function (error, pgResp) {
+        if (error) {
+            res.writeHead(404);
+            res.write('Contents you are looking are Not Found');
+        } else {
+            res.writeHead(200, { 'Content-Type': 'text/js' });
+            res.write(pgResp);   
+        }    
+        res.end();
+    });
+})
+
+app.get('/range.css', function (req, res) {
+    fs.readFile("./range.css", function (error, pgResp) {
+        if (error) {
+            res.writeHead(404);
+            res.write('Contents you are looking are Not Found');
+        } else {
+            res.writeHead(200, { 'Content-Type': 'text/css' });
+            res.write(pgResp);   
+        }    
+        res.end();
+    });
+});
+
+app.get('/UI-Checkbox-master/checkbox.css', function (req, res) {
+    fs.readFile("./UI-Checkbox-master/checkbox.css", function (error, pgResp) {
+        if (error) {
+            res.writeHead(404);
+            res.write('Contents you are looking are Not Found');
+        } else {
+            res.writeHead(200, { 'Content-Type': 'text/css' });
+            res.write(pgResp);   
+        }    
+        res.end();
+    });
+});
+
+
+app.get('/deformation.js', function (req, res) {
+    fs.readFile("./deformation.js", function (error, pgResp) {
+        if (error) {
+            res.writeHead(404);
+            res.write('Contents you are looking are Not Found');
+        } else {
+            res.writeHead(200, { 'Content-Type': 'text/js' });
+            res.write(pgResp);   
+        }    
+        res.end();
+    });
+});
+
+
+app.get('/script.js', function (req, res) {
+    fs.readFile("./script.js", function (error, pgResp) {
+        if (error) {
+            res.writeHead(404);
+            res.write('Contents you are looking are Not Found');
+        } else {
+            res.writeHead(200, { 'Content-Type': 'text/js' });
+            res.write(pgResp);   
+        }    
+        res.end();
+    });
+});
+
+server.listen(8080);

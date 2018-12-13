@@ -1,3 +1,41 @@
+.canvas{
+  position: absolute;
+  left:0;
+  top:0;
+  z-index: 2;
+}
+
+#overlay, #webgl{
+  z-index:1;
+}
+
+
+video{
+  position: absolute;
+  left:0;
+  top:0;
+  z-index: 0;
+}
+
+#filterButtons{
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  left:1080px;
+}
+
+#buttons2D{
+  display:flex;
+  position: relative;
+  flex-direction: column;
+  
+}
+
+.jscolor{
+  display:flex;
+  margin-left: 3%;
+}
+
 input[type=range].slider {
   -webkit-appearance: none;
   width: 100%;
@@ -82,42 +120,4 @@ input[type=range].slider:focus::-ms-fill-lower {
 }
 input[type=range].slider:focus::-ms-fill-upper {
   background: rgba(255, 255, 255, 0.37);
-}
-
-.canvas{
-  position: absolute;
-  left:0;
-  top:0;
-  z-index: 2;
-}
-
-#overlay, #webgl{
-  z-index:1;
-}
-
-
-video{
-  position: absolute;
-  left:0;
-  top:0;
-  z-index: 0;
-}
-
-#filterButtons{
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  left:1080px;
-}
-
-#buttons2D{
-  display:flex;
-  position: relative;
-  flex-direction: column;
-  
-}
-
-.jscolor{
-  display:flex;
-  margin-left: 3%;
 }
