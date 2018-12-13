@@ -984,7 +984,7 @@ function addButtonsDeform(liste){
 }
 
 
-(function(){
+exports.start=function(){
 	//Permet d'utiliser le bon nom de fonction selon le navigateur utilisé
 	navigator.getUserMedia = (navigator.getUserMedia ||
       navigator.webkitGetUserMedia ||
@@ -1065,7 +1065,8 @@ function addButtonsDeform(liste){
 	  //bouche(deformPoints,50);
     
     
-})();
+}
+
 
 
 
