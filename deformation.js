@@ -9,7 +9,6 @@ var deformation = function() {
 	var texCoordBuffer, gridCoordbuffer;
     var texCoordLocation;
 	var usegrid = false;
-	var modif = true;
 	var drawProgram, gridProgram;
 	var nupoints, deformPoints;
     
@@ -17,6 +16,7 @@ var deformation = function() {
 		// ready a webgl element
 		gl = getWebGLContext(canvas);
 		gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
+		return gl;
 	}
 
     this.load = function(element, points, vertices, changements) {
@@ -48,7 +48,7 @@ var deformation = function() {
         miny = Math.floor(miny);
         maxy = Math.ceil(maxy);
         width = maxx-minx;
-        height = maxy-miny;
+		height = maxy-miny;
 
         if (element.tagName == 'VIDEO' || element.tagName == 'IMG') {
 			var ca = document.createElement('canvas');
