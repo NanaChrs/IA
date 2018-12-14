@@ -1,3 +1,5 @@
+//import { isNull } from "util";
+
 var video=document.getElementById("video");
 var video_width = video.width;
 var video_height = video.height;
@@ -75,6 +77,14 @@ var filters2D =[{
 	name:"Visage",
 	start:"visage2D",
 	cancel:visage2D
+},{
+	name:"Nez",
+	start:"nez2D",
+	cancel:nez2D
+},{
+	name:"Bouche",
+	start:"bouche2D",
+	cancel:bouche2D
 },{
 	name:"Yeux",
 	start:"yeux2D",
@@ -209,8 +219,8 @@ var extendVertices = [
 function getElementOfList(liste, name){
 	var result = null;
 	liste.forEach(function(e){
-		console.log(e.name);
-		console.log(name);
+		//console.log(e.name);
+		//console.log(name);
 		if (e.name==name){
 			result=e;
 		}
@@ -340,124 +350,184 @@ function triangle(point1,point2,point3,color, context){
 	//var canvasContext = document.getElementById("canvas1"); 
 	//console.log(context)
 	//var context = canvas.getContext("2d");	}
-	context.beginPath();
-	context.fillStyle=color;
-	context.strokeStyle=color;
-	context.moveTo(point1[0],point1[1]);
-	context.lineTo(point2[0],point2[1]);
-	context.lineTo(point3[0],point3[1]);
-	context.closePath();
-	context.stroke();
-	context.fill();
+	if (point1 != undefined){
+		context.beginPath();
+		context.fillStyle=color;
+		context.strokeStyle=color;
+		context.moveTo(point1[0],point1[1]);
+		context.lineTo(point2[0],point2[1]);
+		context.lineTo(point3[0],point3[1]);
+		context.closePath();
+		context.stroke();
+		context.fill();
+	}
 
 }
 
 function nofilltriangle(point1,point2,point3,color,context){
-	context.beginPath();
-	context.strokeStyle=color;
-	context.lineWidth="0.7";
-	context.moveTo(point1[0],point1[1]);
-	context.lineTo(point2[0],point2[1]);
-	context.lineTo(point3[0],point3[1]);
-	context.closePath();
-	context.stroke();
+	if (point1 != undefined){
+		context.beginPath();
+		context.strokeStyle=color;
+		context.lineWidth="0.7";
+		context.moveTo(point1[0],point1[1]);
+		context.lineTo(point2[0],point2[1]);
+		context.lineTo(point3[0],point3[1]);
+		context.closePath();
+		context.stroke();
+	}
 }
 
 function mickey(color){
-	var context=getCanvasByName("mickey").getContext("2d");
-	requestAnimationFrame(mickey);
-	/*var canvas = document.getElementById("canvas1");
-	var context = canvas.getContext("2d");*/
-	
-	
-	context.clearRect(0,0,2000,2000);
-	
-	//clearZone(0,0,2000,2000, context);
-	var positions = ctracker.getCurrentPosition();
-	var distance = 2 * (positions[19][1]-positions[1][1]);
-	var taille = Math.sqrt((positions[14][0]-positions[0][0])**2+(positions[14][1]-positions[0][1])**2)*(1/3);
-	fillCircle(positions[19][0],positions[19][1]+distance,taille,color,context);
-	fillCircle(positions[15][0],positions[15][1]+distance,taille,color,context);
+	var canvas=getCanvasByName("mickey");
+	if (canvas != null) {
+		var context=canvas.getContext("2d");
+		
+		requestAnimationFrame(mickey);
+		context.clearRect(0,0,2000,2000);
+		var positions = ctracker.getCurrentPosition();
+		if(positions[0]!= undefined){
+
+			//clearZone(0,0,2000,2000, context);
+			var distance = 2 * (positions[19][1]-positions[1][1]);
+			var taille = Math.sqrt((positions[14][0]-positions[0][0])**2+(positions[14][1]-positions[0][1])**2)*(1/3);
+			fillCircle(positions[19][0],positions[19][1]+distance,taille,color,context);
+			fillCircle(positions[15][0],positions[15][1]+distance,taille,color,context);
+		}
+	}
 }
 
 function visage2D(color){
 	var canvas = getCanvasByName("visage2D");
 	requestAnimationFrame(visage2D);
 	//requestAnimFrame(visage);
-	
-	var context = canvas.getContext("2d");
-	
-	context.clearRect(0,0,2000,2000);
-	var positions = ctracker.getCurrentPosition();
+	if (canvas != null) {
+		var context = canvas.getContext("2d");
+		
+		context.clearRect(0,0,2000,2000);
+		var positions = ctracker.getCurrentPosition();
 
-	for (let index = 0; index < 14; index++) { //bas visage
-		nofilltriangle(positions[index],positions[index+1],positions[index+1],color,context);
-	}
-	for (let index = 15; index < 18; index++) {//sourcil droit
-		nofilltriangle(positions[index],positions[index+1],positions[index+1],color,context);
-	}
-	for (let index = 19; index < 22; index++) {//sourcil gauche
-		nofilltriangle(positions[index],positions[index+1],positions[index+1],color,context);
-	}
-	for (let index = 44; index < 55; index++) {//contour bouche
-		nofilltriangle(positions[index],positions[index+1],positions[index+1],color,context);
-	}
-	for (let index = 56; index < 58; index++) {//bas levres
-		nofilltriangle(positions[index],positions[index+1],positions[index+1],color,context);
-	}
-	for (let index = 59; index < 61; index++) {//haut levres
-		nofilltriangle(positions[index],positions[index+1],positions[index+1],color,context);
-	}
-	nofilltriangle(positions[44],positions[44],positions[55],color,context);//jointures
-	nofilltriangle(positions[44],positions[44],positions[56],color,context);
-	nofilltriangle(positions[44],positions[44],positions[61],color,context);
-	nofilltriangle(positions[50],positions[50],positions[58],color,context);
-	nofilltriangle(positions[50],positions[50],positions[59],color,context);
-	for (let index = 34; index < 36; index++) {//droite nez
-		nofilltriangle(positions[index],positions[index+1],positions[index+1],color,context);
-	}
-	for (let index = 38; index < 40; index++) {//gauche nez
-		nofilltriangle(positions[index],positions[index+1],positions[index+1],color,context);
-	}
-	nofilltriangle(positions[36],positions[36],positions[42],color,context);//details nez
-	nofilltriangle(positions[42],positions[42],positions[37],color,context);
-	nofilltriangle(positions[37],positions[37],positions[43],color,context);
-	nofilltriangle(positions[43],positions[43],positions[38],color,context);
+		for (let index = 0; index < 14; index++) { //bas visage
+			nofilltriangle(positions[index],positions[index+1],positions[index+1],color,context);
+		}
+		for (let index = 15; index < 18; index++) {//sourcil droit
+			nofilltriangle(positions[index],positions[index+1],positions[index+1],color,context);
+		}
+		for (let index = 19; index < 22; index++) {//sourcil gauche
+			nofilltriangle(positions[index],positions[index+1],positions[index+1],color,context);
+		}
+		for (let index = 44; index < 55; index++) {//contour bouche
+			nofilltriangle(positions[index],positions[index+1],positions[index+1],color,context);
+		}
+		for (let index = 56; index < 58; index++) {//bas levres
+			nofilltriangle(positions[index],positions[index+1],positions[index+1],color,context);
+		}
+		for (let index = 59; index < 61; index++) {//haut levres
+			nofilltriangle(positions[index],positions[index+1],positions[index+1],color,context);
+		}
+		nofilltriangle(positions[44],positions[44],positions[55],color,context);//jointures
+		nofilltriangle(positions[44],positions[44],positions[56],color,context);
+		nofilltriangle(positions[44],positions[44],positions[61],color,context);
+		nofilltriangle(positions[50],positions[50],positions[58],color,context);
+		nofilltriangle(positions[50],positions[50],positions[59],color,context);
+		for (let index = 34; index < 36; index++) {//droite nez
+			nofilltriangle(positions[index],positions[index+1],positions[index+1],color,context);
+		}
+		for (let index = 38; index < 40; index++) {//gauche nez
+			nofilltriangle(positions[index],positions[index+1],positions[index+1],color,context);
+		}
+		nofilltriangle(positions[36],positions[36],positions[42],color,context);//details nez
+		nofilltriangle(positions[42],positions[42],positions[37],color,context);
+		nofilltriangle(positions[37],positions[37],positions[43],color,context);
+		nofilltriangle(positions[43],positions[43],positions[38],color,context);
 
-	nofilltriangle(positions[41],positions[41],positions[33],color,context);//haut nez
-	nofilltriangle(positions[41],positions[41],positions[62],color,context);
+		nofilltriangle(positions[41],positions[41],positions[33],color,context);//haut nez
+		nofilltriangle(positions[41],positions[41],positions[62],color,context);
 
-	nofilltriangle(positions[23],positions[23],positions[66],color,context);//oeil gauche
-	nofilltriangle(positions[23],positions[23],positions[63],color,context);
-	nofilltriangle(positions[63],positions[63],positions[24],color,context);
-	nofilltriangle(positions[24],positions[24],positions[64],color,context);
-	nofilltriangle(positions[64],positions[64],positions[25],color,context);
-	nofilltriangle(positions[65],positions[25],positions[25],color,context);
-	nofilltriangle(positions[65],positions[65],positions[26],color,context);
-	nofilltriangle(positions[26],positions[26],positions[66],color,context);
+		nofilltriangle(positions[23],positions[23],positions[66],color,context);//oeil gauche
+		nofilltriangle(positions[23],positions[23],positions[63],color,context);
+		nofilltriangle(positions[63],positions[63],positions[24],color,context);
+		nofilltriangle(positions[24],positions[24],positions[64],color,context);
+		nofilltriangle(positions[64],positions[64],positions[25],color,context);
+		nofilltriangle(positions[65],positions[25],positions[25],color,context);
+		nofilltriangle(positions[65],positions[65],positions[26],color,context);
+		nofilltriangle(positions[26],positions[26],positions[66],color,context);
 
-	nofilltriangle(positions[30],positions[30],positions[68],color,context);//oeil droit
-	nofilltriangle(positions[29],positions[68],positions[68],color,context);
-	nofilltriangle(positions[29],positions[29],positions[67],color,context);
-	nofilltriangle(positions[28],positions[67],positions[67],color,context);
-	nofilltriangle(positions[28],positions[28],positions[70],color,context);
-	nofilltriangle(positions[31],positions[70],positions[70],color,context);
-	nofilltriangle(positions[31],positions[31],positions[69],color,context);
-	nofilltriangle(positions[30],positions[69],positions[69],color,context);
+		nofilltriangle(positions[30],positions[30],positions[68],color,context);//oeil droit
+		nofilltriangle(positions[29],positions[68],positions[68],color,context);
+		nofilltriangle(positions[29],positions[29],positions[67],color,context);
+		nofilltriangle(positions[28],positions[67],positions[67],color,context);
+		nofilltriangle(positions[28],positions[28],positions[70],color,context);
+		nofilltriangle(positions[31],positions[70],positions[70],color,context);
+		nofilltriangle(positions[31],positions[31],positions[69],color,context);
+		nofilltriangle(positions[30],positions[69],positions[69],color,context);
+	}
 }
 
 function points(color){
-	var context=getCanvasByName("points").getContext("2d");
-	requestAnimFrame(points);
-	var i = 0;
-	
-	context.clearRect(0,0,2000,2000);
-	var positions = ctracker.getCurrentPosition();
-	//clearZone(0,0,2000,2000);
-	for (i; i<=70;i++){
-		fillCircle(positions[i][0],positions[i][1],2,color,context);
+	var canvas=getCanvasByName("points");
+	if (canvas != null) {
+		var context=canvas.getContext("2d");
+		
+		requestAnimationFrame(points);
+		context.clearRect(0,0,2000,2000);
+		var positions = ctracker.getCurrentPosition();
+		if(positions[0]!= undefined){
+
+			var i = 0;
+			
+			context.clearRect(0,0,2000,2000);
+			//clearZone(0,0,2000,2000);
+			for (i; i<=70;i++){
+				fillCircle(positions[i][0],positions[i][1],2,color,context);
+			}
+		}
 	}
 
+}
+
+function bouche2D(color){
+	var canvas = document.getElementById("bouche2D");
+	if (canvas != null){
+		var context = canvas.getContext("2d");
+		requestAnimationFrame(bouche2D);
+		context.clearRect(0,0,2000,2000);
+		var positions = ctracker.getCurrentPosition();
+
+		triangle(positions[44],positions[45],positions[61],color,context);
+		triangle(positions[45],positions[61],positions[46],color,context);
+		triangle(positions[61],positions[46],positions[47],color,context);
+		triangle(positions[47],positions[60],positions[61],color,context);
+		triangle(positions[47],positions[48],positions[60],color,context);
+		triangle(positions[48],positions[60],positions[59],color,context);
+		triangle(positions[48],positions[49],positions[59],color,context);
+		triangle(positions[49],positions[50],positions[59],color,context);
+		triangle(positions[50],positions[51],positions[58],color,context);
+		triangle(positions[52],positions[51],positions[58],color,context);
+		triangle(positions[52],positions[57],positions[58],color,context);
+		triangle(positions[52],positions[57],positions[53],color,context);
+		triangle(positions[54],positions[57],positions[53],color,context);
+		triangle(positions[54],positions[57],positions[56],color,context);
+		triangle(positions[54],positions[55],positions[56],color,context);
+		triangle(positions[44],positions[55],positions[56],color,context);
+	}
+}
+
+function nez2D(color){
+	var canvas = getCanvasByName("nez2D");
+	if (canvas != null) {
+		var context=canvas.getContext("2d");
+		
+		requestAnimationFrame(nez2D);
+		context.clearRect(0,0,2000,2000);
+		var positions = ctracker.getCurrentPosition();
+		if(positions[0]!= undefined){
+
+			var taille=positions[62][1]-positions[41][1];
+			taille=taille*1.2
+			posx=(positions[62][0]+positions[41][0])/2;
+			fillCircle(posx,positions[62][1],taille,color,context);
+		}
+	}
 }
 
 function positionLoop() {
@@ -467,13 +537,13 @@ function positionLoop() {
 	// print the positions
 	var positionString = "";
 	//fillCircle(positions[27][0],positions[27][1]);
-	(0,0,video_width,video_height)
 	//var taille=positions[27][1]-positions[24][1];
 	//fillCircle(positions[27][0],positions[27][1],taille,'#FF0000');
 	//var taille2=positions[32][1]-positions[29][1];
 	//fillCircle(positions[32][0],positions[32][1],taille2,'#FF0000');
+
 	if(positions){
-		ctracker.draw(overlay);
+		//ctracker.draw(overlay);
 		drawMaskLoop();
 	}
 }
@@ -481,8 +551,9 @@ function positionLoop() {
 function drawMaskLoop() {
 	//var pos = [];
 	var pos = ctracker.getCurrentPosition();
-	// supprimer le masque
+	
 	overlayCC.clearRect(0,0,video_width,video_height);
+	// supprimer le masque
 	if (pos !== undefined) {
 		// create additional points around face
 		var tempPos;
@@ -496,128 +567,130 @@ function drawMaskLoop() {
 	}
 	var newPos = pos.concat(addPos);
 	var newVertices = vertices.concat(mouth_vertices);
-			// merge with newVertices
-			newVertices = newVertices.concat(extendVertices);
-			deform.load(video, newPos, newVertices, changements);
-			deform.draw(newPos);
+	// merge with newVertices
+	newVertices = newVertices.concat(extendVertices);
+	deform.load(video, newPos, newVertices, changements);
+	deform.draw(newPos);
+	
 }
 
 
 function lunettes(thecolor){
 	var canvas=getCanvasByName("lunettes");
-	requestAnimationFrame(lunettes);
-	//console.log(typeof thecolor); la coueluer ne fonctionne pas avec la fonction addcolorstop, on a un changement de type intempestif ainsi que une incrementation infini de la variable
-	
-	var context = canvas.getContext("2d");
-	
-	context.clearRect(0,0,2000,2000);
-	var positions = ctracker.getCurrentPosition();
-	
-	
+	if (canvas != null) {
+		var context=canvas.getContext("2d");
+		
+		requestAnimationFrame(lunettes);
+		context.clearRect(0,0,2000,2000);
+		var positions = ctracker.getCurrentPosition();
+		if(positions[0]!= undefined){
+		
+			taille = Math.sqrt((positions[14][0] - positions[0][0])*(positions[14][0] - positions[0][0])+(positions[14][1] - positions[0][1])*(positions[14][1] - positions[0][1]));
+			taille = taille / 5;
+			//var my_gradient=context.createLinearGradient(0,positions[27][1]-taille,0,positions[27][1]+taille);
+			//var my_gradient=context.createLinearGradient(0,positions[21][1],0,positions[41][1]); //gradient mouvant chelou
+			
+			var my_gradient=context.createLinearGradient(0,positions[27][1]-taille,0,positions[27][1]+taille);
+			var my_gradient2=context.createLinearGradient(0,positions[32][1]-taille,0,positions[32][1]+taille);
+			
+			my_gradient.addColorStop(0,"black");
+			my_gradient.addColorStop(0.8,"#ff5397");
+			my_gradient.addColorStop(1,"white");
 
-	taille = Math.sqrt((positions[14][0] - positions[0][0])*(positions[14][0] - positions[0][0])+(positions[14][1] - positions[0][1])*(positions[14][1] - positions[0][1]));
-	taille = taille / 5;
-	//var my_gradient=context.createLinearGradient(0,positions[27][1]-taille,0,positions[27][1]+taille);
-	//var my_gradient=context.createLinearGradient(0,positions[21][1],0,positions[41][1]); //gradient mouvant chelou
-	
-	var my_gradient=context.createLinearGradient(0,positions[27][1]-taille,0,positions[27][1]+taille);
-	var my_gradient2=context.createLinearGradient(0,positions[32][1]-taille,0,positions[32][1]+taille);
-	
-	my_gradient.addColorStop(0,"black");
-	my_gradient.addColorStop(0.8,"#ff5397");
-	my_gradient.addColorStop(1,"white");
-
-	my_gradient2.addColorStop(0,"black");
-	my_gradient2.addColorStop(0.8,"#ff5397");
-	my_gradient2.addColorStop(1,"white");
-	
-	triangle(positions[27],positions[27], positions[32],"black",context);
-	triangle(positions[27],positions[27], positions[0],"black",context);
-	triangle(positions[32],positions[32], positions[14],"black",context);
-	fillCircle(positions[27][0],positions[27][1],taille,my_gradient,context);
-	fillCircle(positions[32][0],positions[32][1],taille,my_gradient2,context);
-	circle(positions[27][0],positions[27][1],taille,context);
-	circle(positions[32][0],positions[32][1],taille,context);
-	canvas.style.opacity = "0.5";
+			my_gradient2.addColorStop(0,"black");
+			my_gradient2.addColorStop(0.8,"#ff5397");
+			my_gradient2.addColorStop(1,"white");
+			
+			triangle(positions[27],positions[27], positions[32],"black",context);
+			triangle(positions[27],positions[27], positions[0],"black",context);
+			triangle(positions[32],positions[32], positions[14],"black",context);
+			fillCircle(positions[27][0],positions[27][1],taille,my_gradient,context);
+			fillCircle(positions[32][0],positions[32][1],taille,my_gradient2,context);
+			circle(positions[27][0],positions[27][1],taille,context);
+			circle(positions[32][0],positions[32][1],taille,context);
+			canvas.style.opacity = "0.5";
+		}
+	}
 
 }
 
 function yeux2D(color) {	
-	var context=getCanvasByName("yeux2D").getContext("2d");
-	requestAnimFrame(yeux2D);
+	var canvas=getCanvasByName("yeux2D");
+	if (canvas != null) {
+		var context=canvas.getContext("2d");
+		
+		requestAnimationFrame(yeux2D);
+		context.clearRect(0,0,2000,2000);
+		var positions = ctracker.getCurrentPosition();
+		if(positions[0]!= undefined){
 
-	
-	context.clearRect(0,0,2000,2000);
-	var positions = ctracker.getCurrentPosition();
-	// do something with the positions ...
-	// print the positions
-	var positionString = "";
-	//fillCircle(positions[27][0],positions[27][1]);
-	//clearZone(0,0,2000,2000);
-	var taille=positions[27][1]-positions[24][1];
-	fillCircle(positions[27][0],positions[27][1],taille,color,context);
-	var taille2=positions[32][1]-positions[29][1];
-	fillCircle(positions[32][0],positions[32][1],taille2,color,context);
-	
-   }
+			var taille=positions[27][1]-positions[24][1];
+			fillCircle(positions[27][0],positions[27][1],taille,color,context);
+			var taille2=positions[32][1]-positions[29][1];
+			fillCircle(positions[32][0],positions[32][1],taille2,color,context);
+		}	
+	}
+}
 
 function zorro(color){
-	var context=getCanvasByName("zorro").getContext("2d");
-	/*var canvas = document.getElementById("canvas1");
-	var context = canvas.getContext("2d");*/
-	requestAnimationFrame(zorro);
-	
-	context.clearRect(0,0,2000,2000);
-	//console.log(context)
-	//clearZone(0,0,2000,2000);
-	var positions = ctracker.getCurrentPosition();
+	var canvas=getCanvasByName("zorro");
+	if (canvas!= null){
+		var context=canvas.getContext("2d");
+		/*var canvas = document.getElementById("canvas1");
+		var context = canvas.getContext("2d");*/
+		requestAnimationFrame(zorro);
+		
+		context.clearRect(0,0,2000,2000);
+		//console.log(context)
+		//clearZone(0,0,2000,2000);
+		var positions = ctracker.getCurrentPosition();
 
-	triangle(positions[0],positions[1],positions[23],color,context);
-	triangle(positions[0],positions[19],positions[23],color,context);
-	triangle(positions[63],positions[19],positions[23],color,context);
-	triangle(positions[63],positions[19],positions[20],color,context);
-	triangle(positions[20],positions[19],positions[24],color,context);
-	triangle(positions[63],positions[20],positions[24],color,context);
-	triangle(positions[20],positions[24],positions[21],color,context);
-	triangle(positions[24],positions[21],positions[64],color,context);
-	triangle(positions[21],positions[22],positions[64],color,context);
-	triangle(positions[22],positions[64],positions[25],color,context);
-	triangle(positions[22],positions[25],positions[33],color,context);
-	triangle(positions[25],positions[33],positions[41],color,context);
-	triangle(positions[30],positions[33],positions[41],color,context);
-	triangle(positions[30],positions[33],positions[18],color,context);
-	triangle(positions[30],positions[18],positions[68],color,context);
-	triangle(positions[17],positions[18],positions[68],color,context);
-	triangle(positions[29],positions[17],positions[68],color,context);
-	triangle(positions[17],positions[16],positions[29],color,context);
-	triangle(positions[29],positions[16],positions[67],color,context);
-	triangle(positions[16],positions[15],positions[67],color,context);
-	triangle(positions[15],positions[67],positions[28],color,context);
-	triangle(positions[15],positions[28],positions[14],color,context);
+		triangle(positions[0],positions[1],positions[23],color,context);
+		triangle(positions[0],positions[19],positions[23],color,context);
+		triangle(positions[63],positions[19],positions[23],color,context);
+		triangle(positions[63],positions[19],positions[20],color,context);
+		triangle(positions[20],positions[19],positions[24],color,context);
+		triangle(positions[63],positions[20],positions[24],color,context);
+		triangle(positions[20],positions[24],positions[21],color,context);
+		triangle(positions[24],positions[21],positions[64],color,context);
+		triangle(positions[21],positions[22],positions[64],color,context);
+		triangle(positions[22],positions[64],positions[25],color,context);
+		triangle(positions[22],positions[25],positions[33],color,context);
+		triangle(positions[25],positions[33],positions[41],color,context);
+		triangle(positions[30],positions[33],positions[41],color,context);
+		triangle(positions[30],positions[33],positions[18],color,context);
+		triangle(positions[30],positions[18],positions[68],color,context);
+		triangle(positions[17],positions[18],positions[68],color,context);
+		triangle(positions[29],positions[17],positions[68],color,context);
+		triangle(positions[17],positions[16],positions[29],color,context);
+		triangle(positions[29],positions[16],positions[67],color,context);
+		triangle(positions[16],positions[15],positions[67],color,context);
+		triangle(positions[15],positions[67],positions[28],color,context);
+		triangle(positions[15],positions[28],positions[14],color,context);
 
-	triangle(positions[13],positions[40],positions[31],color,context);
+		triangle(positions[13],positions[40],positions[31],color,context);
 
-	triangle(positions[28],positions[70],positions[13],color,context);
-	triangle(positions[31],positions[70],positions[13],color,context);
-	triangle(positions[69],positions[31],positions[40],color,context);
-	triangle(positions[69],positions[30],positions[40],color,context);
-	triangle(positions[40],positions[41],positions[30],color,context);
-	triangle(positions[14],positions[13],positions[28],color,context);
+		triangle(positions[28],positions[70],positions[13],color,context);
+		triangle(positions[31],positions[70],positions[13],color,context);
+		triangle(positions[69],positions[31],positions[40],color,context);
+		triangle(positions[69],positions[30],positions[40],color,context);
+		triangle(positions[40],positions[41],positions[30],color,context);
+		triangle(positions[14],positions[13],positions[28],color,context);
 
-	triangle(positions[40],positions[34],positions[25],color,context);
+		triangle(positions[40],positions[34],positions[25],color,context);
 
-	triangle(positions[26],positions[34],positions[1],color,context);
-	
-	triangle(positions[26],positions[65],positions[34],color,context);
-	triangle(positions[65],positions[25],positions[34],color,context);
-	triangle(positions[26],positions[66],positions[1],color,context);
-	triangle(positions[66],positions[23],positions[1],color,context);
-	triangle(positions[22],positions[18],positions[33],color,context);
-	triangle(positions[41],positions[33],positions[25],color,context);
-	triangle(positions[65],positions[25],positions[41],color,context);
-	triangle(positions[34],positions[41],positions[65],color,context);
-	triangle(positions[65],positions[26],positions[34],color,context);
-	
+		triangle(positions[26],positions[34],positions[1],color,context);
+		
+		triangle(positions[26],positions[65],positions[34],color,context);
+		triangle(positions[65],positions[25],positions[34],color,context);
+		triangle(positions[26],positions[66],positions[1],color,context);
+		triangle(positions[66],positions[23],positions[1],color,context);
+		triangle(positions[22],positions[18],positions[33],color,context);
+		triangle(positions[41],positions[33],positions[25],color,context);
+		triangle(positions[65],positions[25],positions[41],color,context);
+		triangle(positions[34],positions[41],positions[65],color,context);
+		triangle(positions[65],positions[26],positions[34],color,context);
+	}
 
 }
 
@@ -715,7 +788,7 @@ function addButtons2D(liste){
 				getCreatedElementById(item.start+"color","input").style="display: none";
 			}
 			catch(err){
-				console.log(err);
+				//console.log(err);
 			}
 			
 			window.cancelAnimationFrame(item.cancel);
@@ -925,7 +998,12 @@ function addButtonsDeform(liste){
 				range.addEventListener('change', function(){
 					getElementOfList(changements, item.name).value=this.value;
 					positionLoop();
-					document.querySelector("canvas#shader").style="z-index=1";
+					try{
+						document.querySelector("canvas#shader").style="z-index=1";
+					}
+					catch(err){
+						//console.log(err);
+					}
 				});
 			}
 
