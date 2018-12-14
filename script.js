@@ -6,6 +6,7 @@ var video_height = video.height;
 var overlay = document.getElementById('overlay');
 var overlayCC = overlay.getContext('2d');
 var webgl_overlay = document.getElementById('webgl');
+var gl= null;
 var str = "";
 var ctracker = new clm.tracker();
 ctracker.init();
@@ -164,7 +165,7 @@ var mouth_vertices = [
 ];
 
 var deform = new deformation();
-deform.init(webgl_overlay);
+gl=deform.init(webgl_overlay);
 
 
 var extendVertices = [
@@ -541,9 +542,10 @@ function positionLoop() {
 	//fillCircle(positions[27][0],positions[27][1],taille,'#FF0000');
 	//var taille2=positions[32][1]-positions[29][1];
 	//fillCircle(positions[32][0],positions[32][1],taille2,'#FF0000');
-
-	if(positions){
-		//ctracker.draw(overlay);
+	// Store the current transformation matrix
+	gl.clear(gl.DEPTH_BUFFER_BIT && gl.COLOR_BUFFER_BIT && gl.STENCIL_BUFFER_BIT);
+	if(positions[0]!=undefined){
+		//ctracker.draw(overlay)
 		drawMaskLoop();
 	}
 }
@@ -1124,12 +1126,11 @@ function addButtonsDeform(liste){
 	
     var ctracker = new clm.tracker();
   	ctracker.init();
-		ctracker.start(video);
+	ctracker.start(video);
 
-		var deform = new deformation();
-		deform.init(webgl_overlay);
 		
-		// Triangles composant la bouche
+		
+	// Triangles composant la bouche
 
 
     
