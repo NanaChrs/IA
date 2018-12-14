@@ -108,6 +108,7 @@ var visage = function(deformPoints,coeff) {
     });	
 }
 
+
 var nez = function(deformPoints,coeff) {
     coeff=coeff*(5/100);
     var point=[34,35,36,42,37,43,38,39,40,62];

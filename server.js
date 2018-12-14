@@ -2,8 +2,22 @@ var app=require('express')(),
     server=require('http').createServer(app),
     io=require('socket.io').listen(server),
     fs=require('fs'),
-    ent=require('ent');
+    ent=require('ent'),
+    //SaveAs=require(''),
+    events=require('events');
 
+
+io.sockets.on('connection', function (socket, pseudo) {
+    // Dès qu'on nous donne un pseudo, on le stocke en variable de session et on informe les autres personnes
+    socket.on('save', function(nom, json) {
+        
+    });
+
+    socket.on('load', function(nom){
+
+    });
+
+});
 
 app.get('/', function (req, res) {
     fs.readFile("index.html", function (error, pgResp) {
@@ -13,6 +27,9 @@ app.get('/', function (req, res) {
         } else {
             res.writeHead(200, { 'Content-Type': 'text/html' });
             res.write(pgResp);   
+
+            // var msg = require('./script.js');
+            // console.log(msg);
         }    
         res.end();
     });
@@ -152,5 +169,6 @@ app.get('/script.js', function (req, res) {
         res.end();
     });
 });
+
 
 server.listen(8080);

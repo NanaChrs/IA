@@ -1,3 +1,5 @@
+var socket = io.connect('http://localhost:8080');
+socket.emit("nouveau_client","Mathilde", "moi");
 var video=document.getElementById("video");
 var video_width = video.width;
 var video_height = video.height;
@@ -8,6 +10,12 @@ var str = "";
 var ctracker = new clm.tracker();
 ctracker.init();
 ctracker.start(video);
+
+
+var jSON={};
+
+
+
 //var filter2D=[];
 var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
                             window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
@@ -15,6 +23,8 @@ var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAni
 var cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
 
 var canvass=["All", "Video"];
+
+//module.exports = 'Hello world';
 
 var filters =[{
 		name: "Flou",
@@ -206,11 +216,11 @@ var extendVertices = [
 	[19,71,0,19]
 ];
 
+
+
 function getElementOfList(liste, name){
 	var result = null;
 	liste.forEach(function(e){
-		console.log(e.name);
-		console.log(name);
 		if (e.name==name){
 			result=e;
 		}
@@ -220,12 +230,14 @@ function getElementOfList(liste, name){
 }
 
 function checktrue(liste){
+	var chris=false;
 	liste.forEach(function(e){
 		if (e.value!=0){
-			return true;
+			console.log("check");
+			chris= true;
 		}
 	});
-	return false;
+	return chris;
 }
 
 /*
@@ -623,135 +635,121 @@ function zorro(color){
 
 function addButtons2D(liste){
 	var buttonsDiv = document.getElementById("buttons2D");
-	//var boutons;    
 	var container=document.getElementById("container");
 
   	liste.forEach(function(item){
-			// Création de la div de la checkbox
-				
-		
-		//test[item.start]=can.getContext("2d");
-		
-	var div = document.createElement("div");
-	var bouton = document.createElement("div");
-	bouton.className="ui toggle checkbox";
-	//div.style="display: flex; flex-direction: row; align-content: space-around;"
 
-	//Création du label du bouton
-	var label= document.createElement("label");
-	var textLabel= document.createTextNode(item.name);
-	label.appendChild(textLabel);
+		var div = document.createElement("div");
+		var bouton = document.createElement("div");
+		bouton.className="ui toggle checkbox";
+		bouton.id=item.name;
 
-	//Création de l'input
-	var input=document.createElement("input");
-	input.addEventListener('click', function(){
+		//Création du label du bouton
+		var label= document.createElement("label");
+		var textLabel= document.createTextNode(item.name);
+		label.appendChild(textLabel);
 
-		if (this.checked){
-			var can = document.createElement("canvas");
-			can.id = item.start;
-			can.width="1080";
-			can.height="607";
-			can.className="canvas";
-			container.insertAdjacentElement("afterbegin", can);
-			document.querySelectorAll("select").forEach(function(element){
-
-				var li=document.createElement("option");
-				li.className=item.name;
-				element.insertAdjacentElement("beforeend",li);
-				li.textContent=item.name;
-			});
-			//console.log(item.start);
-			//console.log(test);
-			canvass.push(item.name);
-			if(document.querySelectorAll("option#option"+item.start)==null){
+		//Création de l'input
+		var input=document.createElement("input");
+		input.addEventListener('click', function(){
+			if (this.checked){
+				var can = document.createElement("canvas");
+				can.id = item.start;
+				can.width="1080";
+				can.height="607";
+				can.className="canvas";
+				container.insertAdjacentElement("afterbegin", can);
 				document.querySelectorAll("select").forEach(function(element){
-					var li=document.createElement("option");
-					li.textContent=li.value=item.name;
-					li.id="option"+item.start;
-					element.insertAdjacentElement("beforeend",li);
-				});
-			}
-			//console.log(canvass);
-			window[item.start]("#FFFFFF");
-			if (getCreatedElementById(item.start+"color","input")==null){
-				
-				if (item.start!="lunettes"){
-					var color=document.createElement("input");
-					new jscolor(color);
-					color.id=item.start+"color";
-					color.addEventListener('change',function(){
-						window[item.start]("#"+color.value);
-					});
-					color.style="margin-left:2%;";
-					//window[item.start](color.value);
-					div.append(color);
-				}
-				
-				
 
-			
+					var li=document.createElement("option");
+					li.className=item.name;
+					element.insertAdjacentElement("beforeend",li);
+					li.textContent=item.name;
+				});
+
+				canvass.push(item.name);
+				if(document.querySelectorAll("option#option"+item.start)==null){
+					document.querySelectorAll("select").forEach(function(element){
+						var li=document.createElement("option");
+						li.textContent=li.value=item.name;
+						li.id="option"+item.start;
+						element.insertAdjacentElement("beforeend",li);
+					});
+				}
+
+				window[item.start]("#FFFFFF");
+				console.log(item.start);
+				if (getCreatedElementById(item.start+"color","input")==null){
+					//console.log("jsuislàs")
+					if (item.start!="lunettes"){
+						var color=document.createElement("input");
+						new jscolor(color);
+						color.id=item.start+"color";
+						color.addEventListener('change',function(){
+							window[item.start]("#"+color.value);
+						});
+
+
+						color.style="margin-left:2%;";
+						//window[item.start](color.value);
+						div.append(color);
+					}
+				}
+				else{
+					getCreatedElementById(item.start+"color","input").style="margin-left:2%";
+				}
+
 				
 			}
 			else{
-				getCreatedElementById(item.start+"color","input").style="margin-left:2%";
-			}
-			
-			//requestAnimationFrame(item.cancel);
-			//console.log(requestAnimationFrame(item.cancel))
-			//var color = document.
-		}
-		else{
-			canvass.splice(canvass.indexOf(item.name),1);
-			document.querySelectorAll("select").forEach(function(elem){
-				document.querySelectorAll("option."+item.name).forEach(function(element){
-					elem.removeChild(element);
+				canvass.splice(canvass.indexOf(item.name),1);
+				document.querySelectorAll("select").forEach(function(elem){
+					document.querySelectorAll("option."+item.name).forEach(function(element){
+						elem.removeChild(element);
+					});
 				});
-			});
-			
-			//console.log(canvass);
-			//console.log("je cancel ");
-			try{
-				getCreatedElementById(item.start+"color","input").style="display: none";
+
+				try{
+					getCreatedElementById(item.start+"color","input").style="display: none";
+				}
+				catch(err){
+					console.log(err);
+				}
+				
+				window.cancelAnimationFrame(item.cancel);
+				//console.log("cnvas#"+item.start);
+				container.removeChild(getCanvasByName(item.start));
+				//delete getCanvasByName("zorro");
+				//clearZone(0,0,2000,2000,getCanvasByName(item.start));
+				
+				
 			}
-			catch(err){
-				console.log(err);
-			}
+			//console.log(item.start);
+		});
+			//canvas=test;
 			
-			window.cancelAnimationFrame(item.cancel);
-			//console.log("cnvas#"+item.start);
-			container.removeChild(getCanvasByName(item.start));
-			//delete getCanvasByName("zorro");
-			//clearZone(0,0,2000,2000,getCanvasByName(item.start));
-			
-			
-		}
-		//console.log(item.start);
-	});
-		//canvas=test;
+		input.type="checkbox";
+		input.id=item.name;
+		label.htmlFor = input.id;
+
+		//Assemblage du tout
 		
-	input.type="checkbox";
-	input.id=item.name;
-	label.htmlFor = input.id;
+		bouton.appendChild(input);
+		bouton.appendChild(label);
+		div.appendChild(bouton);
 
-	//Assemblage du tout
-	
-	bouton.appendChild(input);
-	bouton.appendChild(label);
-	div.appendChild(bouton);
-
-  //console.log(document.getElementById('Contraste'));
-  	buttonsDiv.insertAdjacentElement("beforeend", div); 
+	//console.log(document.getElementById('Contraste'));
+		buttonsDiv.insertAdjacentElement("beforeend", div); 
 	
   });
   
 }
 
 function addButtons(liste){
-	var buttonsDiv = document.getElementById("filterButtons");
-	//var boutons;    
+	var buttonsDiv = document.getElementById("filterButtons"); 
 
   liste.forEach(function(item){
-			// Création de la div de la checkbox	
+	// Création de la div de la checkbox	
 	var div = document.createElement("div");
 	var bouton = document.createElement("div");
 	bouton.className="ui toggle checkbox";
@@ -767,39 +765,29 @@ function addButtons(liste){
 		var stringette=item.filter+" ";
 		if (this.checked){
 			str+=stringette;
-			
-			
-
 			var ul=document.createElement("select");
 			ul.className="select"+item.start;
+
 			canvass.forEach(function(item){
 				var li=document.createElement("option");
 				li.className=li.textContent=item;
 				ul.appendChild(li);
 			})
+
 			bouton.insertAdjacentElement("afterend",ul);
 			ul.addEventListener('click',function(){
-				/*document.querySelectorAll("canvas.canvas").forEach(function(elem){
-					elem.style.filter=str.replace(stringette,"");
-				});*/
-				//video.style.filter = str;
-				
-				
-
 			})
 			
-			//console.log(getInputRangeByName(item.name));
 			if (getInputRangeByName(item.name)==null){
 				var range=document.createElement("input");
 				range.className="slider";
 				range.name=item.name;
 				range.type="range";
 				div.appendChild(range);
-				
-
 				range.addEventListener('change', function(){
 					var value=getInputRangeByName(item.name).value;
 					var stringette=item.range+value+item.dim;
+
 					if (item.name=="Saturé" || item.name=="Contraste" || item.name=="Lumineux"){
 						stringette=item.range+value*10+item.dim;
 					}
@@ -809,10 +797,8 @@ function addButtons(liste){
 					
 					str=str.replace(item.filter, stringette);
 					item.filter = stringette;
-
 					var value=document.querySelector("select.select"+item.start).value;
-					//console.log(document.querySelector("select.select"+item.start));
-
+					
 					if (value=="All"){
 						document.querySelectorAll("canvas.canvas").forEach(function(elem){
 							elem.style.filter=str;
@@ -821,12 +807,14 @@ function addButtons(liste){
 					}
 					else if (value=="Video"){
 						video.style.filter=str;
+						overlay.filter=str;
+						webgl_overlay.filter=str;
 					}
 					else{
 						var value=value.toLowerCase();
 						console.log(value);
 						document.querySelectorAll("canvas.canvas").forEach(function(elem){
-							//console.log(elem.id);
+
 							if (elem.id==value){
 								console.log(elem)
 								elem.style.filter=str;
@@ -837,56 +825,38 @@ function addButtons(liste){
 				});
 				
 			}
-
-
 			else{
-				
-				
 				getInputRangeByName(item.name).value=50;
 				getInputRangeByName(item.name).style="";
 			}
 		}
 		else{
-			//console.log(getCreatedElementById("select"+item.name,"select"));
 			document.querySelectorAll("select.select"+item.start).forEach(function(elem){
 				div.removeChild(elem);
 			});
-			
 			getInputRangeByName(item.name).style="display: none;";
 			str = str.replace(stringette, "");
-			/*console.log(stringette);
-			console.log(str);*/
-			
 			document.querySelectorAll("canvas.canvas").forEach(function(elem){
 				elem.style.filter=str;
 			});
 			video.style.filter = str;
-			//console.log(document.querySelectorAll("input.slider"));
-			/*document.getElementsByName(item.name).style.display="none";*/
 		}
-	//video.style.filter="contrast(500%)";
-		
-		//console.log(str);
-	
-
 	});
-	//input.checked=false;
+
 	input.type="checkbox";
 	input.id=item.name;
 	label.htmlFor = input.id;
 
-	//Assemblage du tout
-	
+	//Assemblage du tout	
 	bouton.appendChild(input);
 	bouton.appendChild(label);
 	div.appendChild(bouton);
-
-  //console.log(document.getElementById('Contraste'));
-  buttonsDiv.insertAdjacentElement("beforeend", div); 
-	
+  	buttonsDiv.insertAdjacentElement("beforeend", div); 
   });
-  
 }
+
+
+
 
 function addButtonsDeform(liste){
 	var buttonsDiv = document.getElementById("deformation");
@@ -922,66 +892,90 @@ function addButtonsDeform(liste){
 				range.addEventListener('change', function(){
 					getElementOfList(changements, item.name).value=this.value;
 					positionLoop();
-					document.querySelector("canvas#shader").style="z-index=1";
+					//document.querySelector("canvas#shader").style="z-index=2";
+					overlay.style="z-index=2";
+					webgl_overlay.style="z-index=2";
 				});
 			}
-
-
 			else{
-				getInputRangeByName(item.name).value=50;
+				getInputRangeByName(item.name).value=0;
 				getInputRangeByName(item.name).style="";
 			}
 		}
 		else{
-			//console.log(getCreatedElementById("select"+item.name,"select"));
 			document.querySelectorAll("select.select"+item.start).forEach(function(elem){
 				div.removeChild(elem);
 			});
 			
 			getElementOfList(changements, item.name).value=0;
 			getInputRangeByName(item.name).value=0;
-			if (checktrue(changements)){
-				document.querySelector("canvas#shader").style="z-index=-3";
-				return;
+
+			if (!checktrue(changements)){
+				//document.querySelector("canvas#shader").style="display:none";
+				overlay.style="display:none";
+				webgl_overlay.style="display:none";
 			}
+
 			positionLoop();
 			getInputRangeByName(item.name).style="display: none;";
-			//str = str.replace(stringette, "");
-			/*console.log(stringette);
-			console.log(str);*/
-			
-			
-			
+
 			document.querySelectorAll("canvas.canvas").forEach(function(elem){
 				elem.style.filter=str;
 			});
-			//video.style.filter = str;
-			//console.log(document.querySelectorAll("input.slider"));
-			/*document.getElementsByName(item.name).style.display="none";*/
 		}
-	//video.style.filter="contrast(500%)";
-		
-		//console.log(str);
-	
-
 	});
+
 	//input.checked=false;
 	input.type="checkbox";
 	input.id=item.name;
 	label.htmlFor = input.id;
 
 	//Assemblage du tout
-	
 	bouton.appendChild(input);
 	bouton.appendChild(label);
 	div.appendChild(bouton);
-
-  //console.log(document.getElementById('Contraste'));
-  buttonsDiv.insertAdjacentElement("beforeend", div); 
-	
+	buttonsDiv.insertAdjacentElement("beforeend", div);
   });
-  
 }
+
+
+//Ajout des fonctions liées aux 2 boutons save et load
+//Fonction associée au nom du fichier entré permettant de lancer le save si la touche entrée est adctionnée
+var title=document.getElementById("title");
+title.addEventListener("keyup", function(event){
+	event.preventDefault();
+  	if (event.keyCode === 13) {
+    	document.getElementById("save").click();
+  }
+});
+
+//Fonction qui va récupérer toutes les données dans un json pour sauvegarder le filtre
+document.getElementById("save").addEventListener("click", function(){
+	if (title.value==""){
+		alert("Vous n'avez pas entré de nom pour votre filtre.");
+	}
+	else{
+		if(checktrue(changements)){
+			jSON['filtresDéformants']=changements;
+			console.log(jSON);
+		}
+		var i=0;
+		jSON['filtresCSS']=[["video",video.style.filter]];
+		document.querySelectorAll("canvas").forEach(function(e){
+			var css=[
+				e.id,
+				e.style.filter
+			];
+			jSON.filtresCSS.push(css);
+			
+		});
+		document.querySelectorAll("")
+		
+		console.log(jSON);
+	}
+});
+
+
 
 
 (function(){
@@ -1019,27 +1013,6 @@ function addButtonsDeform(liste){
         gotStream, 
         error);
       }}
-
-
-	// }
-	// var constraints = { audio: false, video: { framerate:120, width: 1080, height: 607 } };
-	// var video = document.querySelector('video');
-	// navigator.mediaDevices.getUserMedia(constraints).then(function(mediaStream) {
-	// video.srcObject = mediaStream;
-	// })
-	// .catch(function(err) { console.log(err.name + ": " + err.message); });*/
-	
-	// var video = document.querySelector("video");
- 
-	// if (navigator.mediaDevices.getUserMedia) {       
-	// 	navigator.mediaDevices.getUserMedia({video: {width:1080, height:607}})
-	// .then(function(stream) {
-	// 	video.srcObject = stream;
-	// })
-	// .catch(function(err0r) {
-	// 	console.log("Something went wrong!");
-	// });
-	// }
 	
     var ctracker = new clm.tracker();
   	ctracker.init();
@@ -1050,14 +1023,14 @@ function addButtonsDeform(liste){
 		
 		// Triangles composant la bouche
 
-
-    
+	
     document.body.onload=start();
 	document.body.onload=addButtons(filters);
 	document.body.onload=addButtons2D(filters2D);
 	document.body.onload=addButtonsDeform(changements);
 	video.play();
 	
+	//window.onload=save("bjr","");
 	//var canvasInput = document.getElementById('drawCanvas');
   	//var cc = canvasInput.getContext('2d');
   	//drawLoop();
