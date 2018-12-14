@@ -195,7 +195,7 @@ var vertices= [
 
   const getWebGLContext = function (canvas) {
     if ( window !== window.top) {
-        document.body.className = 'iframe';;
+        document.body.className = 'iframe';
   
       // make the canvas backing store the size it's displayed.
       canvas.width = canvas.clientWidth;
