@@ -1,5 +1,5 @@
 var socket = io.connect('http://localhost:8080');
-socket.emit("nouveau_client","Mathilde", "moi");
+//socket.emit("nouveau_client","Mathilde", "moi");
 var video=document.getElementById("video");
 var video_width = video.width;
 var video_height = video.height;
@@ -394,10 +394,11 @@ function mickey(color){
 
 function visage2D(color){
 	var canvas = getCanvasByName("visage2D");
+	var context = canvas.getContext("2d");
 	requestAnimationFrame(visage2D);
 	//requestAnimFrame(visage);
 	
-	var context = canvas.getContext("2d");
+	
 	
 	context.clearRect(0,0,2000,2000);
 	var positions = ctracker.getCurrentPosition();
@@ -651,6 +652,7 @@ function addButtons2D(liste){
 
 		//Création de l'input
 		var input=document.createElement("input");
+		input.id=item.start;
 		input.addEventListener('click', function(){
 			if (this.checked){
 				var can = document.createElement("canvas");
@@ -659,25 +661,31 @@ function addButtons2D(liste){
 				can.height="607";
 				can.className="canvas";
 				container.insertAdjacentElement("afterbegin", can);
+				window[item.start]("#FFFFFF");
 				document.querySelectorAll("select").forEach(function(element){
-
-					var li=document.createElement("option");
-					li.className=item.name;
-					element.insertAdjacentElement("beforeend",li);
-					li.textContent=item.name;
+					console.log(element);
+					if(element.className!=""){
+						var li=document.createElement("option");
+						li.className=item.name;
+						element.insertAdjacentElement("beforeend",li);
+						li.textContent=item.name;
+					}
 				});
 
 				canvass.push(item.name);
 				if(document.querySelectorAll("option#option"+item.start)==null){
 					document.querySelectorAll("select").forEach(function(element){
-						var li=document.createElement("option");
-						li.textContent=li.value=item.name;
-						li.id="option"+item.start;
-						element.insertAdjacentElement("beforeend",li);
+						console.log(element);
+						if(element.className!=""){
+							//console.log("hello")
+							var li=document.createElement("option");
+							li.textContent=li.value=item.name;
+							li.id="option"+item.start;
+							element.insertAdjacentElement("beforeend",li);}
 					});
 				}
 
-				window[item.start]("#FFFFFF");
+				
 				console.log(item.start);
 				if (getCreatedElementById(item.start+"color","input")==null){
 					//console.log("jsuislàs")
@@ -705,12 +713,16 @@ function addButtons2D(liste){
 				canvass.splice(canvass.indexOf(item.name),1);
 				document.querySelectorAll("select").forEach(function(elem){
 					document.querySelectorAll("option."+item.name).forEach(function(element){
-						elem.removeChild(element);
+						if (elem.className!=""){
+							elem.removeChild(element);
+						}
+						
 					});
 				});
 
 				try{
 					getCreatedElementById(item.start+"color","input").style="display: none";
+					getCreatedElementById(item.start+"color","input").value="FFFFFF";
 				}
 				catch(err){
 					console.log(err);
@@ -729,7 +741,6 @@ function addButtons2D(liste){
 			//canvas=test;
 			
 		input.type="checkbox";
-		input.id=item.name;
 		label.htmlFor = input.id;
 
 		//Assemblage du tout
@@ -951,6 +962,7 @@ title.addEventListener("keyup", function(event){
 
 //Fonction qui va récupérer toutes les données dans un json pour sauvegarder le filtre
 document.getElementById("save").addEventListener("click", function(){
+	var jSON={};
 	if (title.value==""){
 		alert("Vous n'avez pas entré de nom pour votre filtre.");
 	}
@@ -959,7 +971,7 @@ document.getElementById("save").addEventListener("click", function(){
 			jSON['filtresDéformants']=changements;
 			console.log(jSON);
 		}
-		var i=0;
+		
 		jSON['filtresCSS']=[["video",video.style.filter]];
 		document.querySelectorAll("canvas").forEach(function(e){
 			var css=[
@@ -969,9 +981,20 @@ document.getElementById("save").addEventListener("click", function(){
 			jSON.filtresCSS.push(css);
 			
 		});
-		document.querySelectorAll("")
-		
-		console.log(jSON);
+
+		jSON['filtres2D']=[];
+		document.getElementById("buttons2D").querySelectorAll("input[type=checkbox]:checked").forEach(function(e){
+				console.log("input#"+e.id+"color");
+				var f2D=[
+					e.id,
+					document.querySelector("input#"+e.id+"color").value
+				];
+
+				console.log(f2D)
+				jSON.filtres2D.push(f2D);
+			
+		});
+		socket.emit("save",title.value, jSON);
 	}
 });
 
