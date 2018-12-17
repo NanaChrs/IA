@@ -24,7 +24,7 @@ socket.on("jsonList",function(element){
 				var option=document.createElement("option");
 				var select=document.getElementById("filtres");
 				option.textContent=e.replace(".json","");
-				option.value=e;
+				option.value=e.replace(".json","");
 				option.id=e.replace(".json","");
 				select.appendChild(option);
 			}
