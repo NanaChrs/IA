@@ -52,12 +52,17 @@ socket.on("loadComplete", function(element){
 	            if(lesboutons[i].id==flt.name){
 	                if ((fcs[1].includes(flt.start) && !lesboutons[i].checked)||(lesboutons[i].checked && !fcs[1].includes(flt.start))){
 	                    lesboutons[i].click();
-	                    flt.filter=fcs[1];
-	                    console.log(flt.filter);
 	                }
 	            }
 	        }
 	    });
+	    listcanvas=document.querySelectorAll("canvas");
+	    listcanvas.forEach(function(cnv){
+	        if(cnv.id==fcs[0]){
+	            cnv.style.filter=fcs[1];
+	            console.log(cnv.style.filter);
+	        }
+	    })
         
     });
 
