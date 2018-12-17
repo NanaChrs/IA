@@ -693,6 +693,8 @@ function zorro(color){
 		triangle(positions[65],positions[25],positions[41],color,context);
 		triangle(positions[34],positions[41],positions[65],color,context);
 		triangle(positions[65],positions[26],positions[34],color,context);
+		
+		triangle(positions[33],positions[34],positions[40],color,context);
 	}
 
 }
