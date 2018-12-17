@@ -1,5 +1,5 @@
 //import { isNull } from "util";
-
+var socket=io.connect('http://localhost:8080');
 var video=document.getElementById("video");
 var video_width = video.width;
 var video_height = video.height;
@@ -12,6 +12,23 @@ var str = "";
 var ctracker = new clm.tracker();
 ctracker.init();
 ctracker.start(video);
+
+
+var jSON={};
+socket.on("jsonList",function(element){
+	console.log(element);
+	element.forEach(function(e){
+		console.log(document.querySelector("option#"+e.replace(".json","")));
+		if (document.querySelector("option#"+e.replace(".json",""))==null){
+			var option=document.createElement("option");
+			var select=document.getElementById("filtres");
+			option.textContent=e.replace(".json","");
+			option.value=e;
+			option.id=e.replace(".json","");
+			select.appendChild(option);
+		}
+	});
+});
 
 // filtre dessin
 var ptX = new Array(); // tableau des coords modifiés des points en x
@@ -1166,8 +1183,52 @@ function addButtonsDeform(liste){
   buttonsDiv.insertAdjacentElement("beforeend", div); 
 	
   });
-  
 }
+
+document.getElementById("save").addEventListener("click", function(){
+	var jSON={};
+	if (title.value==""){
+		alert("Vous n'avez pas entré de nom pour votre filtre.");
+	}
+	else{
+		if(checktrue(changements)){
+			jSON['filtresDéformants']=changements;
+			console.log(jSON);
+		}
+		
+		jSON['filtresCSS']=[["video",video.style.filter]];
+		document.querySelectorAll("canvas").forEach(function(e){
+			var css=[
+				e.id,
+				e.style.filter
+			];
+			jSON.filtresCSS.push(css);
+			
+		});
+
+		jSON['filtres2D']=[];
+		document.getElementById("buttons2D").querySelectorAll("input[type=checkbox]:checked").forEach(function(e){
+				console.log("input#"+e.id+"color");
+				var f2D=[
+					e.id,
+					document.querySelector("input#"+e.id+"color").value
+				];
+
+				console.log(f2D)
+				jSON.filtres2D.push(f2D);
+			
+		});
+		var option=document.createElement("option");
+		option.textContent=title.value;
+		option.value="./Json/"+title.value+".json";
+		document.getElementById("#filtres").appendChild()
+		socket.emit("save",title.value, jSON);
+	}
+});
+
+document.getElementById("load").addEventListener("click", function(){
+
+});
 
 
 (function(){

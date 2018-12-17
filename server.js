@@ -4,6 +4,28 @@ var app=require('express')(),
     fs=require('fs'),
     ent=require('ent');
 
+io.sockets.on('connection', function (socket) {
+    console.log("Serveur connecté")
+    fs.readdir('./Json', function(err, items) {
+        console.log(items);
+        liste=items;
+        socket.emit('jsonList',items);});
+    
+        
+    // Dès qu'on nous donne un pseudo, on le stocke en variable de session et on informe les autres personnes
+    socket.on('save', function(nom, json) {
+        json=JSON.stringify(json);
+        fs.writeFile('./Json/'+nom+".json",json, 'utf8',function(err) {
+            if (err) throw err;
+            console.log('complete');
+            });
+    });
+
+    socket.on('load', function(nom){
+
+    });
+
+});
 
 app.get('/', function (req, res) {
     fs.readFile("index.html", function (error, pgResp) {
