@@ -39,13 +39,67 @@ socket.on("jsonList",function(element){
 
 socket.on("loadComplete", function(element){
     console.log(element);
-    filtreCss=element["filtresCSS"];
-    filtre2D=element["filtres2D"];
-	filtreDeform=element["filtresDéformants"];
+    var filtreCss=element["filtresCSS"];
+    var filtre2D=element["filtres2D"];
+	var filtreDeform=element["filtresDéformants"];
 
-	lesboutons = document.querySelectorAll('input[type="checkbox"]'); //recupere la totalité des boutons pour cliquer dessus apres
+	var lesboutons = document.querySelectorAll('input[type="checkbox"]'); //recupere la totalité des boutons pour cliquer dessus apres
+	var boutonsCSS = document.getElementById("filterButtons").querySelectorAll("input[type=checkbox]");
+	var boutonsDeform = document.getElementById("deformation").querySelectorAll("input[type=checkbox]");
+	var boutons2D = document.getElementById("buttons2D").querySelectorAll("input[type=checkbox]");
 	//console.log(lesboutons);
-	
+	try{
+		document.querySelectorAll('input[type="checkbox"]:checked').forEach(function(e){
+			e.click();
+		});
+	}
+	catch(err){
+		console.log(err);
+	}
+
+	filtre2D.forEach(function(fcs){
+            // for(i=0; i<lesboutons.length; i++){
+            //     if(lesboutons[i].id==flt.start){
+            //         if ((fcs[0]==flt.start && !lesboutons[i].checked)||(lesboutons[i].checked && fcs[0]!=flt.start)){
+            //             console.log(flt.start);
+            //             console.log(lesboutons[i].checked);
+	        //             lesboutons[i].click();
+	        //         }
+	        //     }
+			// }
+			boutons2D.forEach(function(e){
+				// console.log(e);
+				if(e.id==fcs[0]){
+					e.click();
+				}
+			});
+
+	    // });
+        
+	});
+	if (filtreDeform != undefined){
+		changements=filtreDeform;
+	    filtreDeform.forEach(function(fcs){
+	        // changements.forEach(function(flt){
+	            // for(i=0; i<lesboutons.length; i++){
+	                // if((lesboutons[i].id==flt.name)){
+	                    // if ((fcs.name==flt.name && !lesboutons[i].checked && fcs.value!=0)||(lesboutons[i].checked && fcs.name!=flt.name)){
+							boutonsDeform.forEach(function(e){
+								if(e.id==fcs.name.split(" ").join("_") && fcs.value!=0){
+									// console.log(flt.start);
+									// console.log(lesboutons[i].checked);
+									e.click();
+									getInputRangeByName(fcs.name).value=fcs.value;
+								}
+								
+							});
+	                    // }
+	                // }
+	            // }
+	        // });
+        
+	    });
+	}
 	filtreCss.forEach(function(fcs){
 	    filters.forEach(function(flt){	            
 	        for(i=0; i<lesboutons.length; i++){
@@ -65,38 +119,6 @@ socket.on("loadComplete", function(element){
 	    })
         
     });
-
-	filtre2D.forEach(function(fcs){
-	    filters2D.forEach(function(flt){
-            for(i=0; i<lesboutons.length; i++){
-                if(lesboutons[i].id==flt.start){
-                    if ((fcs[0]==flt.start && !lesboutons[i].checked)||(lesboutons[i].checked && fcs[0]!=flt.start)){
-                        console.log(flt.start);
-                        console.log(lesboutons[i].checked);
-	                    lesboutons[i].click();
-	                }
-	            }
-	        }
-	    });
-        
-	});
-	if (filtreDeform != undefined){
-	    filtreDeform.forEach(function(fcs){
-	        changements.forEach(function(flt){
-	            for(i=0; i<lesboutons.length; i++){
-	                if((lesboutons[i].id==flt.name)){
-	                    if ((fcs.name==flt.name && !lesboutons[i].checked && fcs.value!=0)||(lesboutons[i].checked && fcs.name!=flt.name)){
-	                        console.log(flt.start);
-	                        console.log(lesboutons[i].checked);
-	                        lesboutons[i].click();
-	                        flt.value==fcs.value;
-	                    }
-	                }
-	            }
-	        });
-        
-	    });
-	}
 })
 
 
@@ -1157,8 +1179,8 @@ function addButtonsDeform(liste){
 	label.setAttribute("style","color:#992222");
 	var textLabel= document.createTextNode(item.name);
 	label.appendChild(textLabel);
-
 	//Création de l'input
+	
 	var input=document.createElement("input");
 	input.addEventListener('change', function(){
 		if (this.checked){
@@ -1221,7 +1243,9 @@ function addButtonsDeform(liste){
 	});
 	//input.checked=false;
 	input.type="checkbox";
-	input.id=item.name;
+	var id= item.name.split(" ");
+
+	input.id=id.join("_");
 	label.htmlFor = input.id;
 
 	//Assemblage du tout
