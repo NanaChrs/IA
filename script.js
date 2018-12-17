@@ -44,26 +44,25 @@ socket.on("loadComplete", function(element){
 	filtreDeform=element["filtresDéformants"];
 
 	lesboutons = document.querySelectorAll('input[type="checkbox"]'); //recupere la totalité des boutons pour cliquer dessus apres
-	console.log(lesboutons);
+	//console.log(lesboutons);
 	
-    filtreCss.forEach(function(fcs){
-		if(fcs[0]== "video"){
-			if((!lesboutons[0].checked && fcs[1].includes("blur") ) || (lesboutons[0].checked && !fcs[1].includes("blur"))){ //si pas check
-				lesboutons[0].click();
-			}
-			video.style.filter = fcs[1];
-		}
-		document.querySelectorAll("canvas").forEach(function(e){
-			if (fcs[0]==e.id){
-				e.onclick;
-				console.log(e.onclick);
-				e.style.filter=fcs[1];
-			}
-		});
+	filtreCss.forEach(function(fcs){
+	    filters.forEach(function(flt){	            
+	        for(i=0; i<lesboutons.length; i++){
+	            if(lesboutons[i].id==flt.name){
+	                if ((fcs[1].includes(flt.start) && !lesboutons[i].checked)||(lesboutons[i].checked && !fcs[1].includes(flt.start))){
+	                    lesboutons[i].click();
+	                    flt.filter=fcs[1];
+	                    console.log(flt.filter);
+	                }
+	            }
+	        }
+	    });
         
     });
 
 })
+
 
 // filtre dessin
 var ptX = new Array(); // tableau des coords modifiés des points en x
@@ -904,7 +903,7 @@ function addButtons2D(liste){
 				});
 			}
 			//console.log(canvass);
-			console.log(item.start)
+			//console.log(item.start)
 			if (getCreatedElementById(item.start+"color","input")==null){
 				
 				if (item.start!="lunettes"){
