@@ -22,7 +22,9 @@ io.sockets.on('connection', function (socket) {
     });
 
     socket.on('load', function(nom){
-
+        var json=fs.readFileSync('./Json/'+nom);
+        var jsonContent=JSON.parse(json);
+        socket.emit('loadComplete',jsonContent);
     });
 
 });

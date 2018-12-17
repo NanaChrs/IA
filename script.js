@@ -36,6 +36,11 @@ socket.on("jsonList",function(element){
 	
 });
 
+
+socket.on("loadComplete", function(element){
+	console.log(element);
+})
+
 // filtre dessin
 var ptX = new Array(); // tableau des coords modifiés des points en x
 var ptY = new Array(); // tableau des coords modifiés des points en y
@@ -834,6 +839,7 @@ function addButtons2D(liste){
 
 	//Création de l'input
 	var input=document.createElement("input");
+	input.id=item.start;
 	input.addEventListener('click', function(){
 		//supprimer le dessin du tableau
 		if(this.id=="Dessin"){
@@ -874,7 +880,7 @@ function addButtons2D(liste){
 				});
 			}
 			//console.log(canvass);
-			// window[item.start]("#FFFFFF");
+			console.log(item.start)
 			if (getCreatedElementById(item.start+"color","input")==null){
 				
 				if (item.start!="lunettes"){
@@ -883,6 +889,8 @@ function addButtons2D(liste){
 					color.id=item.start+"color";
 					color.addEventListener('change',function(){
 						window[item.start]("#"+color.value);
+						console.log(color.id)
+						console.log(item.start)
 					});
 					color.style="margin-left:2%;";
 					//window[item.start](color.value);
@@ -906,6 +914,7 @@ function addButtons2D(liste){
 			});
 			
 			try{
+				
 				getCreatedElementById(item.start+"color","input").style="display: none";
 				getCreatedElementById(item.start+"color","input").value="FFFFFF";
 			}
@@ -923,8 +932,8 @@ function addButtons2D(liste){
 		//canvas=test;
 		
 	input.type="checkbox";
-	input.id=item.name;
-	label.htmlFor = input.id;
+	// input.id=item.name;
+	label.htmlFor = item.name;
 
 	//Assemblage du tout
 	
@@ -1110,12 +1119,12 @@ function addButtonsDeform(liste){
 					i=1;
 					getElementOfList(changements, item.name).value=this.value;
 					positionLoop();
-					try{
-						document.querySelector("canvas#shader").style="z-index=1";
-					}
-					catch(err){
-						//console.log(err);
-					}
+					// try{
+					// 	// document.querySelector("canvas#shader").style="z-index:1";
+					// }
+					// catch(err){
+					// 	//console.log(err);
+					// }
 				});
 			}
 
@@ -1133,10 +1142,10 @@ function addButtonsDeform(liste){
 
 			getElementOfList(changements, item.name).value=0;
 			getInputRangeByName(item.name).value=0;
-			if (!checktrue(changements)){
-				document.querySelector("canvas#shader").style="z-index=-3";
-				// return;
-			}
+			// if (!checktrue(changements)){
+			// 	document.querySelector("canvas#shader").style="z-index=-3";
+			// 	// return;
+			// }
 			positionLoop();
 			getInputRangeByName(item.name).style="display: none;";
 			//str = str.replace(stringette, "");
@@ -1186,7 +1195,7 @@ document.getElementById("save").addEventListener("click", function(){
 	else{
 		if(checktrue(changements)){
 			jSON['filtresDéformants']=changements;
-			console.log(jSON);
+			// console.log(jSON);
 		}
 		
 		jSON['filtresCSS']=[["video",video.style.filter]];
@@ -1202,6 +1211,7 @@ document.getElementById("save").addEventListener("click", function(){
 		jSON['filtres2D']=[];
 		document.getElementById("buttons2D").querySelectorAll("input[type=checkbox]:checked").forEach(function(e){
 				console.log("input#"+e.id+"color");
+				console.log(document.querySelector("input#"+e.id+"color"))
 				var f2D=[
 					e.id,
 					document.querySelector("input#"+e.id+"color").value
@@ -1213,14 +1223,20 @@ document.getElementById("save").addEventListener("click", function(){
 		});
 		var option=document.createElement("option");
 		option.textContent=title.value;
-		option.value="./Json/"+title.value+".json";
-		document.getElementById("#filtres").appendChild()
+		option.value=title.value;
+		document.getElementById("filtres").appendChild(option);
 		socket.emit("save",title.value, jSON);
 	}
 });
 
 document.getElementById("load").addEventListener("click", function(){
-
+	if(document.getElementById("filtres").value==""){
+		alert("Aucun filtre choisi.");
+	}
+	else{
+		// console.log(document.getElementById("filtres").value);
+		socket.emit("load",document.getElementById("filtres").value);
+	}
 });
 
 
