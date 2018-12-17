@@ -16,18 +16,24 @@ ctracker.start(video);
 
 var jSON={};
 socket.on("jsonList",function(element){
-	console.log(element);
-	element.forEach(function(e){
-		console.log(document.querySelector("option#"+e.replace(".json","")));
-		if (document.querySelector("option#"+e.replace(".json",""))==null){
-			var option=document.createElement("option");
-			var select=document.getElementById("filtres");
-			option.textContent=e.replace(".json","");
-			option.value=e;
-			option.id=e.replace(".json","");
-			select.appendChild(option);
-		}
-	});
+	// console.log(element);
+	try {
+		element.forEach(function(e){
+			console.log(document.querySelector("option#"+e.replace(".json","")));
+			if (document.querySelector("option#"+e.replace(".json",""))==null){
+				var option=document.createElement("option");
+				var select=document.getElementById("filtres");
+				option.textContent=e.replace(".json","");
+				option.value=e;
+				option.id=e.replace(".json","");
+				select.appendChild(option);
+			}
+		});
+	}
+	catch (err){
+		console.log(err);
+	}
+	
 });
 
 // filtre dessin
@@ -263,12 +269,13 @@ function getElementOfList(liste, name){
 }
 
 function checktrue(liste){
+	var chris=false;
 	liste.forEach(function(e){
 		if (e.value!=0){
-			return true;
+			chris=true;
 		}
 	});
-	return false;
+	return chris;
 }
 
 /*
@@ -813,15 +820,11 @@ function addButtons2D(liste){
 	var container=document.getElementById("container");
 
   	liste.forEach(function(item){
-			// Création de la div de la checkbox
-				
-		
-		//test[item.start]=can.getContext("2d");
-		
+
 	var div = document.createElement("div");
 	var bouton = document.createElement("div");
 	bouton.className="ui toggle checkbox";
-	//div.style="display: flex; flex-direction: row; align-content: space-around;"
+	bouton.id=item.name;
 
 	//Création du label du bouton
 	var label= document.createElement("label");
@@ -848,26 +851,30 @@ function addButtons2D(liste){
 			can.height="550";
 			can.className="canvas";
 			container.insertAdjacentElement("afterbegin", can);
+			window[item.start]("#FFFFFF");
 			document.querySelectorAll("select").forEach(function(element){
-
-				var li=document.createElement("option");
-				li.className=item.name;
-				element.insertAdjacentElement("beforeend",li);
-				li.textContent=item.name;
+				if(element.className!=""){
+					var li=document.createElement("option");
+					li.className=item.name;
+					element.insertAdjacentElement("beforeend",li);
+					li.textContent=item.name;
+				}
 			});
-			//console.log(item.start);
-			//console.log(test);
+
 			canvass.push(item.name);
 			if(document.querySelectorAll("option#option"+item.start)==null){
 				document.querySelectorAll("select").forEach(function(element){
-					var li=document.createElement("option");
-					li.textContent=li.value=item.name;
-					li.id="option"+item.start;
-					element.insertAdjacentElement("beforeend",li);
+					if (element.className!=""){
+						var li=document.createElement("option");
+						li.textContent=li.value=item.name;
+						li.id="option"+item.start;
+						element.insertAdjacentElement("beforeend",li);
+					}
+					
 				});
 			}
 			//console.log(canvass);
-			window[item.start]("#FFFFFF");
+			// window[item.start]("#FFFFFF");
 			if (getCreatedElementById(item.start+"color","input")==null){
 				
 				if (item.start!="lunettes"){
@@ -882,43 +889,34 @@ function addButtons2D(liste){
 					div.append(color);
 				}
 				
-				
-
-			
-				
 			}
 			else{
 				getCreatedElementById(item.start+"color","input").style="margin-left:2%";
 			}
 			
-			//requestAnimationFrame(item.cancel);
-			//console.log(requestAnimationFrame(item.cancel))
-			//var color = document.
 		}
 		else{
 			canvass.splice(canvass.indexOf(item.name),1);
 			document.querySelectorAll("select").forEach(function(elem){
 				document.querySelectorAll("option."+item.name).forEach(function(element){
-					elem.removeChild(element);
+					if(elem.className!=""){
+						elem.removeChild(element);
+					}
 				});
 			});
 			
-			//console.log(canvass);
-			//console.log("je cancel ");
 			try{
 				getCreatedElementById(item.start+"color","input").style="display: none";
+				getCreatedElementById(item.start+"color","input").value="FFFFFF";
 			}
 			catch(err){
-				//console.log(err);
+				console.log(err);
 			}
 			
 			window.cancelAnimationFrame(item.cancel);
 			//console.log("cnvas#"+item.start);
 			container.removeChild(getCanvasByName(item.start));
-			//delete getCanvasByName("zorro");
-			//clearZone(0,0,2000,2000,getCanvasByName(item.start));
-			
-			
+
 		}
 		//console.log(item.start);
 	});
@@ -943,7 +941,6 @@ function addButtons2D(liste){
 
 function addButtons(liste){
 	var buttonsDiv = document.getElementById("filterButtons");
-	//var boutons;    
 
   liste.forEach(function(item){
 			// Création de la div de la checkbox	
@@ -963,26 +960,19 @@ function addButtons(liste){
 		var stringette=item.filter+" ";
 		if (this.checked){
 			str+=stringette;
-			
-			
-
 			var ul=document.createElement("select");
 			ul.className="select"+item.start;
+
 			canvass.forEach(function(item){
 				var li=document.createElement("option");
 				li.className=li.textContent=item;
 				ul.appendChild(li);
 			})
-			bouton.insertAdjacentElement("afterend",ul);
-			ul.addEventListener('click',function(){
-				/*document.querySelectorAll("canvas.canvas").forEach(function(elem){
-					elem.style.filter=str.replace(stringette,"");
-				});*/
-				//video.style.filter = str;
-				
-				
 
-			})
+			bouton.insertAdjacentElement("afterend",ul);
+			// ul.addEventListener('click',function(){
+
+			// })
 			
 			//console.log(getInputRangeByName(item.name));
 			if (getInputRangeByName(item.name)==null){
@@ -992,10 +982,10 @@ function addButtons(liste){
 				range.type="range";
 				div.appendChild(range);
 				
-
 				range.addEventListener('change', function(){
 					var value=getInputRangeByName(item.name).value;
 					var stringette=item.range+value+item.dim;
+
 					if (item.name=="Saturé" || item.name=="Contraste" || item.name=="Lumineux"){
 						stringette=item.range+value*10+item.dim;
 					}
@@ -1143,9 +1133,9 @@ function addButtonsDeform(liste){
 
 			getElementOfList(changements, item.name).value=0;
 			getInputRangeByName(item.name).value=0;
-			if (checktrue(changements)){
+			if (!checktrue(changements)){
 				document.querySelector("canvas#shader").style="z-index=-3";
-				return;
+				// return;
 			}
 			positionLoop();
 			getInputRangeByName(item.name).style="display: none;";
@@ -1158,15 +1148,8 @@ function addButtonsDeform(liste){
 			document.querySelectorAll("canvas.canvas").forEach(function(elem){
 				elem.style.filter=str;
 			});
-			//video.style.filter = str;
-			//console.log(document.querySelectorAll("input.slider"));
-			/*document.getElementsByName(item.name).style.display="none";*/
-		}
-	//video.style.filter="contrast(500%)";
-		
-		//console.log(str);
-	
 
+		}
 	});
 	//input.checked=false;
 	input.type="checkbox";
@@ -1184,6 +1167,16 @@ function addButtonsDeform(liste){
 	
   });
 }
+
+//Ajout des fonctions liées aux 2 boutons save et load
+//Fonction associée au nom du fichier entré permettant de lancer le save si la touche entrée est adctionnée
+var title=document.getElementById("title");
+title.addEventListener("keyup", function(event){
+	event.preventDefault();
+  	if (event.keyCode === 13) {
+    	document.getElementById("save").click();
+  }
+});
 
 document.getElementById("save").addEventListener("click", function(){
 	var jSON={};
