@@ -69,8 +69,10 @@ socket.on("loadComplete", function(element){
 	filtre2D.forEach(function(fcs){
 	    filters2D.forEach(function(flt){
             for(i=0; i<lesboutons.length; i++){
-	            if(lesboutons[i].id==flt.start){
-	                if ((fcs[0]==flt.start && !lesboutons[i].checked)||(lesboutons[i].checked && !fcs[0]==flt.start)){
+                if(lesboutons[i].id==flt.start){
+                    if ((fcs[0]==flt.start && !lesboutons[i].checked)||(lesboutons[i].checked && fcs[0]!=flt.start)){
+                        console.log(flt.start);
+                        console.log(lesboutons[i].checked);
 	                    lesboutons[i].click();
 	                }
 	            }
@@ -78,22 +80,23 @@ socket.on("loadComplete", function(element){
 	    });
         
 	});
-
-	filtreDeform.forEach(function(fcs){
-	    changements.forEach(function(flt){
-	        for(i=0; i<lesboutons.length; i++){
-	            if((lesboutons[i].id==flt.name)&&(fcs.value!=0)){
-	                if ((fcs.name==flt.name && !lesboutons[i].checked)||(lesboutons[i].checked && !fcs.name==flt.name)){
-	                    lesboutons[i].click();
-	                    console.log(flt.value);
-	                    console.log(fcs.value);
-	                    flt.value==fcs.value;
+	if (filtreDeform != undefined){
+	    filtreDeform.forEach(function(fcs){
+	        changements.forEach(function(flt){
+	            for(i=0; i<lesboutons.length; i++){
+	                if((lesboutons[i].id==flt.name)){
+	                    if ((fcs.name==flt.name && !lesboutons[i].checked && fcs.value!=0)||(lesboutons[i].checked && fcs.name!=flt.name)){
+	                        console.log(flt.start);
+	                        console.log(lesboutons[i].checked);
+	                        lesboutons[i].click();
+	                        flt.value==fcs.value;
+	                    }
 	                }
 	            }
-	        }
-	    });
+	        });
         
-	});
+	    });
+	}
 })
 
 
