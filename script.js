@@ -1210,15 +1210,25 @@ document.getElementById("save").addEventListener("click", function(){
 
 		jSON['filtres2D']=[];
 		document.getElementById("buttons2D").querySelectorAll("input[type=checkbox]:checked").forEach(function(e){
-				console.log("input#"+e.id+"color");
-				console.log(document.querySelector("input#"+e.id+"color"))
-				var f2D=[
-					e.id,
-					document.querySelector("input#"+e.id+"color").value
-				];
+				if (e.id=="dessin"){
+					jSON['Dessin']=[];
+					jSON.Dessin.push(pt62X);
+					jSON.Dessin.push(pt62Y);
+					jSON.Dessin.push(X);
+					jSON.Dessin.push(Y);
+					jSON.Dessin.push(trait);
+					jSON.Dessin.push(document.querySelector("input#"+e.id+"color").value);
+				}
+				else{
+					var f2D=[
+						e.id,
+						document.querySelector("input#"+e.id+"color").value
+					];
 
-				console.log(f2D)
+				// console.log(f2D)
 				jSON.filtres2D.push(f2D);
+				}
+				
 			
 		});
 		var option=document.createElement("option");
