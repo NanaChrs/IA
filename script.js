@@ -7,6 +7,7 @@ var overlay = document.getElementById('overlay');
 var overlayCC = overlay.getContext('2d');
 var webgl_overlay = document.getElementById('webgl');
 var gl= null;
+var i=1;
 var str = "";
 var ctracker = new clm.tracker();
 ctracker.init();
@@ -532,22 +533,22 @@ function nez2D(color){
 }
 
 function positionLoop() {
-	requestAnimationFrame(positionLoop);
-	var positions = ctracker.getCurrentPosition();
-	// do something with the positions ...
-	// print the positions
-	var positionString = "";
-	//fillCircle(positions[27][0],positions[27][1]);
-	//var taille=positions[27][1]-positions[24][1];
-	//fillCircle(positions[27][0],positions[27][1],taille,'#FF0000');
-	//var taille2=positions[32][1]-positions[29][1];
-	//fillCircle(positions[32][0],positions[32][1],taille2,'#FF0000');
-	// Store the current transformation matrix
+	animation=requestAnimationFrame(positionLoop);
 	gl.clear(gl.DEPTH_BUFFER_BIT && gl.COLOR_BUFFER_BIT && gl.STENCIL_BUFFER_BIT);
+	if(i==0){
+		return;
+	}
+	var positions = ctracker.getCurrentPosition();
+	var positionString = "";
+	
 	if(positions[0]!=undefined){
 		//ctracker.draw(overlay)
 		drawMaskLoop();
 	}
+	if((changements[0].value==0)&&(changements[1].value==0)&&(changements[2].value==0)&&(changements[3].value==0)&&(changements[4].value==0)&&(changements[5].value==0)&&(changements[6].value==0)&&(changements[7].value==0)&&(changements[8].value==0)&&(changements[9].value==0)&&(changements[10].value==0)){
+        cancelAnimationFrame(animation);
+        i=0;
+    }
 }
  
 function drawMaskLoop() {
@@ -998,6 +999,7 @@ function addButtonsDeform(liste){
 				div.appendChild(range);
 
 				range.addEventListener('change', function(){
+					i=1;
 					getElementOfList(changements, item.name).value=this.value;
 					positionLoop();
 					try{
