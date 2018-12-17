@@ -12,6 +12,16 @@ var str = "";
 var ctracker = new clm.tracker();
 ctracker.init();
 ctracker.start(video);
+
+// filtre dessin
+var ptX = new Array(); // tableau des coords modifiés des points en x
+var ptY = new Array(); // tableau des coords modifiés des points en y
+var pt62X = new Array(); // tableau des coords initiales du centre en x
+var pt62Y = new Array(); // tableau des coords initiales du centre en y
+var X = new Array(); // tableau des coords initiales des points en x
+var Y = new Array(); // tableau des coords initiales des points en y
+var trait = new Array(); // tableau des traits
+
 //var filter2D=[];
 var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
                             window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
@@ -103,6 +113,10 @@ var filters2D =[{
 	name:"Lunettes",
 	start:"lunettes",
 	cancel:lunettes
+},{
+	name:"Dessin",
+	start:"dessin",
+	cancel:dessin
 }];
 
 var changements=[{
@@ -377,6 +391,85 @@ function nofilltriangle(point1,point2,point3,color,context){
 		context.closePath();
 		context.stroke();
 	}
+}
+
+function dessin(color){
+	var canvas=getCanvasByName("dessin");
+	if (canvas != null) {
+		var context=canvas.getContext("2d");
+		// si la souris est appuyée, alors la position de celle-ci sur le canvas est prise
+		$('canvas').mousedown(function(e){
+		  console.log("hey")
+		  dessin = true; // dessiner le point en question
+		  ajouterPt(e.pageX - this.offsetLeft, e.pageY - this.offsetTop); //ajoute au tableau des points dessinés
+		  dessine(); // dessine le point
+		});
+		// si la souris bouge en étant appuyée, on continue de dessiner
+		$('canvas').mousemove(function(e){
+		  if(dessin){
+				ajouterPt(e.pageX - this.offsetLeft, e.pageY - this.offsetTop, true);
+				dessine();
+		  }
+		});
+		// si la souris est relâchée on arrête de dessiner
+		$('canvas').mouseup(function(e){
+		  dessin = false;
+		});
+		// si la souris quitte le canvas on arrête de dessiner
+		$('canvas').mouseleave(function(e){
+		  dessin = false;
+		});
+
+		// ajouter les points de la souris au tableau
+		function ajouterPt(x, y, dragging){
+			var positions = ctracker.getCurrentPosition();
+			if (positions[62]!=undefined) {
+				X.push(x);
+				Y.push(y);
+				ptX.push(x);
+				ptY.push(y);
+				pt62X.push(positions[62][0]);
+				pt62Y.push(positions[62][1]);
+				trait.push(dragging);
+			}
+		}
+
+		function dessine(){
+			context.clearRect(0, 0, context.canvas.width, context.canvas.height); // Clears the canvas
+			
+			context.strokeStyle = color; //couleur
+			context.lineJoin = "round"; //arrondi les angles
+			context.lineWidth = 5; //epaisseur du trait
+						
+			for(var i=0; i < ptX.length; i++) {		
+				context.beginPath();
+				if(trait[i] && i){
+					context.moveTo(ptX[i-1], ptY[i-1]);
+				}else{
+					context.moveTo(ptX[i]-1, ptY[i]);
+				}
+				context.lineTo(ptX[i], ptY[i]);
+				context.closePath();
+				context.stroke();
+			}
+		}
+		function moveDessin(){
+			requestAnimationFrame(moveDessin);
+			var positions = ctracker.getCurrentPosition();
+			if (positions[62]!= undefined) {
+				for(var i=0; i < ptX.length; i++) {
+					ptX[i]=X[i]-pt62X[i]+positions[62][0];
+					ptY[i]=Y[i]-pt62Y[i]+positions[62][1];
+				}
+				dessine();
+			}
+			else {
+				context.clearRect(0,0,2000,2000);
+			}
+		}
+		var dessin;
+		moveDessin();
+	}				
 }
 
 function mickey(color){
@@ -693,8 +786,6 @@ function zorro(color){
 		triangle(positions[65],positions[25],positions[41],color,context);
 		triangle(positions[34],positions[41],positions[65],color,context);
 		triangle(positions[65],positions[26],positions[34],color,context);
-		
-		triangle(positions[33],positions[34],positions[40],color,context);
 	}
 
 }
@@ -724,6 +815,14 @@ function addButtons2D(liste){
 	//Création de l'input
 	var input=document.createElement("input");
 	input.addEventListener('click', function(){
+		//supprimer le dessin du tableau
+		if(this.id=="Dessin"){
+			pt62X.length=0;
+			pt62Y.length=0;
+			X.length=0;
+			Y.length=0;
+			trait.length=0;
+		}
 
 		if (this.checked){
 			var can = document.createElement("canvas");
@@ -1024,7 +1123,7 @@ function addButtonsDeform(liste){
 			document.querySelectorAll("select.select"+item.start).forEach(function(elem){
 				div.removeChild(elem);
 			});
-			
+
 			getElementOfList(changements, item.name).value=0;
 			getInputRangeByName(item.name).value=0;
 			if (checktrue(changements)){
