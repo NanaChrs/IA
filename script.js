@@ -38,7 +38,24 @@ socket.on("jsonList",function(element){
 
 
 socket.on("loadComplete", function(element){
-	console.log(element);
+    console.log(element);
+    filtreCss=element["filtresCSS"];
+    filtre2D=element["filtres2D"];
+    filtreDeform=element["filtresDéformants"];
+
+    video.style.filter=filtreCss[0][1];
+    filtreCss.forEach(function(fcs){
+        if (fcs[1]!=""){
+            document.querySelectorAll("canvas").forEach(function(e){
+                if (fcs[0]==e.id){
+                    e.onclick;
+                    console.log(e.onclick);
+                    e.style.filter=fcs[1];
+                }
+            });
+        }
+    });
+
 })
 
 // filtre dessin
