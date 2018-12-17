@@ -56,7 +56,7 @@ var deformation = function() {
 			ca.width = element.width;
 			ca.height = element.height;
 			ca.class="canvas";
-			ca.style="z-index:1;"
+			// ca.style="z-index:1;"
 			var cc = ca.getContext('2d');
 			cc.drawImage(element, 0, 0, element.width, element.height);
 		} else if (element.tagName == 'CANVAS') {

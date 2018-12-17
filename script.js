@@ -13,7 +13,20 @@ ctracker.start(video);
 
 
 var jSON={};
-
+socket.on("jsonList",function(element){
+	console.log(element);
+	element.forEach(function(e){
+		console.log(document.querySelector("option#"+e.replace(".json","")));
+		if (document.querySelector("option#"+e.replace(".json",""))==null){
+			var option=document.createElement("option");
+			var select=document.getElementById("filtres");
+			option.textContent=e.replace(".json","");
+			option.value=e;
+			option.id=e.replace(".json","");
+			select.appendChild(option);
+		}
+	});
+});
 
 
 //var filter2D=[];
@@ -239,24 +252,6 @@ function checktrue(liste){
 	});
 	return chris;
 }
-
-/*
-function filterApply(){
-	var str="";
-	for (let item in filters){
-		console.log(filters);
-		if (item.name!="reset" && document.getElementById(item.name)!=null){
-			console.log(document.getElementById(item.name));
-			if (document.getElementById(item.name).checked){
-				str+=item.filter+"; ";
-			}
-		} 
-	}
-	if (str!=""){
-		document.getElementById("canvas").filter(str);
-	}
-}
-*/
 
 
 function getInputRangeByName(name){
@@ -814,12 +809,14 @@ function addButtons(liste){
 						document.querySelectorAll("canvas.canvas").forEach(function(elem){
 							elem.style.filter=str;
 						});
+						webgl_overlay.style.filter=str;
+						overlay.style.filter=str;
 						video.style.filter = str;
 					}
 					else if (value=="Video"){
 						video.style.filter=str;
-						overlay.filter=str;
-						webgl_overlay.filter=str;
+						overlay.style.filter=str;
+						webgl_overlay.style.filter=str;
 					}
 					else{
 						var value=value.toLowerCase();
@@ -994,8 +991,16 @@ document.getElementById("save").addEventListener("click", function(){
 				jSON.filtres2D.push(f2D);
 			
 		});
+		var option=document.createElement("option");
+		option.textContent=title.value;
+		option.value="./Json/"+title.value+".json";
+		document.getElementById("#filtres").appendChild()
 		socket.emit("save",title.value, jSON);
 	}
+});
+
+document.getElementById("load").addEventListener("click", function(){
+
 });
 
 

@@ -5,10 +5,20 @@ var app=require('express')(),
     ent=require('ent'),
     //SaveAs=require(''),
     events=require('events');
+   
+var liste;
+
+
 
 
 io.sockets.on('connection', function (socket) {
     console.log("Serveur connecté")
+    fs.readdir('./Json', function(err, items) {
+        console.log(items);
+        liste=items;
+        socket.emit('jsonList',items);});
+   
+        
     // Dès qu'on nous donne un pseudo, on le stocke en variable de session et on informe les autres personnes
     socket.on('save', function(nom, json) {
         json=JSON.stringify(json);
