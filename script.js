@@ -41,19 +41,26 @@ socket.on("loadComplete", function(element){
     console.log(element);
     filtreCss=element["filtresCSS"];
     filtre2D=element["filtres2D"];
-    filtreDeform=element["filtresDéformants"];
+	filtreDeform=element["filtresDéformants"];
 
-    video.style.filter=filtreCss[0][1];
+	lesboutons = document.querySelectorAll('input[type="checkbox"]'); //recupere la totalité des boutons pour cliquer dessus apres
+	console.log(lesboutons);
+	
     filtreCss.forEach(function(fcs){
-        if (fcs[1]!=""){
-            document.querySelectorAll("canvas").forEach(function(e){
-                if (fcs[0]==e.id){
-                    e.onclick;
-                    console.log(e.onclick);
-                    e.style.filter=fcs[1];
-                }
-            });
-        }
+		if(fcs[0]== "video"){
+			if((!lesboutons[0].checked && fcs[1].includes("blur") ) || (lesboutons[0].checked && !fcs[1].includes("blur"))){ //si pas check
+				lesboutons[0].click();
+			}
+			video.style.filter = fcs[1];
+		}
+		document.querySelectorAll("canvas").forEach(function(e){
+			if (fcs[0]==e.id){
+				e.onclick;
+				console.log(e.onclick);
+				e.style.filter=fcs[1];
+			}
+		});
+        
     });
 
 })
