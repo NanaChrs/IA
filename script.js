@@ -245,6 +245,10 @@ var filters2D =[{
 	name:"Dessin",
 	start:"dessin",
 	cancel:dessin
+},{
+	name:"Humeur",
+	start:"humeur",
+	cancel:dessin
 }];
 
 var changements=[{
@@ -269,16 +273,7 @@ var changements=[{
 	name:"Allongement des yeux",
 	value:0
 },{
-	name:"Triste",
-	value:0
-},{
-	name:"Colère",
-	value:0
-},{
-	name:"Heureux",
-	value:0
-},{
-	name:"Surprise",
+	name:"Emotion",
 	value:0
 }];
 
@@ -607,6 +602,33 @@ function dessin(color){
 	}				
 }
 
+
+function humeur(Humeur) {
+	var canvas = getCanvasByName("humeur");
+	var Humeur = Math.floor(Math.random() * 5);
+	if(canvas != null){
+		switch (Humeur) {
+			case 0: //neutral
+				canvas.style.backgroundColor = 'rgba(0,0,0,0)';
+				break;
+			case 1: //joie
+				canvas.style.backgroundColor = 'rgba(255,0,255,0.3)';
+				break;
+			case 2: //tristesse
+				canvas.style.backgroundColor = 'rgba(0,255,0,0.3)';
+				break;
+			case 3: //surprise
+				canvas.style.backgroundColor = 'rgba(0,0,255,0.3)';
+				break;
+			case 4: //colere
+				canvas.style.backgroundColor = 'rgba(255,0,0,0.3)';
+				break;
+			default:
+				break;
+		}
+	}
+}
+
 function mickey(color){
 	var canvas=getCanvasByName("mickey");
 	if (canvas != null) {
@@ -773,7 +795,7 @@ function positionLoop() {
 		//ctracker.draw(overlay)
 		drawMaskLoop();
 	}
-	if((changements[0].value==0)&&(changements[1].value==0)&&(changements[2].value==0)&&(changements[3].value==0)&&(changements[4].value==0)&&(changements[5].value==0)&&(changements[6].value==0)&&(changements[7].value==0)&&(changements[8].value==0)&&(changements[9].value==0)&&(changements[10].value==0)){
+	if((changements[0].value==0)&&(changements[1].value==0)&&(changements[2].value==0)&&(changements[3].value==0)&&(changements[4].value==0)&&(changements[5].value==0)&&(changements[6].value==0)&&(changements[7].value==0)){
         cancelAnimationFrame(animation);
         i=0;
     }

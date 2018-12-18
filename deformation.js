@@ -80,18 +80,30 @@ var deformation = function() {
 		}
 		
 		//deformation
-		yeux(deformPoints,changements[0].value);
-		visage(deformPoints,changements[1].value);
-		bouche(deformPoints,changements[2].value);
-		nez(deformPoints,changements[3].value);
-		sourcils(deformPoints,changements[4].value);
-		yeuxor(deformPoints,changements[5].value);
-		yeuxbrides(deformPoints,changements[6].value);
-		triste(deformPoints,changements[7].value);
-		colere(deformPoints,changements[8].value);
-		joie(deformPoints,changements[9].value);
-		surprise(deformPoints,changements[10].value);
-
+		if (changements[0].value!=0){
+			yeux(deformPoints,changements[0].value);
+		}
+		if (changements[1].value!=0){
+			visage(deformPoints,changements[1].value);
+		}
+		if (changements[2].value!=0){
+			bouche(deformPoints,changements[2].value);
+		}
+		if (changements[3].value!=0){
+			nez(deformPoints,changements[3].value);
+		}
+		if (changements[4].value!=0){
+			sourcils(deformPoints,changements[4].value);
+		}
+		if (changements[5].value!=0){
+			yeuxor(deformPoints,changements[5].value);
+		}
+		if (changements[6].value!=0){
+			yeuxbrides(deformPoints,changements[6].value);
+		}
+		if (changements[7].value!=0){
+			emotiondeform(deformPoints,changements[7].value);
+		}
 
         // create vertices based on points
 		var textureVertices = [];
