@@ -770,7 +770,7 @@ function positionLoop() {
 		//ctracker.draw(overlay)
 		drawMaskLoop();
 	}
-	if((changements[0].value==0)&&(changements[1].value==0)&&(changements[2].value==0)&&(changements[3].value==0)&&(changements[4].value==0)&&(changements[5].value==0)&&(changements[6].value==0)&&(changements[7].value==0)&&(changements[8].value==0)&&(changements[9].value==0)&&(changements[10].value==0)){
+	if((changements[0].value==0)&&(changements[1].value==0)&&(changements[2].value==0)&&(changements[3].value==0)&&(changements[4].value==0)&&(changements[5].value==0)&&(changements[6].value==0)&&(changements[7].value==0)){
         cancelAnimationFrame(animation);
         i=0;
     }
