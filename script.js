@@ -12,7 +12,16 @@ var str = "";
 var ctracker = new clm.tracker();
 ctracker.init();
 ctracker.start(video);
-var emotion = Math.floor(Math.random() * 5);
+
+// filtre dessin
+// var ptX = new Array(); // tableau des coords modifiés des points en x
+// var ptY = new Array(); // tableau des coords modifiés des points en y
+var pt62X = new Array(); // tableau des coords initiales du centre en x
+var pt62Y = new Array(); // tableau des coords initiales du centre en y
+var X = new Array(); // tableau des coords initiales des points en x
+var Y = new Array(); // tableau des coords initiales des points en y
+var trait = new Array(); // tableau des traits
+
 
 var jSON={};
 socket.on("jsonList",function(element){
@@ -43,7 +52,7 @@ socket.on("loadComplete", function(element){
     var filtre2D=element["filtres2D"];
 	var filtreDeform=element["filtresDéformants"];
 
-	var lesboutons = document.querySelectorAll('input[type="checkbox"]'); //recupere la totalité des boutons pour cliquer dessus apres
+	// var lesboutons = document.querySelectorAll('input[type="checkbox"]'); //recupere la totalité des boutons pour cliquer dessus apres
 	var boutonsCSS = document.getElementById("filterButtons").querySelectorAll("input[type=checkbox]");
 	var boutonsDeform = document.getElementById("deformation").querySelectorAll("input[type=checkbox]");
 	var boutons2D = document.getElementById("buttons2D").querySelectorAll("input[type=checkbox]");
@@ -58,78 +67,88 @@ socket.on("loadComplete", function(element){
 	}
 
 	filtre2D.forEach(function(fcs){
-            // for(i=0; i<lesboutons.length; i++){
-            //     if(lesboutons[i].id==flt.start){
-            //         if ((fcs[0]==flt.start && !lesboutons[i].checked)||(lesboutons[i].checked && fcs[0]!=flt.start)){
-            //             console.log(flt.start);
-            //             console.log(lesboutons[i].checked);
-	        //             lesboutons[i].click();
-	        //         }
-	        //     }
-			// }
 			boutons2D.forEach(function(e){
-				// console.log(e);
 				if(e.id==fcs[0]){
 					e.click();
+					console.log(fcs[1]);
+					window[fcs[0]]('#'+fcs[1]);
+					getCreatedElementById(fcs[0]+"color","input").value=fcs[1];
 				}
-			});
-
-	    // });
-        
+			});        
 	});
+
 	if (filtreDeform != undefined){
 		changements=filtreDeform;
 	    filtreDeform.forEach(function(fcs){
-	        // changements.forEach(function(flt){
-	            // for(i=0; i<lesboutons.length; i++){
-	                // if((lesboutons[i].id==flt.name)){
-	                    // if ((fcs.name==flt.name && !lesboutons[i].checked && fcs.value!=0)||(lesboutons[i].checked && fcs.name!=flt.name)){
-							boutonsDeform.forEach(function(e){
-								if(e.id==fcs.name.split(" ").join("_") && fcs.value!=0){
-									// console.log(flt.start);
-									// console.log(lesboutons[i].checked);
-									e.click();
-									getInputRangeByName(fcs.name).value=fcs.value;
-								}
-								
-							});
-	                    // }
-	                // }
-	            // }
-	        // });
-        
+			boutonsDeform.forEach(function(e){
+				if(e.id==fcs.name.split(" ").join("_") && fcs.value!=0){
+					e.click();
+					getInputRangeByName(fcs.name).value=fcs.value;
+					positionLoop();
+				}
+			});        
 	    });
 	}
+	
 	filtreCss.forEach(function(fcs){
+		console.log(fcs);
+		if ("video"==fcs[0]){
+			video.style.filter=fcs[1];
+			// console.log(video.style.filter);
+		}
+		var canvas=document.querySelector("canvas#"+fcs[0]);
+		// console.log(canvas);
+		if (canvas!=null){
+			// console.log("hey")
+			canvas.style.filter=fcs[1];
+		}
+		// var counter=0;
+		
+		// document.querySelector("input#"+fcs[0])
 	    filters.forEach(function(flt){	            
-	        for(i=0; i<lesboutons.length; i++){
-	            if(lesboutons[i].id==flt.name){
-	                if ((fcs[1].includes(flt.start) && !lesboutons[i].checked)||(lesboutons[i].checked && !fcs[1].includes(flt.start))){
-	                    lesboutons[i].click();
+	        for(i=0; i<boutonsCSS.length; i++){
+				
+	            if(boutonsCSS[i].id==flt.name){
+	                if (fcs[1].includes(flt.start)){
+						// console.log(boutonsCSS[i])
+						if (boutonsCSS[i].checked==false){
+							// counter++;
+							boutonsCSS[i].click();
+							console.log(flt.range.length);
+							var firstValue=fcs[1].lastIndexOf(flt.range)+flt.range.length;
+							var secondValue=fcs[1].indexOf(")",firstValue);
+							var length=secondValue-firstValue-flt.range.length;
+							console.log(fcs[1][firstValue]);
+							console.log(fcs[1][secondValue]);
+							console.log(fcs[1].substring(firstValue,secondValue));
+							if(fcs[1][secondValue-1]=="%"){
+								getInputRangeByName(flt.name).value=parseInt(fcs[1].substring(firstValue,secondValue-2));
+							}
+							else if(fcs[1][secondValue-1]=="x"){
+								getInputRangeByName(flt.name).value=parseInt(fcs[1].substring(firstValue,secondValue-3));
+							}
+							else{
+								getInputRangeByName(flt.name).value=parseInt(fcs[1].substring(firstValue,secondValue-4));
+							}
+							
+						}
 	                }
 	            }
 	        }
-	    });
-	    listcanvas=document.querySelectorAll("canvas");
-	    listcanvas.forEach(function(cnv){
-	        if(cnv.id==fcs[0]){
-	            cnv.style.filter=fcs[1];
-	            console.log(cnv.style.filter);
-	        }
-	    })
-        
-    });
+		});
+	});
+	
+	if (element['Dessin']!=undefined){
+		pt62X=element['Dessin'][0];
+		pt62Y=element['Dessin'][1];
+		X=element['Dessin'][2];
+		Y=element['Dessin'][3];
+		trait=element['Dessin'][4];
+		document.querySelector("input#dessin").click();
+		dessin("#"+element['Dessin'][5]);
+
+	}
 })
-
-
-// filtre dessin
-var ptX = new Array(); // tableau des coords modifiés des points en x
-var ptY = new Array(); // tableau des coords modifiés des points en y
-var pt62X = new Array(); // tableau des coords initiales du centre en x
-var pt62Y = new Array(); // tableau des coords initiales du centre en y
-var X = new Array(); // tableau des coords initiales des points en x
-var Y = new Array(); // tableau des coords initiales des points en y
-var trait = new Array(); // tableau des traits
 
 //var filter2D=[];
 var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
@@ -499,6 +518,7 @@ function nofilltriangle(point1,point2,point3,color,context){
 }
 
 function dessin(color){
+	console.log("hey")
 	var canvas=getCanvasByName("dessin");
 	if (canvas != null) {
 		var context=canvas.getContext("2d");
@@ -545,6 +565,8 @@ function dessin(color){
 			context.strokeStyle = color; //couleur
 			context.lineJoin = "round"; //arrondi les angles
 			context.lineWidth = 5; //epaisseur du trait
+			var ptX=new Array(X.length).fill(0);
+			var ptY=new Array(Y.length).fill(0);
 						
 			for(var i=0; i < ptX.length; i++) {		
 				context.beginPath();
@@ -561,11 +583,14 @@ function dessin(color){
 		function moveDessin(){
 			requestAnimationFrame(moveDessin);
 			var positions = ctracker.getCurrentPosition();
+			ptX=[]
 			if (positions[62]!= undefined) {
 				for(var i=0; i < ptX.length; i++) {
 					ptX[i]=X[i]-pt62X[i]+positions[62][0];
 					ptY[i]=Y[i]-pt62Y[i]+positions[62][1];
 				}
+				console.log(X);
+				console.log(Y);
 				dessine();
 			}
 			else {
