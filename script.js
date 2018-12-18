@@ -1055,7 +1055,6 @@ function addButtons2D(liste){
 			for(var i=0; i<filters2D.length; i++){
 			    if (filters2D[i].start==item.start){
 			        cancelAnimationFrame(stopAnimation2D[i]);
-			        console.log(item.start);
 			    }
 			}
 			//console.log("cnvas#"+item.start);
