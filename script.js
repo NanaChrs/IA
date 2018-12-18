@@ -12,6 +12,8 @@ var str = "";
 var ctracker = new clm.tracker();
 ctracker.init();
 ctracker.start(video);
+var reqZorro, reqVisage, reqNez, reqBouche, reqYeux, reqPoints, reqMickey, reqLunettes, reqDessin;
+var stopAnimation2D = [reqZorro, reqVisage, reqNez, reqBouche, reqYeux, reqPoints, reqMickey, reqLunettes, reqDessin];
 
 // filtre dessin
 // var ptX = new Array(); // tableau des coords modifiés des points en x
@@ -581,7 +583,7 @@ function dessin(color){
 			}
 		}
 		function moveDessin(){
-			requestAnimationFrame(moveDessin);
+			reqDessin=requestAnimationFrame(moveDessin);
 			var positions = ctracker.getCurrentPosition();
 			ptX=[]
 			if (positions[62]!= undefined) {
@@ -634,7 +636,7 @@ function mickey(color){
 	if (canvas != null) {
 		var context=canvas.getContext("2d");
 		
-		requestAnimationFrame(mickey);
+		reqMickey=requestAnimationFrame(mickey);
 		context.clearRect(0,0,2000,2000);
 		var positions = ctracker.getCurrentPosition();
 		if(positions[0]!= undefined){
@@ -650,7 +652,7 @@ function mickey(color){
 
 function visage2D(color){
 	var canvas = getCanvasByName("visage2D");
-	requestAnimationFrame(visage2D);
+	reqVisage=requestAnimationFrame(visage2D);
 	//requestAnimFrame(visage);
 	if (canvas != null) {
 		var context = canvas.getContext("2d");
@@ -720,7 +722,7 @@ function points(color){
 	if (canvas != null) {
 		var context=canvas.getContext("2d");
 		
-		requestAnimationFrame(points);
+		reqPoints=requestAnimationFrame(points);
 		context.clearRect(0,0,2000,2000);
 		var positions = ctracker.getCurrentPosition();
 		if(positions[0]!= undefined){
@@ -741,7 +743,7 @@ function bouche2D(color){
 	var canvas = document.getElementById("bouche2D");
 	if (canvas != null){
 		var context = canvas.getContext("2d");
-		requestAnimationFrame(bouche2D);
+		reqBouche=requestAnimationFrame(bouche2D);
 		context.clearRect(0,0,2000,2000);
 		var positions = ctracker.getCurrentPosition();
 
@@ -769,7 +771,7 @@ function nez2D(color){
 	if (canvas != null) {
 		var context=canvas.getContext("2d");
 		
-		requestAnimationFrame(nez2D);
+		reqNez=requestAnimationFrame(nez2D);
 		context.clearRect(0,0,2000,2000);
 		var positions = ctracker.getCurrentPosition();
 		if(positions[0]!= undefined){
@@ -833,7 +835,7 @@ function lunettes(thecolor){
 	if (canvas != null) {
 		var context=canvas.getContext("2d");
 		
-		requestAnimationFrame(lunettes);
+		reqLunettes=requestAnimationFrame(lunettes);
 		context.clearRect(0,0,2000,2000);
 		var positions = ctracker.getCurrentPosition();
 		if(positions[0]!= undefined){
@@ -872,7 +874,7 @@ function yeux2D(color) {
 	if (canvas != null) {
 		var context=canvas.getContext("2d");
 		
-		requestAnimationFrame(yeux2D);
+		reqYeux=requestAnimationFrame(yeux2D);
 		context.clearRect(0,0,2000,2000);
 		var positions = ctracker.getCurrentPosition();
 		if(positions[0]!= undefined){
@@ -891,7 +893,7 @@ function zorro(color){
 		var context=canvas.getContext("2d");
 		/*var canvas = document.getElementById("canvas1");
 		var context = canvas.getContext("2d");*/
-		requestAnimationFrame(zorro);
+		reqZorro=requestAnimationFrame(zorro);
 		
 		context.clearRect(0,0,2000,2000);
 		//console.log(context)
@@ -1049,8 +1051,13 @@ function addButtons2D(liste){
 			catch(err){
 				console.log(err);
 			}
-			
-			window.cancelAnimationFrame(item.cancel);
+
+			for(var i=0; i<filters2D.length; i++){
+			    if (filters2D[i].start==item.start){
+			        cancelAnimationFrame(stopAnimation2D[i]);
+			        console.log(item.start);
+			    }
+			}
 			//console.log("cnvas#"+item.start);
 			container.removeChild(getCanvasByName(item.start));
 
