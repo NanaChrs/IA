@@ -12,7 +12,7 @@ var str = "";
 var ctracker = new clm.tracker();
 ctracker.init();
 ctracker.start(video);
-
+var emotion = Math.floor(Math.random() * 5);
 
 var jSON={};
 socket.on("jsonList",function(element){
@@ -254,16 +254,7 @@ var changements=[{
 	name:"Allongement des yeux",
 	value:0
 },{
-	name:"Triste",
-	value:0
-},{
-	name:"Colère",
-	value:0
-},{
-	name:"Heureux",
-	value:0
-},{
-	name:"Surprise",
+	name:"Emotion",
 	value:0
 }];
 
