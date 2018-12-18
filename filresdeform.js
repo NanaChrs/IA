@@ -121,7 +121,7 @@ var emotiondeform = function (deformPoints, coeff) {
     // emotion doit etre importee ou mise en parametre global
     
     var emotion = Math.floor(Math.random() * 5);
-    console.log(emotion);
+    console.log(emotion, "emotion");
 
     if (emotion == 1) {//joie
         coeff = coeff / 100;
