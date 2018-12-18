@@ -119,6 +119,10 @@ var bouche = function (deformPoints, coeff) {
 }
 var emotiondeform = function (deformPoints, coeff) {
     // emotion doit etre importee ou mise en parametre global
+    
+    var emotion = Math.floor(Math.random() * 5);
+    console.log(emotion);
+
     if (emotion == 1) {//joie
         coeff = coeff / 100;
         var leve = [66, 26, 65, 69, 31, 70];
