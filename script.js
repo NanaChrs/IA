@@ -527,7 +527,6 @@ function dessin(color){
 		var context=canvas.getContext("2d");
 		// si la souris est appuyée, alors la position de celle-ci sur le canvas est prise
 		$('canvas').mousedown(function(e){
-		  console.log("hey")
 		  dessin = true; // dessiner le point en question
 		  ajouterPt(e.pageX - this.offsetLeft, e.pageY - this.offsetTop); //ajoute au tableau des points dessinés
 		  dessine(); // dessine le point
@@ -738,9 +737,8 @@ function points(color){
 }
 
 function bouche2D(color){
-	var canvas = document.getElementById("bouche2D");
+	var canvas = getCanvasByName("bouche2D");
 	if (canvas != null){
-	    console.log(canvas);
 		var context = canvas.getContext("2d");
 		reqBouche=requestAnimationFrame(bouche2D);
 		context.clearRect(0,0,2000,2000);
@@ -768,7 +766,6 @@ function bouche2D(color){
 function nez2D(color){
 	var canvas = getCanvasByName("nez2D");
 	if (canvas != null) {
-	    console.log(canvas);
 		var context=canvas.getContext("2d");
 		
 		reqNez=requestAnimationFrame(nez2D);
