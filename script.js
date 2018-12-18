@@ -139,12 +139,12 @@ socket.on("loadComplete", function(element){
 	});
 	
 	if (element['Dessin']!=undefined){
+	    document.querySelector("input#dessin").click();
 		pt62X=element['Dessin'][0];
 		pt62Y=element['Dessin'][1];
 		X=element['Dessin'][2];
 		Y=element['Dessin'][3];
 		trait=element['Dessin'][4];
-		document.querySelector("input#dessin").click();
 		dessin("#"+element['Dessin'][5]);
 
 	}
