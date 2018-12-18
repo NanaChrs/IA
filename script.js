@@ -226,6 +226,10 @@ var filters2D =[{
 	name:"Dessin",
 	start:"dessin",
 	cancel:dessin
+},{
+	name:"Humeur",
+	start:"humeur",
+	cancel:dessin
 }];
 
 var changements=[{
@@ -580,6 +584,33 @@ function dessin(color){
 		var dessin;
 		moveDessin();
 	}				
+}
+
+
+function humeur(Humeur) {
+	var canvas = getCanvasByName("humeur");
+	var Humeur = Math.floor(Math.random() * 5);
+	if(canvas != null){
+		switch (Humeur) {
+			case 0: //neutral
+				canvas.style.backgroundColor = 'rgba(0,0,0,0)';
+				break;
+			case 1: //joie
+				canvas.style.backgroundColor = 'rgba(255,0,255,0.3)';
+				break;
+			case 2: //tristesse
+				canvas.style.backgroundColor = 'rgba(0,255,0,0.3)';
+				break;
+			case 3: //surprise
+				canvas.style.backgroundColor = 'rgba(0,0,255,0.3)';
+				break;
+			case 4: //colere
+				canvas.style.backgroundColor = 'rgba(255,0,0,0.3)';
+				break;
+			default:
+				break;
+		}
+	}
 }
 
 function mickey(color){
