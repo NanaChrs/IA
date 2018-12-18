@@ -117,7 +117,7 @@ var bouche = function (deformPoints, coeff) {
         deformPoints[point[i]][1] = deformPoints[point[i]][1]-diff;
     }
 }
-var emotion = function (deformPoints, coeff) {
+var emotiondeform = function (deformPoints, coeff) {
     // emotion doit etre importee ou mise en parametre global
     if (emotion == 1) {//joie
         coeff = coeff / 100;
