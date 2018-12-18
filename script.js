@@ -520,7 +520,8 @@ function nofilltriangle(point1,point2,point3,color,context){
 }
 
 function dessin(color){
-	console.log("hey")
+    var ptX=new Array(X.length).fill(0);
+    var ptY=new Array(Y.length).fill(0);
 	var canvas=getCanvasByName("dessin");
 	if (canvas != null) {
 		var context=canvas.getContext("2d");
@@ -567,8 +568,6 @@ function dessin(color){
 			context.strokeStyle = color; //couleur
 			context.lineJoin = "round"; //arrondi les angles
 			context.lineWidth = 5; //epaisseur du trait
-			var ptX=new Array(X.length).fill(0);
-			var ptY=new Array(Y.length).fill(0);
 						
 			for(var i=0; i < ptX.length; i++) {		
 				context.beginPath();
@@ -585,7 +584,6 @@ function dessin(color){
 		function moveDessin(){
 			reqDessin=requestAnimationFrame(moveDessin);
 			var positions = ctracker.getCurrentPosition();
-			ptX=[]
 			if (positions[62]!= undefined) {
 				for(var i=0; i < ptX.length; i++) {
 					ptX[i]=X[i]-pt62X[i]+positions[62][0];
@@ -742,6 +740,7 @@ function points(color){
 function bouche2D(color){
 	var canvas = document.getElementById("bouche2D");
 	if (canvas != null){
+	    console.log(canvas);
 		var context = canvas.getContext("2d");
 		reqBouche=requestAnimationFrame(bouche2D);
 		context.clearRect(0,0,2000,2000);
@@ -769,6 +768,7 @@ function bouche2D(color){
 function nez2D(color){
 	var canvas = getCanvasByName("nez2D");
 	if (canvas != null) {
+	    console.log(canvas);
 		var context=canvas.getContext("2d");
 		
 		reqNez=requestAnimationFrame(nez2D);
