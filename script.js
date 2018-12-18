@@ -969,7 +969,7 @@ function addButtons2D(liste){
 	input.id=item.start;
 	input.addEventListener('click', function(){
 		//supprimer le dessin du tableau
-		if(this.id=="Dessin"){
+		if(this.id=="dessin"){
 			pt62X.length=0;
 			pt62Y.length=0;
 			X.length=0;
