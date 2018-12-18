@@ -87,10 +87,7 @@ var deformation = function() {
 		sourcils(deformPoints,changements[4].value);
 		yeuxor(deformPoints,changements[5].value);
 		yeuxbrides(deformPoints,changements[6].value);
-		triste(deformPoints,changements[7].value);
-		colere(deformPoints,changements[8].value);
-		joie(deformPoints,changements[9].value);
-		surprise(deformPoints,changements[10].value);
+		emotion(deformPoints,changements[7].value);
 
 
         // create vertices based on points
